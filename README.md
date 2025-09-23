@@ -1,4 +1,3 @@
-````markdown
 # PetConnect 🐾
 
 ## 📋 Sobre o Projeto
@@ -44,7 +43,7 @@ O protótipo visual mostra a navegação principal e funcionalidades-chave:
 - **Jornada do Adotante:** da busca até o contato com a ONG.  
 - **Jornada da ONG:** facilidade de cadastrar novos animais no portal.  
 
-*(Inserir imagens do protótipo/wireframe aqui)*  
+
 
 ---
 
@@ -64,9 +63,6 @@ cd petConnect
 # Backend
 cd backend
 npm install
-# Criar arquivo .env
-# PORT=3001
-# DATABASE_URL=mongodb://localhost:27017/petconnect
 npm start
 
 # Frontend
@@ -74,10 +70,6 @@ cd ../frontend
 npm install
 npm run dev
 ````
-
-* Frontend disponível em: [http://localhost:3000](http://localhost:3000)
-* Backend disponível em: [http://localhost:3001](http://localhost:3001)
-
 ---
 
 ## 📂 Estrutura do Projeto
@@ -100,25 +92,12 @@ petconnect/
 └── README.md
 ```
 
----
 
 ## 🤝 Como Contribuir
 
 Consulte o guia [CONTRIBUTING.md](docs/CONTRIBUTING.md) para informações sobre **fork, branches, commits e Pull Requests**.
 
----
-
-## 📞 Contato
-
-* Email: [dev@petconnect.com](mailto:dev@petconnect.com)
-* GitHub: [https://github.com/amsilveira-ce/petConnect](https://github.com/amsilveira-ce/petConnect)
-* Discord/Slack: link do servidor da comunidade
-
----
 
 **Cada contribuição ajuda a transformar vidas de animais! 🐕🐱❤️**
 
-```
-
----
 
