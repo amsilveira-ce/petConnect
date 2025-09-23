@@ -1,36 +1,124 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+````markdown
+# PetConnect 🐾
 
-## Getting Started
+## 📋 Sobre o Projeto
+A **PetConnect** é uma plataforma web que conecta ONGs de adoção de animais a pessoas que buscam um novo companheiro.  
+Nosso objetivo é centralizar e simplificar o processo de adoção, oferecendo um **canal de comunicação unificado para ONGs** e uma **experiência de busca intuitiva para adotantes**.
 
-First, run the development server:
+A PetConnect não é uma ONG, mas uma ferramenta que potencializa o trabalho das organizações parceiras, ajudando animais a encontrarem um lar seguro e amoroso.
 
+---
+
+## 🎯 Funcionalidades Principais
+
+### Portal para ONGs
+- Cadastro e gestão do perfil da organização.  
+- Criação e atualização de perfis detalhados para cada animal (fotos, idade, porte, personalidade, histórico).  
+- Canal de comunicação para troca de informações e recursos entre ONGs parceiras.  
+
+### Página para Adotantes
+- Galeria de animais com filtros avançados (espécie, idade, localização, porte).  
+- Perfis completos dos animais com fotos e informações detalhadas.  
+- Contato direto com a ONG responsável.  
+
+---
+
+## 🌍 Impacto Social
+- Aumenta a visibilidade de animais que precisam de um lar, especialmente os de abrigos com menos recursos.  
+- Facilita e agiliza o processo de adoção, diminuindo o tempo que os animais passam nos abrigos.  
+- Fortalece a rede de ONGs, promovendo colaboração e compartilhamento de recursos.  
+- Promove a adoção responsável ao fornecer informações claras sobre cada animal.  
+
+---
+
+## 🏷️ Categoria de Atuação
+**Terceiro Setor**  
+O projeto atua diretamente com organizações sem fins lucrativos, fornecendo uma ferramenta tecnológica gratuita que otimiza o trabalho essencial das ONGs.  
+A PetConnect foca no **bem-estar animal**, complementando áreas não plenamente atendidas pelo governo ou empresas privadas.
+
+---
+
+## 🎨 Protótipo
+O protótipo visual mostra a navegação principal e funcionalidades-chave:  
+
+- **Jornada do Adotante:** da busca até o contato com a ONG.  
+- **Jornada da ONG:** facilidade de cadastrar novos animais no portal.  
+
+*(Inserir imagens do protótipo/wireframe aqui)*  
+
+---
+
+## 🚀 Como Rodar o Projeto
+
+### Pré-requisitos
+- Node.js (16 ou superior)  
+- Git  
+- Editor de código (VS Code recomendado)  
+
+### Instalação
 ```bash
+# Clonar o repositório
+git clone https://github.com/amsilveira-ce/petConnect.git
+cd petConnect
+
+# Backend
+cd backend
+npm install
+# Criar arquivo .env
+# PORT=3001
+# DATABASE_URL=mongodb://localhost:27017/petconnect
+npm start
+
+# Frontend
+cd ../frontend
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+````
+
+* Frontend disponível em: [http://localhost:3000](http://localhost:3000)
+* Backend disponível em: [http://localhost:3001](http://localhost:3001)
+
+---
+
+## 📂 Estrutura do Projeto
+
+```
+petconnect/
+├── backend/        # API em Node.js (Express)
+├── frontend/       # Aplicação web
+│   ├── public/     # Arquivos públicos estáticos
+│   ├── src/        # Código-fonte do frontend
+│   └── package.json    # Dependências do frontend
+├── assets/         # Recursos de mídia
+│   ├── images/     # Imagens do projeto
+│   └── logos/      # Logos e ícones oficiais
+├── scripts/        # Scripts auxiliares
+├── docs/           # Documentação
+│   ├── wireframes/
+│   ├── CONTRIBUTING.md
+│   └── SETUP.md
+└── README.md
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## 🤝 Como Contribuir
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Consulte o guia [CONTRIBUTING.md](docs/CONTRIBUTING.md) para informações sobre **fork, branches, commits e Pull Requests**.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 📞 Contato
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+* Email: [dev@petconnect.com](mailto:dev@petconnect.com)
+* GitHub: [https://github.com/amsilveira-ce/petConnect](https://github.com/amsilveira-ce/petConnect)
+* Discord/Slack: link do servidor da comunidade
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+**Cada contribuição ajuda a transformar vidas de animais! 🐕🐱❤️**
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
