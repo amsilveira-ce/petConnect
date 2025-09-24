@@ -71,11 +71,11 @@ Valorizamos todos os tipos de contribuição:
 ```bash
 # Fork o repositório no GitHub
 # Clone seu fork
-git clone https://github.com/SEU-USUARIO/petconnect.git
+git clone  https://github.com/amsilveira-ce/petConnect.git
 cd petconnect
 
 # Configure o repositório upstream
-git remote add upstream https://github.com/petconnect/petconnect.git
+git remote add upstream  https://github.com/amsilveira-ce/petConnect.git
 
 # Configure seu ambiente
 npm install
