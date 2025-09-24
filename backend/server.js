@@ -6,7 +6,7 @@ const PORT = 3000;
 
 app.use(express.static(path.join(__dirname, "../frontend/public")));
 app.use("/logos", express.static(path.join(__dirname, "../assets/logos")));
-
+app.use("/images", express.static(path.join(__dirname, "../assets/images")));
 
 // Exemplo de rota de API
 app.get("/api/hello", (req, res) => {

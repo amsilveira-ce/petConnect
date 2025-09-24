@@ -1,31 +1,108 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-  <meta charset="UTF-8">
-  <title>PetConnect</title>
-   <link rel="icon" type="image/x-icon" href="/logos/logo.svg">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="css/styles.css">
+    <meta charset="UTF-8">
+    <title>PetConnect</title>
+    <link rel="icon" type="image/x-icon" href="/logos/logo.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="bg-gray-100 text-gray-800">
-  <header class="bg-blue-600 text-white p-4 text-center">
-    <h1 class="text-3xl font-bold">🐾 PetConnect</h1>
-    <p>Conectando pets e pessoas</p>
-  </header>
 
-  <main class="p-6 text-center">
-    <h2 class="text-2xl font-semibold mb-4">Bem-vindo(a)!</h2>
-    <p class="mb-6">Sua plataforma para cuidar e adotar pets com amor ❤️</p>
-    <img src="/logos/logo.svg" alt="PetConnect Logo" >
-    <button id="ctaBtn" class="bg-blue-500 hover:bg-blue-700 text-white px-6 py-2 rounded">
-      Saiba Mais
-    </button>
-  </main>
+<body class="bg-zinc-100 text-gray-800">
 
-  <footer class="bg-gray-200 text-center p-4">
-    <p>&copy; 2025 PetConnect</p>
-  </footer>
+    <!-- Navbar -->
+    <header class="bg-white text-white">
+        <nav class="container mx-auto flex items-center justify-between p-4">
+            <!-- Logo + Nome -->
+            <div class="flex items-center space-x-3 ml-3">
+                <img src="/logos/logo.svg" alt="PetConnect Logo" class="h-10 w-auto">
+                <span class="text-2xl font-mono text-gray-900">PetConnect</span>
+            </div>
 
-  <script src="js/main.js"></script>
+            <!-- Links -->
+            <ul class="flex space-x-6">
+                <li><a href="#" class="text-gray-900 hover:text-pink-500">Início</a></li>
+                <li><a href="#" class="text-gray-900 hover:text-pink-500">Encontre um Pet</a></li>
+                <li><a href="#" class="text-gray-900 hover:text-pink-500">Seja um Parceiro</a></li>
+                <li><a href="#" class="text-gray-900 hover:text-pink-500">Sobre Nós</a></li>
+                <li><a href="#" class="text-gray-900 hover:text-pink-500">Contato</a></li>
+                <li><a href="#" class="text-pink-500 font-bold">Entrar</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Conteúdo -->
+<main class="flex flex-col md:flex-row items-center justify-center min-h-[80vh] px-6 md:px-12 bg-zinc-100 gap-12">
+
+  <!-- Lado esquerdo -->
+  <div class="max-w-xl md:max-w-lg flex-1 text-center md:text-left">
+    <h2 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight text-gray-900">
+      Conectando mais do que pets, unimos <a class="underline decoration-pink-500 underline-offset-8">famílias</a>
+    </h2>
+    <p class="text-lg mb-8 text-gray-700">
+      Descubra animais incríveis disponíveis para adoção em ONGs parceiras. 
+      Seu novo melhor amigo está mais perto do que você imagina.
+    </p>
+    <div class="flex flex-col sm:flex-row justify-center md:justify-start gap-4 sm:gap-6">
+      <button class="text-white px-8 py-4 rounded-full shadow-lg font-semibold relative hover:shadow-xl hover:scale-[1.02] transition-all duration-200"
+        style="background-color:#221716;">
+        Cadastro para ONGs
+      </button>
+      <button class="text-white px-8 py-4 rounded-full shadow-lg font-semibold relative hover:shadow-xl hover:scale-[1.02] transition-all duration-200"
+        style="background-color:#221716;">
+        Cadastro para adotantes
+        <span class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-2 h-2 rounded-full"></span>
+      </button>
+    </div>
+  </div>
+
+<div class="bg-blue-500 rounded-xl w-full max-w-sm sm:max-w-md lg:w-96 xl:w-[28rem] h-64 sm:h-80 lg:h-96 xl:h-[28rem] overflow-hidden">
+    <img src="/images/landingPage-cat.svg" alt="Imagem de pets" class="w-full h-full object-cover">
+</div>
+</main>
+
+  <footer class="bg-gray-800 text-white py-12">
+    <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+            <!-- Logo e descrição -->
+            <div class="md:col-span-2">
+                <div class="flex items-center space-x-3 mb-4">
+                    <img src="/logos/logo.svg" alt="PetConnect Logo" class="h-8 w-auto">
+                    <span class="text-xl font-mono">PetConnect</span>
+                </div>
+                <p class="text-gray-300 mb-4">Conectando mais do que pets, unimos famílias através do amor e cuidado pelos animais.</p>
+            </div>
+            
+            <!-- Links rápidos -->
+            <div>
+                <h3 class="font-semibold mb-4">Links Rápidos</h3>
+                <ul class="space-y-2 text-gray-300">
+                    <li><a href="#" class="hover:text-pink-400 transition-colors">Encontre um Pet</a></li>
+                    <li><a href="#" class="hover:text-pink-400 transition-colors">Seja um Parceiro</a></li>
+                    <li><a href="#" class="hover:text-pink-400 transition-colors">Sobre Nós</a></li>
+                </ul>
+            </div>
+            
+            <!-- Contato -->
+            <div>
+                <h3 class="font-semibold mb-4">Contato</h3>
+                <ul class="space-y-2 text-gray-300">
+                    <li><a href="#" class="hover:text-pink-400 transition-colors">Suporte</a></li>
+                    <li><a href="#" class="hover:text-pink-400 transition-colors">FAQ</a></li>
+                    <li><a href="#" class="hover:text-pink-400 transition-colors">Email</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Linha divisória e copyright -->
+        <div class="border-t border-gray-700 pt-8 text-center">
+            <p class="text-gray-300">&copy; 2025 PetConnect. Todos os direitos reservados.</p>
+        </div>
+    </div>
+</footer>
+
+    <script src="js/main.js"></script>
 </body>
+
 </html>
