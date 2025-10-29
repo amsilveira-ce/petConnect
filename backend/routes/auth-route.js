@@ -1,6 +1,7 @@
 // Endpoints para autenticação de usuários e ongs
 import express from 'express';
 import { login, logout, signup, verifyEmail, forgotPassword, resetPassword, checkAuth } from '../controllers/auth-controllers.js';
+import { verifyToken } from '../middleware/verifyToken.js';
 
 
 const router = express.Router();
@@ -17,7 +18,7 @@ router.post('/forgot-password', forgotPassword);
 
 router.post('/reset-password/:token', resetPassword);
 
-// TODO: add verifyToken middleware implementation and import it here.
-router.get('/check-auth', checkAuth);
+
+router.get('/check-auth', verifyToken, checkAuth);
 
 export default router;

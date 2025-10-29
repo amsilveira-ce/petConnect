@@ -2,154 +2,178 @@ import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 
-const ongSchema = new mongoose.Schema({
-  // --- 1. Identity & Public Profile ---
+const teamMemberSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, 'Please provide your organization\'s name.'],
-    trim: true,
-    unique: true,
+    required: true,
+    trim: true
   },
-  description: {
-    type: String,
-    trim: true,
-    maxlength: [2000, 'Description cannot be more than 2000 characters.'],
-  },
-  logoUrl: {
-    type: String, // URL to the hosted logo image
-  },
-  bannerUrl: {
-    type: String, // URL to a cover photo for their profile page
-  },
-
-  // --- 2. Authentication & Security ---
   email: {
     type: String,
-    required: [true, 'Please provide an email.'],
-    unique: true,
+    required: true,
     lowercase: true,
-    trim: true,
-    // Basic email regex validation
-    match: [
-      /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-      'Please fill a valid email address',
-    ],
+    trim: true
   },
-  password: {
+  role: {
     type: String,
-    required: [true, 'Please provide a password.'],
-    minlength: 8,
-    select: false, // Automatically hide this field from query results
+    enum: ['admin', 'manager', 'volunteer', 'veterinarian'],
+    default: 'volunteer'
   },
-
-  // --- 3. Contact & Location ---
-  phoneNumbers: [{
-    type: String,
-  }],
-  website: {
-    type: String,
-    trim: true,
+  phone: String,
+  avatar: String,
+  permissions: {
+    canManagePets: { type: Boolean, default: false },
+    canReviewApplications: { type: Boolean, default: false },
+    canPublishPosts: { type: Boolean, default: false },
+    canManageTeam: { type: Boolean, default: false }
   },
-  socialMedia: {
-    instagram: { type: String, trim: true },
-    facebook: { type: String, trim: true },
+  joinedAt: {
+    type: Date,
+    default: Date.now
   },
-  address: {
-    street: String,
-    city: { type: String, required: [true, 'City is required.'] },
-    state: { type: String, required: [true, 'State is required.'], maxlength: 2, uppercase: true },
-    zipCode: String,
-  },
-  // GeoJSON for geospatial queries (e.g., "find pets near me")
-  location: {
-    type: {
-      type: String,
-      enum: ['Point'],
-      default: 'Point',
-    },
-    coordinates: {
-      type: [Number], // [longitude, latitude]
-      required: [true, 'Coordinates are required for location.'],
-    },
-  },
-
-  // --- 4. Platform Status ---
-  // Per your request: "let any ong be legit".
-  // It defaults to 'true' but gives you a way to deactivate bad actors later.
   isActive: {
     type: Boolean,
-    default: true,
-    select: false, // Hide from public API responses
+    default: true
+  }
+}, { _id: true });
+
+const ongSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: [true, 'ONG name is required'],
+      unique: true,
+      trim: true,
+      minlength: [3, 'ONG name must be at least 3 characters'],
+      maxlength: [150, 'ONG name cannot exceed 150 characters']
+    },
+    email: {
+      type: String,
+      required: [true, 'Email is required'],
+      unique: true,
+      lowercase: true,
+      trim: true,
+      match: [/^\S+@\S+\.\S+$/, 'Please provide a valid email']
+    },
+    password: {
+      type: String,
+      required: [true, 'Password is required'],
+      minlength: [8, 'Password must be at least 8 characters'],
+      select: false
+    },
+    role: {
+      type: String,
+      enum: ['ong'],
+      default: 'ong'
+    },
+    logo: {
+      type: String,
+      default: null
+    },
+    coverImage: {
+      type: String
+    },
+    mission: {
+      type: String,
+      maxlength: [300, 'Mission statement cannot exceed 300 characters']
+    },
+    description: {
+      type: String,
+      maxlength: [2000, 'Description cannot exceed 2000 characters']
+    },
+    adoptionPolicy: {
+      type: String,
+      maxlength: [3000, 'Adoption policy cannot exceed 3000 characters']
+    },
+    address: {
+      street: { type: String, trim: true, required: true },
+      number: { type: String, trim: true },
+      complement: { type: String, trim: true },
+      neighborhood: { type: String, trim: true },
+      city: { type: String, trim: true, required: true },
+      state: { type: String, trim: true, required: true },
+      zipCode: { type: String, trim: true, required: true },
+      country: { type: String, trim: true, default: 'Brazil' },
+      coordinates: {
+        type: {
+          type: String,
+          enum: ['Point'],
+          default: 'Point'
+        },
+        coordinates: {
+          type: [Number],
+          index: '2dsphere'
+        }
+      }
+    },
+    phone: {
+      type: String,
+      required: [true, 'Phone is required'],
+      trim: true
+    },
+    alternativePhone: {
+      type: String,
+      trim: true
+    },
+    socialLinks: {
+      website: { type: String, trim: true },
+      facebook: { type: String, trim: true },
+      instagram: { type: String, trim: true },
+      twitter: { type: String, trim: true },
+      whatsapp: { type: String, trim: true }
+    },
+    members: [teamMemberSchema],
+    operatingHours: {
+      monday: { open: String, close: String, closed: { type: Boolean, default: false } },
+      tuesday: { open: String, close: String, closed: { type: Boolean, default: false } },
+      wednesday: { open: String, close: String, closed: { type: Boolean, default: false } },
+      thursday: { open: String, close: String, closed: { type: Boolean, default: false } },
+      friday: { open: String, close: String, closed: { type: Boolean, default: false } },
+      saturday: { open: String, close: String, closed: { type: Boolean, default: false } },
+      sunday: { open: String, close: String, closed: { type: Boolean, default: true } }
+    },
+    statistics: {
+      totalAdoptions: { type: Number, default: 0 },
+      activeListings: { type: Number, default: 0 },
+      pendingApplications: { type: Number, default: 0 }
+    },
+    verification: {
+      isVerified: { type: Boolean, default: false },
+      verifiedAt: Date,
+      documents: [{
+        type: { type: String },
+        url: String,
+        uploadedAt: { type: Date, default: Date.now }
+      }]
+    },
+    rating: {
+      average: { type: Number, default: 0, min: 0, max: 5 },
+      count: { type: Number, default: 0 }
+    },
+    isActive: {
+      type: Boolean,
+      default: true
+    },
+    isFeatured: {
+      type: Boolean,
+      default: false
+    },
+    isVerified: {
+      type: Boolean,
+      default: false
+    },
+    verificationToken: String,
+    verificationTokenExpiresAt: Date,
+    resetPasswordToken: String,
+    resetPasswordExpiresAt: Date,
+    lastLogin: Date
   },
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
+  }
+);
 
-  // --- 5. Password Reset ---
-  passwordResetToken: String,
-  passwordResetExpires: Date,
-
-}, {
-  // --- 6. Timestamps & Virtuals ---
-  timestamps: true,
-  toJSON: { virtuals: true },
-  toObject: { virtuals: true },
-});
-
-// --- VIRTUAL RELATIONSHIPS ---
-// This is the clean way to get all pets/posts from an ONG
-// The ONG schema itself doesn't store a giant array of pet IDs.
-
-// Populate virtuals for pets
-ongSchema.virtual('pets', {
-  ref: 'Pet',
-  localField: '_id',
-  foreignField: 'ong',
-});
-
-// Populate virtuals for posts
-ongSchema.virtual('posts', {
-  ref: 'Post',
-  localField: '_id',
-  foreignField: 'authorOng',
-});
-
-// --- INDEXES ---
-// Create a geospatial index for location queries
-ongSchema.index({ location: '2dsphere' });
-// Index on email for faster login queries
-ongSchema.index({ email: 1 });
-
-// --- MIDDLEWARE (HOOKS) ---
-// Hash password before saving
-ongSchema.pre('save', async function(next) {
-  // Only run this function if password was actually modified
-  if (!this.isModified('password')) return next();
-
-  // Hash the password with cost of 12
-  const salt = await bcrypt.genSalt(12);
-  this.password = await bcrypt.hash(this.password, salt);
-
-  next();
-});
-
-// --- INSTANCE METHODS ---
-// Method to check password on login
-ongSchema.methods.comparePassword = async function(candidatePassword) {
-  return await bcrypt.compare(candidatePassword, this.password);
-};
-
-// Method to generate password reset token
-ongSchema.methods.createPasswordResetToken = function() {
-  const resetToken = crypto.randomBytes(32).toString('hex');
-
-  // Hash token and set to passwordResetToken field
-  this.passwordResetToken = crypto
-    .createHash('sha256')
-    .update(resetToken)
-    .digest('hex');
-
-  // Set token expiration to 10 minutes
-  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
-
-  return resetToken; // Return the unhashed token (to be emailed)
-};
-
-export default mongoose.model('Ong', ongSchema);
+const ONG = mongoose.model('ONG', ongSchema);
+export default ONG;
