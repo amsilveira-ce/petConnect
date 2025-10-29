@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog da ONG | PetConnect</title>
+  <link rel="icon" type="image/x-icon" href="http://localhost:5173/logos/logo.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#ec4899',
+            secondary: '#fce7f3',
+          },
+        },
+      },
+    };
+  </script>
+</head>
+<body class="bg-gray-50 text-gray-900">
+  <!-- Navbar -->
+  <nav class="bg-white shadow-md sticky top-0 z-10">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <img src="http://localhost:5173/logos/logo.svg" class="h-10 w-10" alt="PetConnect">
+        <span class="font-mono text-2xl font-semibold">PetConnect</span>
+      </div>
+      <div class="hidden md:flex gap-8">
+        <a href="ong-dashboard.html" class="text-gray-700 hover:text-primary transition">Dashboard</a>
+        <a href="pets-ong.html" class="text-gray-700 hover:text-primary transition">Meus Pets</a>
+        <a href="requests-ong.html" class="text-gray-700 hover:text-primary transition">Solicitações</a>
+        <a href="ong-blog.html" class="text-primary font-semibold">Posts</a>
+        <button id="logoutBtn" class="bg-primary text-white px-6 py-2 rounded-full hover:bg-pink-600 transition">Sair</button>
+      </div>
+      <button class="md:hidden text-gray-700 focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+          stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M3.75 5.25h16.5M3.75 12h16.5m-16.5 6.75h16.5" />
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="max-w-6xl mx-auto px-6 py-12">
+    <div class="flex justify-between items-center mb-8">
+      <div>
+        <h1 class="text-4xl font-bold text-gray-900">Blog da ONG</h1>
+        <p class="text-gray-600 mt-2">Compartilhe histórias, eventos e dicas sobre adoção</p>
+      </div>
+      <button id="openNewPostModal" class="bg-primary text-white px-6 py-3 rounded-full font-medium hover:bg-pink-600 transition transform hover:scale-105 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+        </svg>
+        Novo Post
+      </button>
+    </div>
+
+    <!-- Posts Grid -->
+    <section id="postsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></section>
+  </main>
+
+  <!-- Modal de Novo Post -->
+  <div id="newPostModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
+      <!-- Modal Header -->
+      <div class="sticky top-0 bg-white border-b px-8 py-6 flex justify-between items-center rounded-t-2xl">
+        <h2 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+          <span>✍️</span> Criar Novo Post
+        </h2>
+        <button id="closeNewPostModal" class="text-gray-500 hover:text-gray-700 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Modal Content -->
+      <form id="newPostForm" class="p-8 space-y-6">
+        <!-- Título -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">
+            Título do Post <span class="text-red-500">*</span>
+          </label>
+          <input 
+            type="text" 
+            id="postTitle"
+            name="title"
+            required
+            maxlength="100"
+            placeholder="Ex: História de superação: Rex encontrou um lar ❤️"
+            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition"
+          >
+          <p class="text-xs text-gray-500 mt-1">Máximo 100 caracteres</p>
+        </div>
+
+        <!-- Categoria -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">
+            Categoria <span class="text-red-500">*</span>
+          </label>
+          <select 
+            id="postCategory"
+            name="category"
+            required
+            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition"
+          >
+            <option value="">Selecione uma categoria</option>
+            <option value="adoption-story">🏠 História de Adoção</option>
+            <option value="event">📅 Evento</option>
+            <option value="tips">💡 Dicas e Orientações</option>
+            <option value="news">📰 Notícias</option>
+            <option value="campaign">📢 Campanha</option>
+            <option value="rescue">🚨 Resgate</option>
+            <option value="other">📝 Outro</option>
+          </select>
+        </div>
+
+        <!-- Resumo -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">
+            Resumo <span class="text-red-500">*</span>
+          </label>
+          <textarea 
+            id="postExcerpt"
+            name="excerpt"
+            required
+            maxlength="200"
+            rows="3"
+            placeholder="Escreva um breve resumo do post (será exibido no card)"
+            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition resize-none"
+          ></textarea>
+          <p class="text-xs text-gray-500 mt-1">Máximo 200 caracteres - <span id="excerptCount">0</span>/200</p>
+        </div>
+
+        <!-- Conteúdo -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">
+            Conteúdo Completo <span class="text-red-500">*</span>
+          </label>
+          <textarea 
+            id="postContent"
+            name="content"
+            required
+            minlength="100"
+            rows="10"
+            placeholder="Escreva o conteúdo completo do seu post aqui..."
+            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition resize-none"
+          ></textarea>
+          <p class="text-xs text-gray-500 mt-1">Mínimo 100 caracteres - <span id="contentCount">0</span> caracteres</p>
+        </div>
+
+        <!-- Imagem de Capa -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">
+            Imagem de Capa <span class="text-red-500">*</span>
+          </label>
+          <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-primary transition">
+            <input 
+              type="file" 
+              id="postImage"
+              name="image"
+              accept="image/*"
+              class="hidden"
+              onchange="previewImage(event)"
+            >
+            <div id="imagePreview" class="hidden mb-4">
+              <img id="previewImg" src="" alt="Preview" class="max-h-48 mx-auto rounded-lg object-cover">
+            </div>
+            <button 
+              type="button"
+              onclick="document.getElementById('postImage').click()"
+              class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-2 rounded-full font-medium transition"
+            >
+              📷 Selecionar Imagem
+            </button>
+            <p class="text-xs text-gray-500 mt-2">PNG, JPG ou WEBP até 5MB</p>
+          </div>
+        </div>
+
+        <!-- URL da Imagem (alternativa) -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">
+            Ou cole a URL da imagem
+          </label>
+          <input 
+            type="url" 
+            id="postImageUrl"
+            name="imageUrl"
+            placeholder="https://exemplo.com/imagem.jpg"
+            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition"
+          >
+          <p class="text-xs text-gray-500 mt-1">Se preferir, cole o link de uma imagem online</p>
+        </div>
+
+        <!-- Tags -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">
+            Tags (opcional)
+          </label>
+          <input 
+            type="text" 
+            id="postTags"
+            name="tags"
+            placeholder="Ex: adoção, cachorro, resgate (separadas por vírgula)"
+            class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition"
+          >
+          <p class="text-xs text-gray-500 mt-1">Separe as tags com vírgulas</p>
+        </div>
+
+        <!-- Destaque -->
+        <div class="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
+          <input 
+            type="checkbox" 
+            id="postFeatured"
+            name="featured"
+            class="w-5 h-5 text-primary focus:ring-primary border-gray-300 rounded"
+          >
+          <label for="postFeatured" class="text-sm font-medium text-gray-700">
+            ⭐ Marcar como post em destaque (aparecerá no topo)
+          </label>
+        </div>
+
+        <!-- Botões de Ação -->
+        <div class="flex gap-4 pt-4 border-t">
+          <button 
+            type="button"
+            id="cancelNewPost"
+            class="flex-1 bg-gray-200 text-gray-700 px-6 py-3 rounded-full font-medium hover:bg-gray-300 transition"
+          >
+            Cancelar
+          </button>
+          <button 
+            type="submit"
+            class="flex-1 bg-primary text-white px-6 py-3 rounded-full font-medium hover:bg-pink-600 transition"
+          >
+            Publicar Post
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white py-6 mt-16 border-t text-center text-gray-500 text-sm">
+    © 2025 PetConnect — Histórias que inspiram adoção ❤️
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    // Mock data
+    const postsMock = [
+      {
+        id: '1',
+        title: "Adoção responsável: o que você precisa saber 🐶",
+        author: "ONG Patas Felizes",
+        date: "10/10/2025",
+        category: "tips",
+        excerpt: "Adotar é um ato de amor, mas também de responsabilidade. Veja o que considerar antes de levar um pet para casa.",
+        image: "https://pet.istoe.com.br/wp-content/uploads/sites/32/2025/09/vakinhapet.jpg",
+        featured: true
+      },
+      {
+        id: '2',
+        title: "Evento de adoção em São Paulo 🏙️",
+        author: "ONG Coração Animal",
+        date: "22/10/2025",
+        category: "event",
+        excerpt: "Venha conhecer nossos animais disponíveis para adoção no parque Villa-Lobos neste fim de semana!",
+        image: "https://images.unsplash.com/photo-1560807707-8cc77767d783?auto=format&fit=crop&w=600&q=60",
+        featured: false
+      },
+      {
+        id: '3',
+        title: "História de superação: Thor encontrou um lar ❤️",
+        author: "ONG Esperança",
+        date: "15/10/2025",
+        category: "adoption-story",
+        excerpt: "Thor foi resgatado em situação crítica e hoje vive feliz com sua nova família. Conheça essa história emocionante.",
+        image: "https://images.unsplash.com/photo-1574158622682-e40e69881006?auto=format&fit=crop&w=600&q=60",
+        featured: false
+      }
+    ];
+
+    // Category badges
+    const categoryConfig = {
+      'adoption-story': { label: '🏠 História de Adoção', color: 'bg-green-100 text-green-800' },
+      'event': { label: '📅 Evento', color: 'bg-blue-100 text-blue-800' },
+      'tips': { label: '💡 Dicas', color: 'bg-yellow-100 text-yellow-800' },
+      'news': { label: '📰 Notícias', color: 'bg-purple-100 text-purple-800' },
+      'campaign': { label: '📢 Campanha', color: 'bg-pink-100 text-pink-800' },
+      'rescue': { label: '🚨 Resgate', color: 'bg-red-100 text-red-800' },
+      'other': { label: '📝 Outro', color: 'bg-gray-100 text-gray-800' }
+    };
+
+    // Render posts
+    function renderPosts() {
+      const postsGrid = document.getElementById("postsGrid");
+      postsGrid.innerHTML = '';
+      
+      // Sort by featured first
+      const sortedPosts = [...postsMock].sort((a, b) => b.featured - a.featured);
+      
+      sortedPosts.forEach(post => {
+        const category = categoryConfig[post.category] || categoryConfig.other;
+        const card = document.createElement("div");
+        card.className = `bg-white rounded-2xl shadow-md hover:shadow-lg overflow-hidden transition ${post.featured ? 'ring-2 ring-primary' : ''}`;
+        card.innerHTML = `
+          ${post.featured ? '<div class="bg-primary text-white text-xs font-bold px-4 py-2 text-center">⭐ POST EM DESTAQUE</div>' : ''}
+          <div class="relative">
+            <img src="${post.image}" alt="${post.title}" class="w-full h-48 object-cover">
+            <span class="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-medium ${category.color}">
+              ${category.label}
+            </span>
+          </div>
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2 text-gray-900">${post.title}</h3>
+            <p class="text-gray-600 text-sm mb-4 line-clamp-2">${post.excerpt}</p>
+            <div class="flex justify-between items-center text-xs text-gray-500 mb-3">
+              <span>👤 ${post.author}</span>
+              <span>📅 ${post.date}</span>
+            </div>
+            <button onclick="viewPost('${post.id}')" class="w-full bg-gray-100 hover:bg-primary hover:text-white text-gray-700 py-2 rounded-full font-medium transition">
+              Ler mais
+            </button>
+          </div>
+        `;
+        postsGrid.appendChild(card);
+      });
+    }
+
+    // View post (mock function)
+    function viewPost(postId) {
+      alert(`Visualizar post ID: ${postId}\n\nEm produção, isso abriria a página completa do post.`);
+    }
+
+    // Modal functions
+    function openModal() {
+      document.getElementById('newPostModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('newPostModal').classList.add('hidden');
+      document.body.style.overflow = 'auto';
+      document.getElementById('newPostForm').reset();
+      document.getElementById('imagePreview').classList.add('hidden');
+      updateCharCount();
+    }
+
+    // Preview image
+    function previewImage(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          document.getElementById('previewImg').src = e.target.result;
+          document.getElementById('imagePreview').classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // Character count
+    function updateCharCount() {
+      const excerpt = document.getElementById('postExcerpt').value;
+      const content = document.getElementById('postContent').value;
+      document.getElementById('excerptCount').textContent = excerpt.length;
+      document.getElementById('contentCount').textContent = content.length;
+    }
+
+    // Form submission
+    document.getElementById('newPostForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const formData = new FormData(this);
+      const postData = {
+        id: String(postsMock.length + 1),
+        title: formData.get('title'),
+        category: formData.get('category'),
+        excerpt: formData.get('excerpt'),
+        content: formData.get('content'),
+        image: formData.get('imageUrl') || 'https://images.unsplash.com/photo-1450778869180-41d0601e046e?auto=format&fit=crop&w=600&q=60',
+        author: 'Minha ONG',
+        date: new Date().toLocaleDateString('pt-BR'),
+        featured: formData.get('featured') === 'on',
+        tags: formData.get('tags') ? formData.get('tags').split(',').map(t => t.trim()) : []
+      };
+
+      // Add to mock data
+      postsMock.unshift(postData);
+      
+      // Show success message
+      alert('✅ Post criado com sucesso!\n\nEm produção, isso seria enviado para o backend.');
+      
+      // Close modal and re-render
+      closeModal();
+      renderPosts();
+    });
+
+    // Event listeners
+    document.getElementById('openNewPostModal').addEventListener('click', openModal);
+    document.getElementById('closeNewPostModal').addEventListener('click', closeModal);
+    document.getElementById('cancelNewPost').addEventListener('click', closeModal);
+    
+    // Close modal on outside click
+    document.getElementById('newPostModal').addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeModal();
+      }
+    });
+
+    // Character count listeners
+    document.getElementById('postExcerpt').addEventListener('input', updateCharCount);
+    document.getElementById('postContent').addEventListener('input', updateCharCount);
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+      localStorage.removeItem('userInfo');
+      window.location.href = 'index.html';
+    });
+
+    // Make functions global
+    window.previewImage = previewImage;
+    window.viewPost = viewPost;
+
+    // Initial render
+    renderPosts();
+  </script>
+</body>
+</html>

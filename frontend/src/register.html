@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - PetConnect</title>
+    <link rel="icon" type="image/x-icon" href="http://localhost:5501/logos/logo.svg">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <!-- Alert Container -->
+            <div id="alert-container"></div>
+
+            <!-- Header -->
+            <div class="auth-header">
+                <img src="http://localhost:5501/logos/logo.svg"alt="PetConnect Logo" class="auth-logo">
+                <h1 class="auth-title">Criar Conta</h1>
+                <p class="auth-subtitle">Junte-se a nós e faça a diferença</p>
+            </div>
+
+            <!-- Account Type Toggle -->
+            <div class="form-group">
+                <div class="toggle-switch" id="accountTypeToggle">
+                    <div class="toggle-slider"></div>
+                    <div class="toggle-option active" data-type="user">
+                        Adotante
+                    </div>
+                    <div class="toggle-option" data-type="ong">
+                        ONG
+                    </div>
+                </div>
+            </div>
+
+            <!-- Registration Form -->
+            <form id="registerForm">
+                <!-- Name -->
+                <div class="form-group">
+                    <label for="name" class="form-label">
+                        <span id="nameLabel">Nome Completo</span>
+                    </label>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        class="form-input" 
+                        placeholder="Seu nome completo"
+                        required
+                        autocomplete="name"
+                    >
+                    <div class="form-error hidden" id="nameError"></div>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email" class="form-label">E-mail</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        class="form-input" 
+                        placeholder="seu@email.com"
+                        required
+                        autocomplete="email"
+                    >
+                    <div class="form-error hidden" id="emailError"></div>
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="password" class="form-label">Senha</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        class="form-input" 
+                        placeholder="Mínimo 8 caracteres"
+                        required
+                        autocomplete="new-password"
+                    >
+                    <div class="form-helper">Mínimo 8 caracteres</div>
+                    <div class="form-error hidden" id="passwordError"></div>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="form-group">
+                    <label for="confirmPassword" class="form-label">Confirmar Senha</label>
+                    <input 
+                        type="password" 
+                        id="confirmPassword" 
+                        class="form-input" 
+                        placeholder="Digite a senha novamente"
+                        required
+                        autocomplete="new-password"
+                    >
+                    <div class="form-error hidden" id="confirmPasswordError"></div>
+                </div>
+
+                <!-- ONG Specific Fields -->
+                <div class="ong-fields" id="ongFields">
+                    <!-- Phone -->
+                    <div class="form-group">
+                        <label for="phone" class="form-label">Telefone</label>
+                        <input 
+                            type="tel" 
+                            id="phone" 
+                            class="form-input" 
+                            placeholder="(11) 98765-4321"
+                            autocomplete="tel"
+                        >
+                        <div class="form-error hidden" id="phoneError"></div>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="form-group">
+                        <label class="form-label">Endereço</label>
+                        <div class="address-grid">
+                            <div class="form-group">
+                                <input 
+                                    type="text" 
+                                    id="street" 
+                                    class="form-input" 
+                                    placeholder="Rua, número"
+                                    autocomplete="street-address"
+                                >
+                            </div>
+                            <div class="form-group">
+                                <input 
+                                    type="text" 
+                                    id="city" 
+                                    class="form-input" 
+                                    placeholder="Cidade"
+                                    autocomplete="address-level2"
+                                >
+                            </div>
+                            <div class="form-group">
+                                <select id="state" class="form-input">
+                                    <option value="">Estado</option>
+                                    <option value="AC">Acre</option>
+                                    <option value="AL">Alagoas</option>
+                                    <option value="AP">Amapá</option>
+                                    <option value="AM">Amazonas</option>
+                                    <option value="BA">Bahia</option>
+                                    <option value="CE">Ceará</option>
+                                    <option value="DF">Distrito Federal</option>
+                                    <option value="ES">Espírito Santo</option>
+                                    <option value="GO">Goiás</option>
+                                    <option value="MA">Maranhão</option>
+                                    <option value="MT">Mato Grosso</option>
+                                    <option value="MS">Mato Grosso do Sul</option>
+                                    <option value="MG">Minas Gerais</option>
+                                    <option value="PA">Pará</option>
+                                    <option value="PB">Paraíba</option>
+                                    <option value="PR">Paraná</option>
+                                    <option value="PE">Pernambuco</option>
+                                    <option value="PI">Piauí</option>
+                                    <option value="RJ">Rio de Janeiro</option>
+                                    <option value="RN">Rio Grande do Norte</option>
+                                    <option value="RS">Rio Grande do Sul</option>
+                                    <option value="RO">Rondônia</option>
+                                    <option value="RR">Roraima</option>
+                                    <option value="SC">Santa Catarina</option>
+                                    <option value="SP">São Paulo</option>
+                                    <option value="SE">Sergipe</option>
+                                    <option value="TO">Tocantins</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <input 
+                                    type="text" 
+                                    id="zipCode" 
+                                    class="form-input" 
+                                    placeholder="CEP"
+                                    autocomplete="postal-code"
+                                >
+                            </div>
+                        </div>
+                        <div class="form-error hidden" id="addressError"></div>
+                    </div>
+                </div>
+
+                <!-- Terms -->
+                <div class="form-group">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="terms" class="checkbox-input" required>
+                        <label for="terms" class="checkbox-label">
+                            Eu aceito os <a href="#" class="btn-link">Termos de Uso</a> e 
+                            <a href="#" class="btn-link">Política de Privacidade</a>
+                        </label>
+                    </div>
+                    <div class="form-error hidden" id="termsError"></div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                    Criar Conta
+                </button>
+            </form>
+
+            <!-- Login Link -->
+            <div class="auth-link">
+                Já tem uma conta? <a href="login.html">Entrar</a>
+            </div>
+
+            <!-- Back to Home -->
+            <div class="auth-link">
+                <a href="index.html">← Voltar para o início</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/register.js"></script>
+</body>
+</html>

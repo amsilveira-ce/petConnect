@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - PetConnect</title>
+    <link rel="icon" type="image/x-icon" href="http://localhost:5173/logos/logo.svg">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen">
+        <nav class="bg-white shadow-sm px-6 py-4">
+            <div class="container mx-auto flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <img src="http://localhost:5173/logos/logo.svg" alt="PetConnect" class="h-10">
+                    <span class="text-2xl font-mono text-gray-900">PetConnect</span>
+                </div>
+                <div class="flex items-center gap-6">
+                    <a href="user-dashboard.html" class="text-gray-600 hover:text-pink-500">Início</a>
+                    <a href="#" class="text-gray-600 hover:text-pink-500">Meus Pets</a>
+                    <a href="#" class="text-gray-600 hover:text-pink-500">Minhas Adoções</a>
+                    <button id="logoutBtn" class="bg-pink-500 text-white px-6 py-2 rounded-full hover:bg-pink-600">Sair</button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="container mx-auto px-6 py-12">
+            <h1 class="text-4xl font-bold text-gray-900 mb-8">Dashboard do Adotante</h1>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-2xl shadow-lg">
+                    <div class="text-pink-500 text-4xl mb-2">❤️</div>
+                    <h3 class="text-2xl font-bold text-gray-900">0</h3>
+                    <p class="text-gray-600">Pets Favoritos</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-lg">
+                    <div class="text-pink-500 text-4xl mb-2">📝</div>
+                    <h3 class="text-2xl font-bold text-gray-900">0</h3>
+                    <p class="text-gray-600">Solicitações</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-lg">
+                    <div class="text-pink-500 text-4xl mb-2">🐾</div>
+                    <h3 class="text-2xl font-bold text-gray-900">0</h3>
+                    <p class="text-gray-600">Pets Adotados</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl shadow-lg text-center">
+                <h2 class="text-2xl font-bold text-gray-900 mb-4">Bem-vindo ao PetConnect!</h2>
+                <p class="text-gray-600 mb-6">Seu dashboard está pronto. Comece a explorar pets disponíveis para adoção.</p>
+                <a href="index.html#encontre-pet" class="inline-block bg-pink-500 text-white px-8 py-3 rounded-full hover:bg-pink-600 transition">
+                    Encontrar Pets
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script>
+        document.getElementById('logoutBtn').addEventListener('click', async () => {
+            try {
+                await api.logout();
+                localStorage.removeItem('userInfo');
+                window.location.href = 'index.html';
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+        });
+
+        async function checkAuth() {
+            try {
+                const response = await api.checkAuth();
+                if (!response.success || response.role !== 'user') {
+                    window.location.href = 'login.html';
+                }
+            } catch (error) {
+                window.location.href = 'login.html';
+            }
+        }
+        
+        // checkAuth();
+    </script>
+</body>
+</html>

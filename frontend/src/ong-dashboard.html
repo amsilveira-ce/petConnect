@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard da ONG | PetConnect</title>
+  <link rel="icon" type="image/x-icon" href="http://localhost:5501/logos/logo.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#ec4899', // Tailwind pink-500
+            secondary: '#fce7f3',
+          },
+        },
+      },
+    };
+  </script>
+</head>
+
+<body class="bg-gray-50 text-gray-900">
+  <!-- Navbar -->
+  <nav class="bg-white shadow-md sticky top-0 z-10">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <img src="http://localhost:5501/frontend/public/logos/logo.svg" alt="PetConnect" class="h-10 w-10">
+        <span class="font-mono text-2xl font-semibold text-gray-900">PetConnect</span>
+      </div>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="index.html" class="text-gray-700 hover:text-primary transition">Início</a>
+        <a href="pets-ong.html" class="text-gray-700 hover:text-primary transition">Meus Pets</a>
+        <a href="requests-ong.html" class="text-gray-700 hover:text-primary transition">Solicitações</a>
+        <a href="ong-blog.html" class="text-gray-700 hover:text-primary transition">Posts</a>
+        <button id="logoutBtn"
+          class="bg-primary text-white px-6 py-2 rounded-full font-medium hover:bg-pink-600 transition">Sair</button>
+      </div>
+      <button class="md:hidden text-gray-700 focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+          stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M3.75 5.25h16.5M3.75 12h16.5m-16.5 6.75h16.5" />
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto px-6 py-12">
+    <div class="mb-10">
+      <h1 class="text-4xl font-bold text-gray-900 mb-2">Dashboard da ONG</h1>
+      <p class="text-gray-600">Gerencie pets, solicitações e publicações da sua ONG.</p>
+    </div>
+
+    <!-- Stats Cards -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+      <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition">
+        <div class="flex items-center justify-between mb-3">
+          <div class="text-primary text-4xl">🐾</div>
+        </div>
+        <h3 id="petsCount" class="text-3xl font-bold text-gray-900">0</h3>
+        <p class="text-gray-600">Pets Cadastrados</p>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition">
+        <div class="flex items-center justify-between mb-3">
+          <div class="text-primary text-4xl">📋</div>
+        </div>
+        <h3 id="pendingRequests" class="text-3xl font-bold text-gray-900">0</h3>
+        <p class="text-gray-600">Solicitações Pendentes</p>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition">
+        <div class="flex items-center justify-between mb-3">
+          <div class="text-primary text-4xl">✅</div>
+        </div>
+        <h3 id="adoptionsDone" class="text-3xl font-bold text-gray-900">0</h3>
+        <p class="text-gray-600">Adoções Realizadas</p>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition">
+        <div class="flex items-center justify-between mb-3">
+          <div class="text-primary text-4xl">📰</div>
+        </div>
+        <h3 id="postsCount" class="text-3xl font-bold text-gray-900">0</h3>
+        <p class="text-gray-600">Posts Publicados</p>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="bg-white p-10 rounded-2xl shadow-md text-center">
+      <h2 class="text-2xl font-bold mb-4">Bem-vindo(a) ao <span class="text-primary">PetConnect</span>! 🐶🐱</h2>
+      <p class="text-gray-600 mb-6">
+        Aqui você pode cadastrar novos pets, acompanhar solicitações de adoção e interagir com a comunidade.
+      </p>
+      <button
+        id="registerPet"
+        class="bg-primary text-white font-medium px-8 py-3 rounded-full hover:bg-pink-600 transition transform hover:scale-105">
+        + Cadastrar Novo Pet
+      </button>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-white mt-16 py-6 border-t">
+    <div class="max-w-7xl mx-auto text-center text-gray-500 text-sm">
+      © 2025 PetConnect — Feito com ❤️ para ajudar animais a encontrarem um lar.
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/api.js"></script>
+  <script>
+    document.getElementById('registerPet').addEventListener('click', async () => {
+      try {
+        window.location.href = 'register-pet.html';
+
+      } catch (error) {
+        console.error('Erro ao sair:', error);
+      }
+    });
+    
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      try {
+        await api.logout();
+        localStorage.removeItem('userInfo');
+        window.location.href = 'index.html';
+      } catch (error) {
+        console.error('Erro ao sair:', error);
+      }
+    });
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      // try {
+      //   await api.logout();
+      //   localStorage.removeItem('userInfo');
+      window.location.href = 'index.html';
+    //   } catch (error) {
+    //     console.error('Erro ao sair:', error);
+    //   }
+    });
+
+    // Example dynamic data fetch
+    async function loadDashboardData() {
+      try {
+        const res = await fetch('/api/ong/dashboard');
+        const data = await res.json();
+        document.getElementById('petsCount').textContent = data.pets || 0;
+        document.getElementById('pendingRequests').textContent = data.requests || 0;
+        document.getElementById('adoptionsDone').textContent = data.adoptions || 0;
+        document.getElementById('postsCount').textContent = data.posts || 0;
+      } catch (err) {
+        console.error('Erro ao carregar dados do dashboard:', err);
+      }
+    }
+
+    // Initialize dashboard
+    // checkAuth();
+    // loadDashboardData();
+  </script>
+</body>
+</html>

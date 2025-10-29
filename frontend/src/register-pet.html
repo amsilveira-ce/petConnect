@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadastrar Novo Pet | PetConnect</title>
+  <link rel="icon" type="image/x-icon" href="http://localhost:5173/logos/logo.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#ec4899',
+            secondary: '#fce7f3',
+          },
+        },
+      },
+    };
+  </script>
+</head>
+
+<body class="bg-gray-50 text-gray-900">
+  <nav class="bg-white shadow-md sticky top-0 z-10">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <img src="http://localhost:5173/logos/logo.svg" alt="PetConnect" class="h-10 w-10">
+        <span class="font-mono text-2xl font-semibold text-gray-900">PetConnect</span>
+      </div>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="ong-dashboard.html" class="text-gray-700 hover:text-primary transition">Dashboard</a>
+        <a href="pets-ong.html" class="text-gray-700 hover:text-primary transition">Meus Pets</a>
+        <button id="logoutBtn"
+          class="bg-primary text-white px-6 py-2 rounded-full font-medium hover:bg-pink-600 transition">Sair</button>
+      </div>
+      <button class="md:hidden text-gray-700 focus:outline-none">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+          stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M3.75 5.25h16.5M3.75 12h16.5m-16.5 6.75h16.5" />
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <main class="max-w-5xl mx-auto px-6 py-12">
+    <div class="mb-10">
+      <h1 class="text-4xl font-bold text-gray-900 mb-2">Cadastrar Novo Pet 🐾</h1>
+      <p class="text-gray-600">Preencha as informações abaixo para cadastrar um novo pet para adoção.</p>
+    </div>
+
+    <form id="petForm" class="space-y-8">
+      
+      <section class="bg-white p-8 rounded-2xl shadow-md">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+          <span class="text-primary">📝</span> Informações Básicas
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
+              Nome do Pet <span class="text-red-500">*</span>
+            </label>
+            <input type="text" id="name" name="name" required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition"
+              placeholder="Ex: Rex, Luna, Mel..." minlength="2" maxlength="100">
+          </div>
+
+          <div>
+            <label for="species" class="block text-sm font-medium text-gray-700 mb-2">
+              Espécie <span class="text-red-500">*</span>
+            </label>
+            <select id="species" name="species" required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition">
+              <option value="">Selecione...</option>
+              <option value="dog">Cachorro 🐶</option>
+              <option value="cat">Gato 🐱</option>
+              <option value="other">Outro</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="breed" class="block text-sm font-medium text-gray-700 mb-2">
+              Raça
+            </label>
+            <input type="text" id="breed" name="breed"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition"
+              placeholder="Ex: Vira-lata, SRD, Labrador..." maxlength="100">
+          </div>
+
+          <div>
+            <label for="gender" class="block text-sm font-medium text-gray-700 mb-2">
+              Sexo <span class="text-red-500">*</span>
+            </label>
+            <select id="gender" name="gender" required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition">
+              <option value="">Selecione...</option>
+              <option value="male">Macho ♂️</option>
+              <option value="female">Fêmea ♀️</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="size" class="block text-sm font-medium text-gray-700 mb-2">
+              Porte <span class="text-red-500">*</span>
+            </label>
+            <select id="size" name="size" required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition">
+              <option value="">Selecione...</option>
+              <option value="small">Pequeno (até 10kg)</option>
+              <option value="medium">Médio (10-25kg)</option>
+              <option value="large">Grande (25-45kg)</option>
+              <option value="extra-large">Extra Grande (+45kg)</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="ageCategory" class="block text-sm font-medium text-gray-700 mb-2">
+              Categoria de Idade <span class="text-red-500">*</span>
+            </label>
+            <select id="ageCategory" name="ageCategory" required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition">
+              <option value="">Selecione...</option>
+              <option value="puppy">Filhote (0-1 ano)</option>
+              <option value="young">Jovem (1-3 anos)</option>
+              <option value="adult">Adulto (3-8 anos)</option>
+              <option value="senior">Idoso (+8 anos)</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="ageYears" class="block text-sm font-medium text-gray-700 mb-2">
+              Idade (anos)
+            </label>
+            <input type="number" id="ageYears" name="ageYears" min="0" max="30"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition"
+              placeholder="Ex: 2">
+          </div>
+
+          <div>
+            <label for="ageMonths" class="block text-sm font-medium text-gray-700 mb-2">
+              Idade (meses)
+            </label>
+            <input type="number" id="ageMonths" name="ageMonths" min="0" max="11"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition"
+              placeholder="Ex: 6">
+          </div>
+
+          <div>
+            <label for="colorPrimary" class="block text-sm font-medium text-gray-700 mb-2">
+              Cor Principal
+            </label>
+            <input type="text" id="colorPrimary" name="colorPrimary"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition"
+              placeholder="Ex: Preto, Branco, Caramelo...">
+          </div>
+
+          <div>
+            <label for="colorSecondary" class="block text-sm font-medium text-gray-700 mb-2">
+              Cor Secundária
+            </label>
+            <input type="text" id="colorSecondary" name="colorSecondary"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition"
+              placeholder="Ex: Manchas marrons">
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-white p-8 rounded-2xl shadow-md">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+          <span class="text-primary">🎯</span> Comportamento e Temperamento
+        </h2>
+        
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-3">
+            Características de Comportamento
+          </label>
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" name="behaviorTags" value="friendly" class="w-4 h-4 text-primary rounded focus:ring-primary">
+              <span class="text-sm">Amigável</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" name="behaviorTags" value="calm" class="w-4 h-4 text-primary rounded focus:ring-primary">
+              <span class="text-sm">Calmo</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" name="behaviorTags" value="energetic" class="w-4 h-4 text-primary rounded focus:ring-primary">
+              <span class="text-sm">Energético</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" name="behaviorTags" value="playful" class="w-4 h-4 text-primary rounded focus:ring-primary">
+              <span class="text-sm">Brincalhão</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" name="behaviorTags" value="protective" class="w-4 h-4 text-primary rounded focus:ring-primary">
+              <span class="text-sm">Protetor</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" name="behaviorTags" value="independent" class="w-4 h-4 text-primary rounded focus:ring-primary">
+              <span class="text-sm">Independente</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" name="behaviorTags" value="affectionate" class="w-4 h-4 text-primary rounded focus:ring-primary">
+              <span class="text-sm">Carinhoso</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" name="behaviorTags" value="shy" class="w-4 h-4 text-primary rounded focus:ring-primary">
+              <span class="text-sm">Tímido</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" name="behaviorTags" value="trained" class="w-4 h-4 text-primary rounded focus:ring-primary">
+              <span class="text-sm">Treinado</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" name="behaviorTags" value="good-with-kids" class="w-4 h-4 text-primary rounded focus:ring-primary">
+              <span class="text-sm">Bom com crianças</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" name="behaviorTags" value="good-with-dogs" class="w-4 h-4 text-primary rounded focus:ring-primary">
+              <span class="text-sm">Bom com cães</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" name="behaviorTags" value="good-with-cats" class="w-4 h-4 text-primary rounded focus:ring-primary">
+              <span class="text-sm">Bom com gatos</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" name="behaviorTags" value="needs-space" class="w-4 h-4 text-primary rounded focus:ring-primary">
+              <span class="text-sm">Precisa de espaço</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" name="behaviorTags" value="apartment-friendly" class="w-4 h-4 text-primary rounded focus:ring-primary">
+              <span class="text-sm">Apto para apartamento</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" name="behaviorTags" value="special-needs" class="w-4 h-4 text-primary rounded focus:ring-primary">
+              <span class="text-sm">Necessidades especiais</span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-white p-8 rounded-2xl shadow-md">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+          <span class="text-primary">🏥</span> Informações de Saúde
+        </h2>
+        
+        <div class="space-y-6">
+          <div class="flex flex-wrap gap-6">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="isVaccinated" name="isVaccinated" class="w-5 h-5 text-primary rounded focus:ring-primary">
+              <span class="text-sm font-medium">Vacinado</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="isNeutered" name="isNeutered" class="w-5 h-5 text-primary rounded focus:ring-primary">
+              <span class="text-sm font-medium">Castrado</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" id="hasMicrochip" name="hasMicrochip" class="w-5 h-5 text-primary rounded focus:ring-primary">
+              <span class="text-sm font-medium">Possui Microchip</span>
+            </label>
+          </div>
+
+          <div>
+            <label for="specialNeeds" class="block text-sm font-medium text-gray-700 mb-2">
+              Necessidades Especiais
+            </label>
+            <textarea id="specialNeeds" name="specialNeeds" rows="3" maxlength="500"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition"
+              placeholder="Descreva qualquer necessidade especial do pet..."></textarea>
+          </div>
+
+          <div>
+            <label for="medicalHistory" class="block text-sm font-medium text-gray-700 mb-2">
+              Histórico Médico
+            </label>
+            <textarea id="medicalHistory" name="medicalHistory" rows="4" maxlength="1000"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition"
+              placeholder="Descreva o histórico médico, tratamentos realizados, medicamentos, etc."></textarea>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-white p-8 rounded-2xl shadow-md">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+          <span class="text-primary">✍️</span> Descrição e História
+        </h2>
+        
+        <div class="space-y-6">
+          <div>
+            <label for="description" class="block text-sm font-medium text-gray-700 mb-2">
+              Descrição <span class="text-red-500">*</span>
+            </label>
+            <textarea id="description" name="description" rows="5" required minlength="20" maxlength="2000"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition"
+              placeholder="Descreva o pet de forma atraente para os adotantes. Fale sobre personalidade, hábitos, o que ele gosta de fazer..."></textarea>
+            <p class="text-sm text-gray-500 mt-1">Mínimo 20 caracteres, máximo 2000</p>
+          </div>
+
+          <div>
+            <label for="story" class="block text-sm font-medium text-gray-700 mb-2">
+              História do Pet
+            </label>
+            <textarea id="story" name="story" rows="5" maxlength="3000"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition"
+              placeholder="Conte a história de como o pet chegou à ONG, seu passado, desafios superados..."></textarea>
+            <p class="text-sm text-gray-500 mt-1">Máximo 3000 caracteres</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-white p-8 rounded-2xl shadow-md">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+          <span class="text-primary">📍</span> Localização
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label for="city" class="block text-sm font-medium text-gray-700 mb-2">
+              Cidade <span class="text-red-500">*</span>
+            </label>
+            <input type="text" id="city" name="city" required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition"
+              placeholder="Ex: São Paulo">
+          </div>
+
+          <div>
+            <label for="state" class="block text-sm font-medium text-gray-700 mb-2">
+              Estado <span class="text-red-500">*</span>
+            </label>
+            <select id="state" name="state" required
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition">
+              <option value="">Selecione...</option>
+              <option value="AC">Acre</option>
+              <option value="AL">Alagoas</option>
+              <option value="AP">Amapá</option>
+              <option value="AM">Amazonas</option>
+              <option value="BA">Bahia</option>
+              <option value="CE">Ceará</option>
+              <option value="DF">Distrito Federal</option>
+              <option value="ES">Espírito Santo</option>
+              <option value="GO">Goiás</option>
+              <option value="MA">Maranhão</option>
+              <option value="MT">Mato Grosso</option>
+              <option value="MS">Mato Grosso do Sul</option>
+              <option value="MG">Minas Gerais</option>
+              <option value="PA">Pará</option>
+              <option value="PB">Paraíba</option>
+              <option value="PR">Paraná</option>
+              <option value="PE">Pernambuco</option>
+              <option value="PI">Piauí</option>
+              <option value="RJ">Rio de Janeiro</option>
+              <option value="RN">Rio Grande do Norte</option>
+              <option value="RS">Rio Grande do Sul</option>
+              <option value="RO">Rondônia</option>
+              <option value="RR">Roraima</option>
+              <option value="SC">Santa Catarina</option>
+              <option value="SP">São Paulo</option>
+              <option value="SE">Sergipe</option>
+              <option value="TO">Tocantins</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-white p-8 rounded-2xl shadow-md">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+          <span class="text-primary">📸</span> Fotos
+        </h2>
+        
+        <div>
+          <label for="photos" class="block text-sm font-medium text-gray-700 mb-2">
+            Upload de Fotos
+          </label>
+          <input type="file" id="photos" name="photos" accept="image/*" multiple
+            class="w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition cursor-pointer">
+          <p class="text-sm text-gray-500 mt-2">Você pode selecionar múltiplas fotos. A primeira será a foto principal.</p>
+          
+          <div id="photoPreview" class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-4"></div>
+        </div>
+      </section>
+
+      <section class="bg-white p-8 rounded-2xl shadow-md">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+          <span class="text-primary">📋</span> Requisitos para Adoção
+        </h2>
+        
+        <div id="requirementsContainer" class="space-y-3">
+          <div class="flex gap-2">
+            <input type="text" name="requirements[]" maxlength="200"
+              class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition"
+              placeholder="Ex: Ter quintal cercado">
+          </div>
+        </div>
+        
+        <button type="button" id="addRequirementBtn"
+          class="mt-4 text-primary font-medium hover:text-pink-600 transition flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+          Adicionar Requisito
+        </button>
+      </section>
+
+      <section class="bg-white p-8 rounded-2xl shadow-md">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+          <span class="text-primary">⚡</span> Status e Prioridade
+        </h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div>
+            <label for="adoptionStatus" class="block text-sm font-medium text-gray-700 mb-2">
+              Status de Adoção
+            </label>
+            <select id="adoptionStatus" name="adoptionStatus"
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition">
+              <option value="available">Disponível</option>
+              <option value="pending">Pendente</option>
+              <option value="not-available">Indisponível</option>
+            </select>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <input type="checkbox" id="isUrgent" name="isUrgent" class="w-5 h-5 text-primary rounded focus:ring-primary">
+            <label for="isUrgent" class="text-sm font-medium text-gray-700">
+              Adoção Urgente 🚨
+            </label>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <input type="checkbox" id="isFeatured" name="isFeatured" class="w-5 h-5 text-primary rounded focus:ring-primary">
+            <label for="isFeatured" class="text-sm font-medium text-gray-700">
+              Pet em Destaque ⭐
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <div class="flex gap-4 justify-end">
+        
+        <a href="/frontend/src/ong-dashboard.html"
+          class="px-8 py-3 border-2 border-gray-300 text-gray-700 rounded-full font-medium hover:bg-gray-50 transition">
+          Cancelar
+        </a>
+        
+        <button type="submit"
+          class="bg-primary text-white px-8 py-3 rounded-full font-medium hover:bg-pink-600 transition transform hover:scale-105 flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+          </svg>
+          Cadastrar Pet
+        </button>
+      </div>
+    </form>
+  </main>
+
+  <footer class="bg-white mt-16 py-6 border-t">
+    <div class="max-w-7xl mx-auto text-center text-gray-500 text-sm">
+      © 2025 PetConnect — Feito com ❤️ para ajudar animais a encontrarem um lar.
+    </div>
+  </footer>
+
+  <div id="loadingModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+    <div class="bg-white rounded-2xl p-8 text-center">
+      <div class="animate-spin rounded-full h-16 w-16 border-b-2 border-primary mx-auto mb-4"></div>
+      <p class="text-gray-700 font-medium">Cadastrando pet...</p>
+    </div>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script>
+    
+    // Script para o botão "Sair" da barra de navegação (Correto)
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      // try {
+      //   await api.logout();
+      //   localStorage.removeItem('userInfo');
+      window.location.href = 'index.html';
+    //   } catch (error) {
+    //     console.error('Erro ao sair:', error);
+    //   }
+    });
+
+    // Add requirement field
+    document.getElementById('addRequirementBtn').addEventListener('click', () => {
+      const container = document.getElementById('requirementsContainer');
+      const newField = document.createElement('div');
+      newField.className = 'flex gap-2';
+      newField.innerHTML = `
+        <input type="text" name="requirements[]" maxlength="200"
+          class="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition"
+          placeholder="Ex: Visita prévia obrigatória">
+        <button type="button" class="removeRequirementBtn text-red-500 hover:text-red-700 px-3">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      `;
+      container.appendChild(newField);
+    });
+
+    // Remove requirement field
+    document.getElementById('requirementsContainer').addEventListener('click', (e) => {
+      if (e.target.closest('.removeRequirementBtn')) {
+        e.target.closest('.flex').remove();
+      }
+    });
+
+    // Photo preview
+    document.getElementById('photos').addEventListener('change', (e) => {
+      const previewContainer = document.getElementById('photoPreview');
+      previewContainer.innerHTML = '';
+      
+      const files = Array.from(e.target.files);
+      files.forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const div = document.createElement('div');
+          div.className = 'relative rounded-lg overflow-hidden border-2 border-gray-200';
+          div.innerHTML = `
+            <img src="${e.target.result}" alt="Preview" class="w-full h-32 object-cover">
+            ${index === 0 ? '<span class="absolute top-2 left-2 bg-primary text-white text-xs px-2 py-1 rounded">Principal</span>' : ''}
+          `;
+          previewContainer.appendChild(div);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    // Form submission
+    document.getElementById('petForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const loadingModal = document.getElementById('loadingModal');
+      loadingModal.classList.remove('hidden');
+
+      try {
+        const formData = new FormData(e.target);
+        
+        // Collect behavior tags
+        const behaviorTags = Array.from(document.querySelectorAll('input[name="behaviorTags"]:checked'))
+          .map(cb => cb.value);
+        
+        // Collect requirements
+        const requirements = Array.from(document.querySelectorAll('input[name="requirements[]"]'))
+          .map(input => input.value)
+          .filter(val => val.trim() !== '');
+        
+        // Build pet data object
+        const petData = {
+          name: formData.get('name'),
+          species: formData.get('species'),
+          breed: formData.get('breed') || undefined,
+          size: formData.get('size'),
+          ageCategory: formData.get('ageCategory'),
+          ageYears: formData.get('ageYears') ? parseInt(formData.get('ageYears')) : undefined,
+          ageMonths: formData.get('ageMonths') ? parseInt(formData.get('ageMonths')) : undefined,
+          gender: formData.get('gender'),
+          color: {
+            primary: formData.get('colorPrimary') || undefined,
+            secondary: formData.get('colorSecondary') || undefined
+          },
+          behaviorTags: behaviorTags,
+          healthInfo: {
+            isVaccinated: formData.get('isVaccinated') === 'on',
+            isNeutered: formData.get('isNeutered') === 'on',
+            hasMicrochip: formData.get('hasMicrochip') === 'on',
+            specialNeeds: formData.get('specialNeeds') || undefined,
+            medicalHistory: formData.get('medicalHistory') || undefined
+          },
+          description: formData.get('description'),
+          story: formData.get('story') || undefined,
+          location: {
+            city: formData.get('city'),
+            state: formData.get('state')
+          },
+          adoptionRequirements: requirements,
+          adoptionStatus: formData.get('adoptionStatus') || 'available',
+          isUrgent: formData.get('isUrgent') === 'on',
+          isFeatured: formData.get('isFeatured') === 'on'
+        };
+
+        // TODO: Upload photos separately and add URLs to petData.media.photos
+        // For now, you'll need to implement photo upload to your backend
+        
+        // Submit to API
+        const response = await fetch('/api/pets', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(petData),
+          credentials: 'include'
+        });
+
+        if (!response.ok) {
+          throw new Error('Erro ao cadastrar pet');
+        }
+
+        const result = await response.json();
+        
+        // Success - redirect to dashboard
+        alert('Pet cadastrado com sucesso! 🎉');
+        // Corrigido para corresponder ao seu nome de arquivo
+        window.location.href = 'ong-dashboard.html'; 
+        
+      } catch (error) {
+        console.error('Erro:', error);
+        alert('Erro ao cadastrar pet. Por favor, tente novamente.');
+      } finally {
+        loadingModal.classList.add('hidden');
+      }
+    });
+
+    // Auth check on page load
+    async function checkAuth() {
+      try {
+        const response = await api.checkAuth();
+        if (!response.success || response.role !== 'ong') {
+          window.location.href = 'login.html';
+        }
+      } catch (error) {
+        window.location.href = 'login.html';
+      }
+    }
+
+    // Uncomment to enable auth check
+    // checkAuth();
+  </script>
+</body>
+</html>
