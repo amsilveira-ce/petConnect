@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrar - PetConnect</title>
+    <link rel="icon" type="image/x-icon" href="http://localhost:5173/logos/logo.svg">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <!-- Alert Container -->
+            <div id="alert-container"></div>
+
+            <!-- Header -->
+            <div class="auth-header">
+                <img src="http://localhost:5173/logos/logo.svg" alt="PetConnect Logo" class="auth-logo">
+                <h1 class="auth-title">Bem-vindo de volta!</h1>
+                <p class="auth-subtitle">Entre com sua conta para continuar</p>
+            </div>
+
+            
+            <div class="form-group">
+            <div class="account-toggle" id="accountTypeToggle">
+                <button class="toggle-btn active" data-type="user">Adotante</button>
+                <button class="toggle-btn" data-type="ong">ONG</button>
+            </div>
+            </div>
+
+
+            <!-- Login Form -->
+            <form id="loginForm">
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email" class="form-label">E-mail</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        class="form-input" 
+                        placeholder="seu@email.com"
+                        required
+                        autocomplete="email"
+                    >
+                    <div class="form-error hidden" id="emailError"></div>
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="password" class="form-label">Senha</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        class="form-input" 
+                        placeholder="Digite sua senha"
+                        required
+                        autocomplete="current-password"
+                    >
+                    <div class="form-error hidden" id="passwordError"></div>
+                </div>
+
+                <!-- Remember & Forgot -->
+                <div class="form-group" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="checkbox-wrapper">
+                        <input type="checkbox" id="remember" class="checkbox-input">
+                        <label for="remember" class="checkbox-label">Lembrar-me</label>
+                    </div>
+                    <a href="forgot-password.html" class="btn-link">Esqueceu a senha?</a>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-primary" id="submitBtn">
+                    Entrar
+                </button>
+            </form>
+
+            <!-- Sign Up Link -->
+            <div class="auth-link">
+                Não tem uma conta? <a href="register.html">Cadastre-se</a>
+            </div>
+
+            <!-- Back to Home -->
+            <div class="auth-link">
+                <a href="index.html">← Voltar para o início</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/login.js"></script>
+</body>
+</html>
