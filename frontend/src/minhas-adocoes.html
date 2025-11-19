@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minhas adoções | PetConnect</title>
+  <link rel="icon" type="image/x-icon" href="http://localhost:5173/logos/logo.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#ec4899',
+            secondary: '#fce7f3'
+          }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="bg-gray-50 text-gray-900">
+  <!-- Navbar -->
+  <nav class="bg-white shadow-md sticky top-0 z-10">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <img src="http://localhost:5173/logos/logo.svg" alt="PetConnect" class="h-10 w-10">
+        <span class="font-mono text-2xl font-semibold">PetConnect</span>
+      </div>
+      <div class="hidden md:flex gap-8">
+        <a href="user-dashboard.html" class="text-gray-700 hover:text-primary transition">Dashboard</a>
+        <a href="pets-adodante.html" class="text-primary font-semibold">Meus Pets</a>
+        <a href="minhas-adocoes.html" class="text-gray-700 hover:text-primary transition">Minhas adoções</a>
+        <button id="logoutBtn" class="bg-primary text-white px-6 py-2 rounded-full hover:bg-pink-600 transition">Sair</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Conteúdo -->
+  <main class="max-w-7xl mx-auto px-6 py-12">
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-4xl font-bold text-gray-900">Minhas adoções</h1>
+    </div>
+
+    <!-- Grid de Pets -->
+    <section id="petsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></section>
+  </main>
+
+  <!-- Modal Detalhes -->
+  <div id="petModal" class="hidden fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full overflow-hidden">
+      <div class="flex justify-between items-center border-b p-6">
+        <h2 id="modalPetName" class="text-2xl font-bold text-gray-900">Detalhes do Pet</h2>
+        <button id="closeModal" class="text-gray-600 hover:text-gray-900 text-2xl">&times;</button>
+      </div>
+
+      <div class="p-6 overflow-y-auto max-h-[80vh]">
+        <img id="modalPetImage" src="" alt="Pet" class="w-full h-64 object-cover rounded-xl mb-6">
+
+        <div id="modalPetDetails" class="space-y-4 text-gray-700"></div>
+
+        <div id="modalAdopter" class="mt-6 border-t pt-4 hidden">
+          <h3 class="text-xl font-semibold mb-3 text-primary">Adotante</h3>
+          <div id="adopterInfo" class="text-gray-700"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white py-6 mt-16 border-t text-center text-gray-500 text-sm">
+    © 2025 PetConnect — Conectando corações humanos e animais ❤️
+  </footer>
+
+  <script>
+    // MOCKS DE PETS + USUÁRIOS
+    const petsMock = [
+      {
+        _id: "pet1",
+        name: "Chili",
+        species: "cat",
+        breed: "Gato Malhado",
+        size: "small",
+        gender: "female",
+        ageCategory: "young",
+        ageYears: 1,
+        color: { primary: "Malhado" },
+        adoptionStatus: "adopted",
+        description: "Chili é brincalhona, doce e adora brincar com seu ratinho de brinquedo.",
+        location: { city: "Bragança Paulista", state: "SP" },
+        behaviorTags: ["friendly", "playful", "sweet"],
+        healthInfo: { isVaccinated: true, isNeutered: false },
+        media: {
+          photos: [
+            { url: "https://wpcdn.web.wsu.edu/news/uploads/sites/2797/2025/03/cat2-1024x676.jpg", isPrimary: true }
+          ]
+        },
+        adoptedBy: {
+          name: "Clarissa Mendes",
+          email: "clarissa.mendes@example.com",
+          phone: "(11) 99876-5432",
+          address: {
+            street: "Rua Dr. Tosta, 123",
+            city: "Bragança Paulista",
+            state: "SP"
+          },
+          profile: {
+            occupation: "Universitária",
+            hasPets: true,
+            hasChildren: false,
+            childrenAges: null
+          }
+        }
+      },
+      {
+        _id: "pet2",
+        name: "Pepper",
+        species: "dog",
+        breed: "Mountain Feist",
+        size: "medium",
+        gender: "male",
+        ageCategory: "young",
+        ageYears: 1.5,
+        color: { primary: "Preto e Branco" },
+        adoptionStatus: "adopted",
+        description: "Pepper adora brincar no quintal e pular na piscina quando esta calor.",
+        location: { city: "Bragança Paulista", state: "SP" },
+        behaviorTags: ["energetic", "affectionate"],
+        healthInfo: { isVaccinated: true, isNeutered: true },
+        media: {
+          photos: [
+            { url: "https://love.doghero.com.br/wp-content/uploads/2018/06/shutterstock_1058092325.jpg", isPrimary: true }
+          ]
+        },
+        adoptedBy: {
+          name: "Clarissa Mendes",
+          email: "clarissa.mendes@example.com",
+          phone: "(11) 99876-5432",
+          address: {
+            street: "Rua Dr. Tosta, 123",
+            city: "Bragança Paulista",
+            state: "SP"
+          },
+          profile: {
+            occupation: "Universitária",
+            hasPets: true,
+            hasChildren: false,
+            childrenAges: null
+          }
+        }
+      }
+    ];
+
+    // RENDERIZA OS CARDS
+    const petsGrid = document.getElementById("petsGrid");
+    petsMock.forEach(pet => {
+      const card = document.createElement("div");
+      card.className = "bg-white rounded-2xl shadow-md hover:shadow-lg transition overflow-hidden cursor-pointer";
+      card.innerHTML = `
+        <img src="${pet.media.photos[0].url}" alt="${pet.name}" class="w-full h-52 object-cover">
+        <div class="p-6">
+          <h3 class="text-2xl font-bold mb-1">${pet.name}</h3>
+          <p class="text-gray-600 capitalize mb-1">${pet.breed} • ${pet.gender} • ${pet.ageCategory}</p>
+          <p class="text-sm text-gray-500">${pet.location.city} - ${pet.location.state}</p>
+          <span class="inline-block mt-3 px-3 py-1 rounded-full text-sm font-medium
+            ${pet.adoptionStatus === 'available' ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-700'}">
+            ${pet.adoptionStatus === 'available' ? 'Disponível' : 'Adotado'}
+          </span>
+        </div>
+      `;
+      card.addEventListener('click', () => openPetModal(pet));
+      petsGrid.appendChild(card);
+    });
+
+    // MODAL
+    const modal = document.getElementById('petModal');
+    const closeModal = document.getElementById('closeModal');
+
+    closeModal.addEventListener('click', () => modal.classList.add('hidden'));
+    modal.addEventListener('click', e => { if (e.target === modal) modal.classList.add('hidden'); });
+
+    function openPetModal(pet) {
+      document.getElementById('modalPetName').textContent = pet.name;
+      document.getElementById('modalPetImage').src = pet.media.photos[0].url;
+
+      const details = `
+        <div><strong>Espécie:</strong> ${pet.species}</div>
+        <div><strong>Raça:</strong> ${pet.breed}</div>
+        <div><strong>Tamanho:</strong> ${pet.size}</div>
+        <div><strong>Idade:</strong> ${pet.ageYears} anos (${pet.ageCategory})</div>
+        <div><strong>Cor:</strong> ${pet.color.primary || '-'}</div>
+        <div><strong>Comportamento:</strong> ${pet.behaviorTags.join(', ')}</div>
+        <div><strong>Saúde:</strong> ${pet.healthInfo.isVaccinated ? 'Vacinado' : 'Não vacinado'}, ${pet.healthInfo.isNeutered ? 'Castrado' : 'Não castrado'}</div>
+        <div><strong>Localização:</strong> ${pet.location.city} - ${pet.location.state}</div>
+        <div><strong>Descrição:</strong> ${pet.description}</div>
+      `;
+      document.getElementById('modalPetDetails').innerHTML = details;
+
+      // Se tiver adotante
+      const adopterSection = document.getElementById('modalAdopter');
+      if (pet.adoptedBy) {
+        adopterSection.classList.remove('hidden');
+        const a = pet.adoptedBy;
+        document.getElementById('adopterInfo').innerHTML = `
+          <div><strong>Nome:</strong> ${a.name}</div>
+          <div><strong>Email:</strong> ${a.email}</div>
+          <div><strong>Telefone:</strong> ${a.phone}</div>
+          <div><strong>Endereço:</strong> ${a.address.street}, ${a.address.city} - ${a.address.state}</div>
+          <div><strong>Profissão:</strong> ${a.profile.occupation}</div>
+          <div><strong>Tem filhos:</strong> ${a.profile.hasChildren ? 'Sim (' + a.profile.childrenAges.join(', ') + ' anos)' : 'Não'}</div>
+          <div><strong>Já possui pets:</strong> ${a.profile.hasPets ? 'Sim' : 'Não'}</div>
+        `;
+      } else {
+        adopterSection.classList.add('hidden');
+      }
+
+      modal.classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
