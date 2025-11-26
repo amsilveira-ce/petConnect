@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Formulário de Adoção - PetConnect</title>
-    <link rel="icon" type="image/x-icon" href="http://localhost:5173/logos/logo.svg">
+    <link rel="icon" type="image/x-icon" href="http://127.0.0.1:5501/frontend/public/logos/logo.svg">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .step-indicator {
@@ -32,7 +32,7 @@
     <nav class="bg-white shadow-sm px-6 py-4">
         <div class="container mx-auto flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <img src="http://localhost:5173/logos/logo.svg" alt="PetConnect" class="h-10">
+                <img src="http://127.0.0.1:5501/frontend/public/logos/logo.svg" alt="PetConnect" class="h-10">
                 <span class="text-2xl font-mono text-gray-900">PetConnect</span>
             </div>
             <a href="user-dashboard.html" class="text-gray-600 hover:text-pink-500">← Voltar</a>
@@ -317,13 +317,16 @@
 
     <script>
         let currentStep = 1;
+        let pet = null; // Global pet variable
+        let petId = null; // Global petId variable
+        
         const petsMock = [
             {
                 _id: "pet1",
                 name: "Luna",
                 species: "dog",
                 breed: "Labrador",
-                media: { photos: [{ url: "https://images.unsplash.com/photo-1617854970997-9526f01d0493?w=800" }] }
+                media: { photos: [{ url: "https://www.petlove.com.br/images/breeds/193219/profile/original/labrador-p.jpg?1532539172" }] }
             },
             {
                 _id: "pet2",
@@ -376,15 +379,39 @@
             }
         ];
 
-        // Load pet info
-        const petId = localStorage.getItem('adoptingPetId');
-        const pet = petsMock.find(p => p._id === petId);
+        // Load pet info after DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            petId = localStorage.getItem('adoptingPetId');
+            console.log('Loading pet with ID:', petId);
+            
+            pet = petsMock.find(p => p._id === petId);
 
-        if (pet) {
-            document.getElementById('petImage').src = pet.media.photos[0].url;
-            document.getElementById('petName').textContent = pet.name;
-            document.getElementById('petInfo').textContent = `${pet.breed} • ${pet.species === 'dog' ? 'Cachorro' : 'Gato'}`;
-        }
+            if (!pet) {
+                console.error('Pet not found with ID:', petId);
+                alert('Pet não encontrado. Redirecionando...');
+                window.location.href = 'user-dashboard.html';
+                return;
+            }
+
+            console.log('Pet found:', pet);
+            console.log('Pet image URL:', pet.media.photos[0].url);
+
+            const petImageEl = document.getElementById('petImage');
+            const petNameEl = document.getElementById('petName');
+            const petInfoEl = document.getElementById('petInfo');
+
+            if (petImageEl && petNameEl && petInfoEl) {
+                petImageEl.src = pet.media.photos[0].url;
+                petImageEl.onerror = function() {
+                    console.error('Failed to load image:', pet.media.photos[0].url);
+                };
+                petNameEl.textContent = pet.name;
+                petInfoEl.textContent = `${pet.breed} • ${pet.species === 'dog' ? 'Cachorro' : 'Gato'}`;
+                console.log('Pet info loaded successfully');
+            } else {
+                console.error('Pet preview elements not found');
+            }
+        });
 
         function nextStep() {
             // Validate current step
@@ -456,7 +483,12 @@
             // Collect form data
             const formData = {
                 petId: petId,
-                petName: pet.name,
+                pet: {
+                    name: pet.name,
+                    breed: pet.breed,
+                    species: pet.species,
+                    image: pet.media.photos[0].url
+                },
                 applicantInfo: {
                     fullName: document.getElementById('fullName').value,
                     email: document.getElementById('email').value,
@@ -489,6 +521,9 @@
             let applications = JSON.parse(localStorage.getItem('applications')) || [];
             applications.push(formData);
             localStorage.setItem('applications', JSON.stringify(applications));
+
+            console.log('Application saved:', formData);
+            console.log('Total applications:', applications.length);
 
             // Show success modal
             document.getElementById('successModal').classList.remove('hidden');

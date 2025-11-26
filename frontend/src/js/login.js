@@ -3,39 +3,32 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('loginForm');
     const submitBtn = document.getElementById('submitBtn');
     const accountTypeToggle = document.getElementById('accountTypeToggle');
-    const toggleOptions = accountTypeToggle.querySelectorAll('.toggle-option');
+    const toggleButtons = accountTypeToggle.querySelectorAll('.toggle-btn');
     
     let accountType = 'user';
 
     // Toggle between User and ONG
-     toggleOptions.forEach(option => {
-        option.addEventListener('click', () => {
-            const type = option.dataset.type;
+    toggleButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const type = button.dataset.type;
+            
+            // Don't do anything if clicking the already active button
+            if (type === accountType) return;
 
-            // Atualiza visual ativo
-            toggleOptions.forEach(opt => opt.classList.remove('active'));
-            option.classList.add('active');
+            // Update active state
+            toggleButtons.forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
 
-            // Move o slider
+            // Slide the toggle
             if (type === 'ong') {
                 accountTypeToggle.classList.add('ong');
             } else {
                 accountTypeToggle.classList.remove('ong');
             }
 
-            // Anima o clique
-            toggleSlider.classList.add('clicked');
-            setTimeout(() => toggleSlider.classList.remove('clicked'), 150);
-
             accountType = type;
+            console.log('Account type changed to:', accountType);
         });
-    });
-    accountTypeToggle.addEventListener('click', (e) => {
-        if (!e.target.classList.contains('toggle-option')) {
-            const current = accountType === 'user' ? 'ong' : 'user';
-            const option = accountTypeToggle.querySelector(`[data-type="${current}"]`);
-            option.click();
-        }
     });
 
     // Form submission
