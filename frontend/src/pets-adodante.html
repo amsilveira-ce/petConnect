@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Meus Pets | PetConnect</title>
+  <title>Meus Pets Favoritos | PetConnect</title>
   <link rel="icon" type="image/x-icon" href="http://localhost:5173/logos/logo.svg">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -18,6 +18,14 @@
       }
     };
   </script>
+  <style>
+    .heart-icon {
+      transition: all 0.3s ease;
+    }
+    .heart-icon:hover {
+      transform: scale(1.2);
+    }
+  </style>
 </head>
 <body class="bg-gray-50 text-gray-900">
   <!-- Navbar -->
@@ -30,7 +38,7 @@
       <div class="hidden md:flex gap-8">
         <a href="user-dashboard.html" class="text-gray-700 hover:text-primary transition">Dashboard</a>
         <a href="pets-adodante.html" class="text-primary font-semibold">Meus Pets</a>
-        <a href="minhas-adocoes.html" class="text-gray-700 hover:text-primary transition">Minhas adoções</a>
+        <a href="minhas-adocoes.html" class="text-gray-700 hover:text-primary transition">Minhas Adoções</a>
         <button id="logoutBtn" class="bg-primary text-white px-6 py-2 rounded-full hover:bg-pink-600 transition">Sair</button>
       </div>
     </div>
@@ -39,7 +47,23 @@
   <!-- Conteúdo -->
   <main class="max-w-7xl mx-auto px-6 py-12">
     <div class="flex justify-between items-center mb-8">
-      <h1 class="text-4xl font-bold text-gray-900">Meus Pets</h1>
+      <div>
+        <h1 class="text-4xl font-bold text-gray-900">Meus Pets Favoritos ❤️</h1>
+        <p class="text-gray-600 mt-2">Pets que você marcou como favoritos</p>
+      </div>
+      <a href="user-dashboard.html" class="bg-primary text-white px-6 py-3 rounded-full hover:bg-pink-600 transition">
+        Explorar Mais Pets
+      </a>
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="hidden text-center py-16">
+      <div class="text-6xl mb-4">💔</div>
+      <h3 class="text-2xl font-bold text-gray-900 mb-2">Nenhum pet favoritado ainda</h3>
+      <p class="text-gray-600 mb-6">Explore nossos pets disponíveis e favorite os que você mais gostar!</p>
+      <a href="user-dashboard.html" class="inline-block bg-primary text-white px-8 py-3 rounded-full hover:bg-pink-600 transition">
+        Explorar Pets
+      </a>
     </div>
 
     <!-- Grid de Pets -->
@@ -59,9 +83,10 @@
 
         <div id="modalPetDetails" class="space-y-4 text-gray-700"></div>
 
-        <div id="modalAdopter" class="mt-6 border-t pt-4 hidden">
-          <h3 class="text-xl font-semibold mb-3 text-primary">Adotante</h3>
-          <div id="adopterInfo" class="text-gray-700"></div>
+        <div class="mt-6 pt-4 border-t">
+          <button id="modalAdoptBtn" class="w-full bg-primary text-white py-3 rounded-xl font-semibold hover:bg-pink-600 transition">
+            Adotar Este Pet
+          </button>
         </div>
       </div>
     </div>
@@ -69,153 +94,321 @@
 
   <!-- Footer -->
   <footer class="bg-white py-6 mt-16 border-t text-center text-gray-500 text-sm">
-    © 2025 PetConnect — Conectando corações humanos e animais ❤️
+    © 2025 PetConnect – Conectando corações humanos e animais ❤️
   </footer>
 
   <script>
-    // MOCKS DE PETS + USUÁRIOS
+    // Mock pets data (same as dashboard)
     const petsMock = [
       {
         _id: "pet1",
-        name: "Chili",
-        species: "cat",
-        breed: "Gato Malhado",
-        size: "small",
+        name: "Luna",
+        species: "dog",
+        breed: "Labrador",
+        size: "large",
         gender: "female",
         ageCategory: "young",
-        ageYears: 1,
-        color: { primary: "Malhado" },
-        adoptionStatus: "adopted",
-        description: "Chili é brincalhona, doce e adora brincar com seu ratinho de brinquedo.",
+        ageYears: 2,
+        color: { primary: "Dourado" },
+        adoptionStatus: "available",
+        description: "Luna é muito carinhosa e adora brincar. Perfeita para famílias!",
         location: { city: "Bragança Paulista", state: "SP" },
-        behaviorTags: ["friendly", "playful", "sweet"],
-        healthInfo: { isVaccinated: true, isNeutered: false },
+        behaviorTags: ["friendly", "energetic", "good-with-kids"],
+        healthInfo: { isVaccinated: true, isNeutered: true },
         media: {
-          photos: [
-            { url: "https://wpcdn.web.wsu.edu/news/uploads/sites/2797/2025/03/cat2-1024x676.jpg", isPrimary: true }
-          ]
-        },
-        adoptedBy: {
-          name: "Clarissa Mendes",
-          email: "clarissa.mendes@example.com",
-          phone: "(11) 99876-5432",
-          address: {
-            street: "Rua Dr. Tosta, 123",
-            city: "Bragança Paulista",
-            state: "SP"
-          },
-          profile: {
-            occupation: "Universitária",
-            hasPets: true,
-            hasChildren: false,
-            childrenAges: null
-          }
+          photos: [{ url: "https://images.unsplash.com/photo-1617854970997-9526f01d0493?w=800", isPrimary: true }]
         }
       },
       {
         _id: "pet2",
-        name: "Pepper",
+        name: "Thor",
         species: "dog",
-        breed: "Mountain Feist",
-        size: "medium",
+        breed: "Pastor Alemão",
+        size: "large",
         gender: "male",
-        ageCategory: "young",
-        ageYears: 1.5,
-        color: { primary: "Preto e Branco" },
-        adoptionStatus: "adopted",
-        description: "Pepper adora brincar no quintal e pular na piscina quando esta calor.",
-        location: { city: "Bragança Paulista", state: "SP" },
-        behaviorTags: ["energetic", "affectionate"],
+        ageCategory: "adult",
+        ageYears: 4,
+        color: { primary: "Preto e Marrom" },
+        adoptionStatus: "available",
+        description: "Thor é protetor e leal. Ótimo companheiro!",
+        location: { city: "Campinas", state: "SP" },
+        behaviorTags: ["protective", "loyal", "calm"],
         healthInfo: { isVaccinated: true, isNeutered: true },
         media: {
-          photos: [
-            { url: "https://love.doghero.com.br/wp-content/uploads/2018/06/shutterstock_1058092325.jpg", isPrimary: true }
-          ]
-        },
-        adoptedBy: {
-          name: "Clarissa Mendes",
-          email: "clarissa.mendes@example.com",
-          phone: "(11) 99876-5432",
-          address: {
-            street: "Rua Dr. Tosta, 123",
-            city: "Bragança Paulista",
-            state: "SP"
-          },
-          profile: {
-            occupation: "Universitária",
-            hasPets: true,
-            hasChildren: false,
-            childrenAges: null
-          }
+          photos: [{ url: "https://images.unsplash.com/photo-1568572933382-74d440642117?w=800", isPrimary: true }]
+        }
+      },
+      {
+        _id: "pet3",
+        name: "Mimi",
+        species: "cat",
+        breed: "Siamês",
+        size: "small",
+        gender: "female",
+        ageCategory: "young",
+        ageYears: 1,
+        color: { primary: "Bege e Marrom" },
+        adoptionStatus: "available",
+        description: "Mimi é independente mas muito carinhosa. Adora dormir no sol!",
+        location: { city: "São Paulo", state: "SP" },
+        behaviorTags: ["independent", "affectionate", "quiet"],
+        healthInfo: { isVaccinated: true, isNeutered: false },
+        media: {
+          photos: [{ url: "https://images.unsplash.com/photo-1513245543132-31f507417b26?w=800", isPrimary: true }]
+        }
+      },
+      {
+        _id: "pet4",
+        name: "Bob",
+        species: "dog",
+        breed: "Bulldog",
+        size: "medium",
+        gender: "male",
+        ageCategory: "puppy",
+        ageYears: 0.5,
+        color: { primary: "Branco e Marrom" },
+        adoptionStatus: "available",
+        description: "Bob é um filhote brincalhão que adora fazer amigos!",
+        location: { city: "Jundiaí", state: "SP" },
+        behaviorTags: ["playful", "friendly", "energetic"],
+        healthInfo: { isVaccinated: true, isNeutered: false },
+        media: {
+          photos: [{ url: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=800", isPrimary: true }]
+        }
+      },
+      {
+        _id: "pet5",
+        name: "Nina",
+        species: "cat",
+        breed: "Persa",
+        size: "small",
+        gender: "female",
+        ageCategory: "adult",
+        ageYears: 3,
+        color: { primary: "Branco" },
+        adoptionStatus: "available",
+        description: "Nina é tranquila e adora colo. Perfeita para apartamento!",
+        location: { city: "Bragança Paulista", state: "SP" },
+        behaviorTags: ["calm", "affectionate", "indoor"],
+        healthInfo: { isVaccinated: true, isNeutered: true },
+        media: {
+          photos: [{ url: "https://images.unsplash.com/photo-1495360010541-f48722b34f7d?w=800", isPrimary: true }]
+        }
+      },
+      {
+        _id: "pet6",
+        name: "Rex",
+        species: "dog",
+        breed: "Rottweiler",
+        size: "large",
+        gender: "male",
+        ageCategory: "senior",
+        ageYears: 8,
+        color: { primary: "Preto" },
+        adoptionStatus: "available",
+        description: "Rex é calmo e experiente. Procura um lar tranquilo para seus anos dourados.",
+        location: { city: "Atibaia", state: "SP" },
+        behaviorTags: ["calm", "loyal", "experienced"],
+        healthInfo: { isVaccinated: true, isNeutered: true },
+        media: {
+          photos: [{ url: "https://images.unsplash.com/photo-1567752881298-894bb81f9379?w=800", isPrimary: true }]
+        }
+      },
+      {
+        _id: "pet7",
+        name: "Mel",
+        species: "cat",
+        breed: "Vira-lata",
+        size: "small",
+        gender: "female",
+        ageCategory: "puppy",
+        ageYears: 0.3,
+        color: { primary: "Laranja" },
+        adoptionStatus: "available",
+        description: "Mel é uma filhote adorável e cheia de energia!",
+        location: { city: "Campinas", state: "SP" },
+        behaviorTags: ["playful", "curious", "energetic"],
+        healthInfo: { isVaccinated: true, isNeutered: false },
+        media: {
+          photos: [{ url: "https://images.unsplash.com/photo-1574158622682-e40e69881006?w=800", isPrimary: true }]
+        }
+      },
+      {
+        _id: "pet8",
+        name: "Max",
+        species: "dog",
+        breed: "Golden Retriever",
+        size: "large",
+        gender: "male",
+        ageCategory: "young",
+        ageYears: 2.5,
+        color: { primary: "Dourado" },
+        adoptionStatus: "available",
+        description: "Max é extremamente amigável e adora crianças. Um verdadeiro golden heart!",
+        location: { city: "São Paulo", state: "SP" },
+        behaviorTags: ["friendly", "good-with-kids", "gentle"],
+        healthInfo: { isVaccinated: true, isNeutered: true },
+        media: {
+          photos: [{ url: "https://images.unsplash.com/photo-1633722715463-d30f4f325e24?w=800", isPrimary: true }]
         }
       }
     ];
 
-    // RENDERIZA OS CARDS
-    const petsGrid = document.getElementById("petsGrid");
-    petsMock.forEach(pet => {
-      const card = document.createElement("div");
-      card.className = "bg-white rounded-2xl shadow-md hover:shadow-lg transition overflow-hidden cursor-pointer";
-      card.innerHTML = `
-        <img src="${pet.media.photos[0].url}" alt="${pet.name}" class="w-full h-52 object-cover">
-        <div class="p-6">
-          <h3 class="text-2xl font-bold mb-1">${pet.name}</h3>
-          <p class="text-gray-600 capitalize mb-1">${pet.breed} • ${pet.gender} • ${pet.ageCategory}</p>
-          <p class="text-sm text-gray-500">${pet.location.city} - ${pet.location.state}</p>
-          <span class="inline-block mt-3 px-3 py-1 rounded-full text-sm font-medium
-            ${pet.adoptionStatus === 'available' ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-700'}">
-            ${pet.adoptionStatus === 'available' ? 'Disponível' : 'Adotado'}
-          </span>
-        </div>
-      `;
-      card.addEventListener('click', () => openPetModal(pet));
-      petsGrid.appendChild(card);
-    });
+    // Get favorites from localStorage
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
-    // MODAL
+    // Toggle favorite
+    function toggleFavorite(petId) {
+      const index = favorites.indexOf(petId);
+      if (index > -1) {
+        favorites.splice(index, 1);
+      } else {
+        favorites.push(petId);
+      }
+      localStorage.setItem('favorites', JSON.stringify(favorites));
+      renderFavoritePets();
+    }
+
+    // Render favorite pets
+    function renderFavoritePets() {
+      const petsGrid = document.getElementById("petsGrid");
+      const emptyState = document.getElementById("emptyState");
+      
+      // Get favorite pets
+      const favoritePets = petsMock.filter(pet => favorites.includes(pet._id));
+      
+      if (favoritePets.length === 0) {
+        petsGrid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+      
+      emptyState.classList.add('hidden');
+      petsGrid.innerHTML = '';
+
+      favoritePets.forEach(pet => {
+        const card = document.createElement("div");
+        card.className = "bg-white rounded-2xl shadow-md hover:shadow-xl transition overflow-hidden group";
+        card.innerHTML = `
+          <div class="relative">
+            <img src="${pet.media.photos[0].url}" alt="${pet.name}" 
+              class="w-full h-56 object-cover group-hover:scale-105 transition duration-300 cursor-pointer"
+              onclick="openPetModal('${pet._id}')">
+            <button onclick="toggleFavorite('${pet._id}')" 
+              class="absolute top-3 right-3 bg-white p-2 rounded-full shadow-lg heart-icon">
+              <svg class="w-6 h-6 text-pink-500" fill="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+            </button>
+            <span class="absolute top-3 left-3 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+              Disponível
+            </span>
+          </div>
+          <div class="p-5">
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">${pet.name}</h3>
+            <p class="text-gray-600 mb-3">${pet.breed} • ${getGenderText(pet.gender)} • ${getAgeText(pet.ageCategory)}</p>
+            <p class="text-sm text-gray-500 mb-4">📍 ${pet.location.city} - ${pet.location.state}</p>
+            <p class="text-gray-700 text-sm mb-4 line-clamp-2">${pet.description}</p>
+            <div class="flex gap-2 mb-4 flex-wrap">
+              ${pet.behaviorTags.slice(0, 2).map(tag => 
+                `<span class="px-3 py-1 bg-pink-50 text-pink-600 rounded-full text-xs font-medium">${getBehaviorText(tag)}</span>`
+              ).join('')}
+            </div>
+            <button onclick="goToAdoptionForm('${pet._id}')" 
+              class="w-full bg-primary text-white py-3 rounded-xl font-semibold hover:bg-pink-600 transition">
+              Adotar ${pet.name}
+            </button>
+          </div>
+        `;
+        petsGrid.appendChild(card);
+      });
+    }
+
+    // Modal functions
     const modal = document.getElementById('petModal');
     const closeModal = document.getElementById('closeModal');
+    let currentModalPetId = null;
 
     closeModal.addEventListener('click', () => modal.classList.add('hidden'));
     modal.addEventListener('click', e => { if (e.target === modal) modal.classList.add('hidden'); });
 
-    function openPetModal(pet) {
+    function openPetModal(petId) {
+      const pet = petsMock.find(p => p._id === petId);
+      if (!pet) return;
+
+      currentModalPetId = petId;
       document.getElementById('modalPetName').textContent = pet.name;
       document.getElementById('modalPetImage').src = pet.media.photos[0].url;
 
       const details = `
-        <div><strong>Espécie:</strong> ${pet.species}</div>
+        <div><strong>Espécie:</strong> ${pet.species === 'dog' ? 'Cachorro' : 'Gato'}</div>
         <div><strong>Raça:</strong> ${pet.breed}</div>
-        <div><strong>Tamanho:</strong> ${pet.size}</div>
-        <div><strong>Idade:</strong> ${pet.ageYears} anos (${pet.ageCategory})</div>
+        <div><strong>Tamanho:</strong> ${getSizeText(pet.size)}</div>
+        <div><strong>Gênero:</strong> ${getGenderText(pet.gender)}</div>
+        <div><strong>Idade:</strong> ${pet.ageYears} anos (${getAgeText(pet.ageCategory)})</div>
         <div><strong>Cor:</strong> ${pet.color.primary || '-'}</div>
-        <div><strong>Comportamento:</strong> ${pet.behaviorTags.join(', ')}</div>
+        <div><strong>Comportamento:</strong> ${pet.behaviorTags.map(tag => getBehaviorText(tag)).join(', ')}</div>
         <div><strong>Saúde:</strong> ${pet.healthInfo.isVaccinated ? 'Vacinado' : 'Não vacinado'}, ${pet.healthInfo.isNeutered ? 'Castrado' : 'Não castrado'}</div>
         <div><strong>Localização:</strong> ${pet.location.city} - ${pet.location.state}</div>
-        <div><strong>Descrição:</strong> ${pet.description}</div>
+        <div class="mt-4"><strong>Descrição:</strong><br>${pet.description}</div>
       `;
       document.getElementById('modalPetDetails').innerHTML = details;
 
-      // Se tiver adotante
-      const adopterSection = document.getElementById('modalAdopter');
-      if (pet.adoptedBy) {
-        adopterSection.classList.remove('hidden');
-        const a = pet.adoptedBy;
-        document.getElementById('adopterInfo').innerHTML = `
-          <div><strong>Nome:</strong> ${a.name}</div>
-          <div><strong>Email:</strong> ${a.email}</div>
-          <div><strong>Telefone:</strong> ${a.phone}</div>
-          <div><strong>Endereço:</strong> ${a.address.street}, ${a.address.city} - ${a.address.state}</div>
-          <div><strong>Profissão:</strong> ${a.profile.occupation}</div>
-          <div><strong>Tem filhos:</strong> ${a.profile.hasChildren ? 'Sim (' + a.profile.childrenAges.join(', ') + ' anos)' : 'Não'}</div>
-          <div><strong>Já possui pets:</strong> ${a.profile.hasPets ? 'Sim' : 'Não'}</div>
-        `;
-      } else {
-        adopterSection.classList.add('hidden');
-      }
+      document.getElementById('modalAdoptBtn').onclick = () => goToAdoptionForm(petId);
 
       modal.classList.remove('hidden');
     }
+
+    // Navigation to adoption form
+    function goToAdoptionForm(petId) {
+      localStorage.setItem('adoptingPetId', petId);
+      window.location.href = 'adoption-form.html';
+    }
+
+    // Helper functions
+    function getSizeText(size) {
+      const sizeMap = { small: 'Pequeno', medium: 'Médio', large: 'Grande' };
+      return sizeMap[size] || size;
+    }
+
+    function getGenderText(gender) {
+      return gender === 'male' ? 'Macho' : 'Fêmea';
+    }
+
+    function getAgeText(age) {
+      const ageMap = { puppy: 'Filhote', young: 'Jovem', adult: 'Adulto', senior: 'Idoso' };
+      return ageMap[age] || age;
+    }
+
+    function getBehaviorText(behavior) {
+      const behaviorMap = {
+        friendly: 'Amigável',
+        energetic: 'Energético',
+        playful: 'Brincalhão',
+        calm: 'Calmo',
+        protective: 'Protetor',
+        loyal: 'Leal',
+        'good-with-kids': 'Bom com crianças',
+        affectionate: 'Carinhoso',
+        independent: 'Independente',
+        quiet: 'Quieto',
+        indoor: 'Indoor',
+        curious: 'Curioso',
+        gentle: 'Gentil',
+        experienced: 'Experiente'
+      };
+      return behaviorMap[behavior] || behavior;
+    }
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('userInfo');
+      window.location.href = 'index.html';
+    });
+
+    // Initialize
+    renderFavoritePets();
   </script>
 </body>
 </html>
