@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Solicitações de Adoção | PetConnect</title>
-  <link rel="icon" type="image/x-icon" href="http://localhost:5501/logos/logo.svg">
+  <link rel="icon" type="image/x-icon" href="http://127.0.0.1:5501/frontend/public/logos/logo.svg">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -25,7 +25,7 @@
   <nav class="bg-white shadow-md sticky top-0 z-10">
     <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
       <div class="flex items-center gap-3">
-        <img src="http://localhost:5173/logos/logo.svg" alt="PetConnect" class="h-10 w-10">
+        <img src="http://127.0.0.1:5501/frontend/public/logos/logo.svg" alt="PetConnect" class="h-10 w-10">
         <span class="font-mono text-2xl font-semibold text-gray-900">PetConnect</span>
       </div>
       <div class="hidden md:flex items-center gap-8">
@@ -36,13 +36,6 @@
         <button id="logoutBtn"
           class="bg-primary text-white px-6 py-2 rounded-full font-medium hover:bg-pink-600 transition">Sair</button>
       </div>
-      <button class="md:hidden text-gray-700 focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-          stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-          <path stroke-linecap="round" stroke-linejoin="round"
-            d="M3.75 5.25h16.5M3.75 12h16.5m-16.5 6.75h16.5" />
-        </svg>
-      </button>
     </div>
   </nav>
 
@@ -51,6 +44,34 @@
     <div class="mb-10">
       <h1 class="text-4xl font-bold text-gray-900 mb-2">Solicitações de Adoção</h1>
       <p class="text-gray-600">Gerencie as solicitações de adoção recebidas pela sua ONG.</p>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+      <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-200">
+        <div class="text-2xl font-bold text-gray-900" id="countAll">0</div>
+        <div class="text-sm text-gray-600">Todas</div>
+      </div>
+      <div class="bg-blue-50 rounded-xl p-4 shadow-sm border border-blue-200">
+        <div class="text-2xl font-bold text-blue-700" id="countSent">0</div>
+        <div class="text-sm text-blue-600">Enviadas</div>
+      </div>
+      <div class="bg-yellow-50 rounded-xl p-4 shadow-sm border border-yellow-200">
+        <div class="text-2xl font-bold text-yellow-700" id="countInReview">0</div>
+        <div class="text-sm text-yellow-600">Em Análise</div>
+      </div>
+      <div class="bg-purple-50 rounded-xl p-4 shadow-sm border border-purple-200">
+        <div class="text-2xl font-bold text-purple-700" id="countInterview">0</div>
+        <div class="text-sm text-purple-600">Entrevista</div>
+      </div>
+      <div class="bg-green-50 rounded-xl p-4 shadow-sm border border-green-200">
+        <div class="text-2xl font-bold text-green-700" id="countApproved">0</div>
+        <div class="text-sm text-green-600">Aprovadas</div>
+      </div>
+      <div class="bg-red-50 rounded-xl p-4 shadow-sm border border-red-200">
+        <div class="text-2xl font-bold text-red-700" id="countRejected">0</div>
+        <div class="text-sm text-red-600">Rejeitadas</div>
+      </div>
     </div>
 
     <!-- Filter Tabs -->
@@ -99,6 +120,58 @@
     </div>
   </div>
 
+  <!-- Modal de Mudança de Status -->
+  <div id="statusChangeModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full">
+      <div class="border-b px-6 py-4">
+        <h3 class="text-xl font-bold text-gray-900" id="statusChangeTitle">Alterar Status</h3>
+      </div>
+      
+      <div class="p-6">
+        <div class="mb-4">
+          <p class="text-gray-700 mb-2">Você está prestes a alterar o status desta solicitação para:</p>
+          <div class="bg-gray-50 rounded-lg p-4 flex items-center gap-3" id="statusChangePreview">
+            <!-- Preview will be shown here -->
+          </div>
+        </div>
+
+        <!-- Reason textarea (shown for rejection) -->
+        <div id="reasonContainer" class="hidden mb-4">
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Motivo da rejeição *</label>
+          <textarea id="rejectionReason" rows="4" 
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+            placeholder="Explique o motivo da rejeição para o candidato..."></textarea>
+        </div>
+
+        <!-- Interview date (shown for interview) -->
+        <div id="interviewContainer" class="hidden mb-4">
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Data da Entrevista</label>
+          <input type="datetime-local" id="interviewDate"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+        </div>
+
+        <!-- Notes textarea -->
+        <div class="mb-4">
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Observações (opcional)</label>
+          <textarea id="statusNotes" rows="3" 
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+            placeholder="Adicione observações sobre esta mudança de status..."></textarea>
+        </div>
+
+        <div class="flex gap-3">
+          <button id="cancelStatusChange" 
+            class="flex-1 px-6 py-2 rounded-full border border-gray-300 hover:bg-gray-50 transition">
+            Cancelar
+          </button>
+          <button id="confirmStatusChange" 
+            class="flex-1 px-6 py-2 rounded-full bg-primary text-white hover:bg-pink-600 transition">
+            Confirmar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- Footer -->
   <footer class="bg-white mt-16 py-6 border-t">
     <div class="max-w-7xl mx-auto text-center text-gray-500 text-sm">
@@ -106,11 +179,19 @@
     </div>
   </footer>
 
-  <!-- Scripts -->
-  <script src="js/api.js"></script>
   <script>
+    // Status configuration
+    const statusConfig = {
+      sent: { label: 'Enviada', color: 'blue', icon: '📨', bgColor: 'bg-blue-100', textColor: 'text-blue-700', borderColor: 'border-blue-200' },
+      in_review: { label: 'Em Análise', color: 'yellow', icon: '🔍', bgColor: 'bg-yellow-100', textColor: 'text-yellow-700', borderColor: 'border-yellow-200' },
+      interview: { label: 'Entrevista Agendada', color: 'purple', icon: '📅', bgColor: 'bg-purple-100', textColor: 'text-purple-700', borderColor: 'border-purple-200' },
+      approved: { label: 'Aprovada', color: 'green', icon: '✅', bgColor: 'bg-green-100', textColor: 'text-green-700', borderColor: 'border-green-200' },
+      rejected: { label: 'Rejeitada', color: 'red', icon: '❌', bgColor: 'bg-red-100', textColor: 'text-red-700', borderColor: 'border-red-200' },
+      completed: { label: 'Concluída', color: 'emerald', icon: '🎉', bgColor: 'bg-emerald-100', textColor: 'text-emerald-700', borderColor: 'border-emerald-200' }
+    };
+
     // Mock data
-    const mockRequests = [
+    let mockRequests = [
       {
         _id: '1',
         user: {
@@ -133,8 +214,8 @@
           aboutYou: {
             occupation: 'Professora',
             ageRange: '26-35',
-            motivation: 'Sempre tive cachorros na minha infância e sinto muita falta dessa companhia. Moro sozinha e gostaria de ter um amigo fiel para compartilhar meu dia a dia. Rex parece ser um cachorro muito carinhoso e com muita energia, perfeito para mim que adoro caminhar e fazer atividades ao ar livre.',
-            previousPetExperience: 'Cresci com cachorros em casa. Tivemos um Golden Retriever chamado Thor que viveu 12 anos conosco. Sei cuidar bem de pets, incluindo alimentação, higiene e cuidados veterinários.'
+            motivation: 'Sempre tive cachorros na minha infância e sinto muita falta dessa companhia. Moro sozinha e gostaria de ter um amigo fiel para compartilhar meu dia a dia.',
+            previousPetExperience: 'Cresci com cachorros em casa. Tivemos um Golden Retriever que viveu 12 anos conosco.'
           },
           yourHome: {
             housingType: 'house',
@@ -147,12 +228,12 @@
           yourRoutine: {
             workSchedule: 'full-time-office',
             hoursAlonePerDay: 8,
-            exercisePlan: 'Pretendo passear com o Rex todos os dias pela manhã antes do trabalho (cerca de 30 minutos) e à noite quando voltar (1 hora). Nos finais de semana, podemos fazer caminhadas mais longas em parques. Também tenho um quintal onde ele pode brincar durante o dia.'
+            exercisePlan: 'Pretendo passear com o Rex todos os dias pela manhã e à noite. Também tenho um quintal onde ele pode brincar.'
           }
         },
-        submittedAt: '2025-10-25T10:30:00Z',
+        submittedAt: '2025-11-01T10:30:00Z',
         statusHistory: [
-          { status: 'sent', timestamp: '2025-10-25T10:30:00Z' }
+          { status: 'sent', timestamp: '2025-11-01T10:30:00Z', notes: 'Solicitação recebida' }
         ]
       },
       {
@@ -177,8 +258,8 @@
           aboutYou: {
             occupation: 'Desenvolvedor de Software',
             ageRange: '26-35',
-            motivation: 'Trabalho de casa e sinto que um gato seria uma companhia perfeita. Luna é linda e adoro gatos siameses. Eles são inteligentes e sociáveis, características que procuro em um pet. Tenho um ambiente tranquilo e bastante tempo para dedicar a ela.',
-            previousPetExperience: 'Já tive um gato quando era adolescente. Cuidei dele por 10 anos até ele falecer de causas naturais. Entendo as necessidades dos gatos e sei como cuidar bem deles.'
+            motivation: 'Trabalho de casa e sinto que um gato seria uma companhia perfeita.',
+            previousPetExperience: 'Já tive um gato quando era adolescente. Cuidei dele por 10 anos.'
           },
           yourHome: {
             housingType: 'apartment',
@@ -191,104 +272,88 @@
           yourRoutine: {
             workSchedule: 'full-time-remote',
             hoursAlonePerDay: 2,
-            exercisePlan: 'Como gatos não precisam de passeios externos, vou garantir que Luna tenha brinquedos interativos, arranhadores e espaços para escalar dentro do apartamento. Pretendo dedicar pelo menos 1 hora por dia brincando com ela ativamente.'
+            exercisePlan: 'Vou garantir que Luna tenha brinquedos interativos e arranhadores dentro do apartamento.'
           }
         },
-        submittedAt: '2025-10-23T14:20:00Z',
-        reviewedAt: '2025-10-24T09:00:00Z',
+        submittedAt: '2025-10-28T14:20:00Z',
+        reviewedAt: '2025-10-29T09:00:00Z',
         statusHistory: [
-          { status: 'sent', timestamp: '2025-10-23T14:20:00Z' },
-          { status: 'in_review', timestamp: '2025-10-24T09:00:00Z' }
-        ],
-        notes: [
-          {
-            author: 'ong1',
-            authorModel: 'ONG',
-            content: 'Candidato promissor. Trabalha de casa e tem experiência prévia com gatos.',
-            isPrivate: true,
-            createdAt: '2025-10-24T09:15:00Z'
-          }
+          { status: 'sent', timestamp: '2025-10-28T14:20:00Z', notes: 'Solicitação recebida' },
+          { status: 'in_review', timestamp: '2025-10-29T09:00:00Z', notes: 'Iniciada análise do perfil' }
         ]
       },
       {
         _id: '3',
         user: {
           _id: 'u3',
-          name: 'Beatriz Costa',
-          email: 'bia.costa@email.com',
-          phone: '(19) 99876-5432',
+          name: 'Mariana Costa',
+          email: 'mariana.costa@email.com',
+          phone: '(11) 99876-5432',
           profilePicture: 'https://i.pravatar.cc/150?img=5'
         },
         pet: {
           _id: 'p3',
-          name: 'Bolinha',
+          name: 'Bob',
           species: 'dog',
-          breed: 'Poodle',
-          age: 5,
-          images: ['https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?w=400']
+          breed: 'Beagle',
+          age: 2,
+          images: ['https://images.unsplash.com/photo-1505628346881-b72b27e84530?w=400']
         },
         status: 'interview',
         formData: {
           aboutYou: {
-            occupation: 'Dentista',
-            ageRange: '36-45',
-            motivation: 'Minha família e eu estamos prontos para adotar um cachorro. Bolinha parece ser um cão tranquilo e carinhoso, perfeito para conviver com nossas crianças. Queremos ensinar nossos filhos sobre responsabilidade e amor aos animais.',
-            previousPetExperience: 'Tivemos um cachorro há alguns anos, mas ele faleceu de velhice. Toda a família sente falta e agora estamos prontos para abrir nosso coração novamente.'
+            occupation: 'Veterinária',
+            ageRange: '26-35',
+            motivation: 'Como veterinária, sempre quis ter um cachorro em casa. Bob parece perfeito!',
+            previousPetExperience: 'Trabalho com animais há 8 anos e tenho ampla experiência em cuidados veterinários.'
           },
           yourHome: {
             housingType: 'house',
             ownershipStatus: 'owned',
             hasYard: true,
-            householdSize: 4,
+            householdSize: 3,
             hasChildren: true,
-            childrenAges: [8, 11]
+            childrenAges: [7, 10]
           },
           yourRoutine: {
             workSchedule: 'part-time',
             hoursAlonePerDay: 4,
-            exercisePlan: 'Passeios diários de manhã e à tarde, cerca de 30 minutos cada. Nos finais de semana, toda a família fará passeios mais longos. As crianças também brincarão com ele no quintal após a escola.'
+            exercisePlan: 'Passeios diários e brincadeiras no quintal. Meus filhos também adoram brincar com cachorros.'
           }
         },
-        submittedAt: '2025-10-20T11:00:00Z',
-        reviewedAt: '2025-10-21T10:00:00Z',
-        interview: {
-          scheduled: true,
-          date: '2025-10-30T15:00:00Z',
-          location: 'Sede da ONG',
-          type: 'in-person',
-          notes: 'Família muito interessada. Agendar visita à casa também.',
-          completed: false
-        },
+        submittedAt: '2025-10-25T16:45:00Z',
+        reviewedAt: '2025-10-26T10:00:00Z',
+        interviewScheduledAt: '2025-11-05T14:00:00Z',
         statusHistory: [
-          { status: 'sent', timestamp: '2025-10-20T11:00:00Z' },
-          { status: 'in_review', timestamp: '2025-10-21T10:00:00Z' },
-          { status: 'interview', timestamp: '2025-10-22T14:00:00Z' }
+          { status: 'sent', timestamp: '2025-10-25T16:45:00Z', notes: 'Solicitação recebida' },
+          { status: 'in_review', timestamp: '2025-10-26T10:00:00Z', notes: 'Perfil muito promissor' },
+          { status: 'interview', timestamp: '2025-10-27T11:30:00Z', notes: 'Entrevista agendada para 05/11 às 14h' }
         ]
       },
       {
         _id: '4',
         user: {
           _id: 'u4',
-          name: 'Ricardo Santos',
-          email: 'ricardo.santos@email.com',
-          phone: '(19) 98123-4567',
+          name: 'Pedro Oliveira',
+          email: 'pedro.oliveira@email.com',
+          phone: '(21) 98888-7777',
           profilePicture: 'https://i.pravatar.cc/150?img=8'
         },
         pet: {
           _id: 'p4',
-          name: 'Mel',
+          name: 'Nina',
           species: 'cat',
-          breed: 'Vira-lata',
+          breed: 'SRD',
           age: 1,
-          images: ['https://super.abril.com.br/wp-content/uploads/2024/09/0909-brazilian-shorthair-super-site.jpg?quality=70&strip=info&w=720&h=440&crop=1']
+          images: ['https://images.unsplash.com/photo-1574158622682-e40e69881006?w=400']
         },
         status: 'approved',
         formData: {
           aboutYou: {
-            occupation: 'Aposentado',
-            ageRange: '56+',
-            motivation: 'Após me aposentar, sinto que um pet faria toda diferença na minha rotina. Mel é jovem e brincalhona, e tenho todo o tempo do mundo para cuidar dela e dar o amor que ela merece.',
-            previousPetExperience: 'Sempre tive gatos durante toda minha vida. Conheço bem o comportamento felino e sei como proporcionar uma vida feliz e saudável para eles.'
+            occupation: 'Designer Gráfico',
+            ageRange: '26-35',
+            motivation: 'Trabalho de casa e Nina seria a companhia perfeita. Adoro gatos!',
+            previousPetExperience: 'Tive gatos durante toda minha vida. Sei cuidar muito bem deles.'
           },
           yourHome: {
             housingType: 'apartment',
@@ -299,43 +364,36 @@
             childrenAges: []
           },
           yourRoutine: {
-            workSchedule: 'retired',
+            workSchedule: 'full-time-remote',
             hoursAlonePerDay: 1,
-            exercisePlan: 'Sessões diárias de brincadeiras com varinha, laser e bolinhas. Tenho vários brinquedos e um arranhador grande. Vou telar a varanda para que ela possa observar os pássaros com segurança.'
+            exercisePlan: 'Ambiente enriquecido com arranhadores, prateleiras e muitos brinquedos.'
           }
         },
-        submittedAt: '2025-10-15T09:00:00Z',
-        reviewedAt: '2025-10-16T10:00:00Z',
-        approvedAt: '2025-10-28T16:30:00Z',
-        interview: {
-          scheduled: true,
-          date: '2025-10-25T10:00:00Z',
-          location: 'Residência do adotante',
-          type: 'in-person',
-          notes: 'Casa muito bem preparada para receber um gato. Ambiente seguro e enriquecido.',
-          completed: true
-        },
+        submittedAt: '2025-10-20T09:15:00Z',
+        reviewedAt: '2025-10-21T08:00:00Z',
+        interviewScheduledAt: '2025-10-23T15:00:00Z',
+        approvedAt: '2025-10-24T10:30:00Z',
         statusHistory: [
-          { status: 'sent', timestamp: '2025-10-15T09:00:00Z' },
-          { status: 'in_review', timestamp: '2025-10-16T10:00:00Z' },
-          { status: 'interview', timestamp: '2025-10-20T11:00:00Z' },
-          { status: 'approved', timestamp: '2025-10-28T16:30:00Z' }
+          { status: 'sent', timestamp: '2025-10-20T09:15:00Z', notes: 'Solicitação recebida' },
+          { status: 'in_review', timestamp: '2025-10-21T08:00:00Z', notes: 'Análise iniciada' },
+          { status: 'interview', timestamp: '2025-10-22T14:00:00Z', notes: 'Entrevista agendada' },
+          { status: 'approved', timestamp: '2025-10-24T10:30:00Z', notes: 'Candidato aprovado! Excelente perfil e entrevista.' }
         ]
       },
       {
         _id: '5',
         user: {
           _id: 'u5',
-          name: 'Juliana Oliveira',
-          email: 'ju.oliveira@email.com',
-          phone: '(19) 99234-5678',
+          name: 'Julia Santos',
+          email: 'julia.santos@email.com',
+          phone: '(31) 97777-6666',
           profilePicture: 'https://i.pravatar.cc/150?img=9'
         },
         pet: {
           _id: 'p5',
           name: 'Thor',
           species: 'dog',
-          breed: 'Rottweiler',
+          breed: 'Pastor Alemão',
           age: 4,
           images: ['https://images.unsplash.com/photo-1568572933382-74d440642117?w=400']
         },
@@ -344,80 +402,85 @@
           aboutYou: {
             occupation: 'Estudante',
             ageRange: '18-25',
-            motivation: 'Sempre quis ter um cachorro grande e Thor parece incrível. Adoro a raça Rottweiler e acho que seria muito legal ter um.',
-            previousPetExperience: 'Nunca tive pets próprios, mas sempre brinquei com os cachorros dos meus amigos.'
+            motivation: 'Sempre quis ter um cachorro grande.',
+            previousPetExperience: 'Nunca tive pets antes.'
           },
           yourHome: {
             housingType: 'apartment',
             ownershipStatus: 'rented',
             hasYard: false,
-            householdSize: 3,
+            householdSize: 4,
             hasChildren: false,
             childrenAges: []
           },
           yourRoutine: {
-            workSchedule: 'student',
+            workSchedule: 'full-time-student',
             hoursAlonePerDay: 10,
-            exercisePlan: 'Pretendo passear com ele quando der, provavelmente à noite depois das aulas.'
+            exercisePlan: 'Passeios quando tiver tempo.'
           }
         },
-        submittedAt: '2025-10-18T13:00:00Z',
+        submittedAt: '2025-10-18T11:20:00Z',
         reviewedAt: '2025-10-19T09:00:00Z',
-        rejectedAt: '2025-10-19T14:00:00Z',
+        rejectedAt: '2025-10-19T09:30:00Z',
         statusHistory: [
-          { status: 'sent', timestamp: '2025-10-18T13:00:00Z' },
-          { status: 'in_review', timestamp: '2025-10-19T09:00:00Z' },
+          { status: 'sent', timestamp: '2025-10-18T11:20:00Z', notes: 'Solicitação recebida' },
+          { status: 'in_review', timestamp: '2025-10-19T09:00:00Z', notes: 'Análise iniciada' },
           { 
             status: 'rejected', 
-            timestamp: '2025-10-19T14:00:00Z',
-            reason: 'Perfil não adequado para um cão de grande porte. Falta de experiência prévia e rotina incompatível com as necessidades da raça.'
+            timestamp: '2025-10-19T09:30:00Z', 
+            reason: 'Infelizmente, Thor é um cachorro de grande porte que precisa de muito espaço e exercício diário. Um apartamento sem quintal e com 10 horas sozinho por dia não seria adequado para ele. Recomendamos que procure um pet de menor porte e que se adapte melhor à sua rotina.',
+            notes: 'Perfil não compatível com as necessidades do animal'
           }
-        ],
-        notes: [
-          {
-            author: 'ong1',
-            authorModel: 'ONG',
-            content: 'Candidata muito jovem, sem experiência e com rotina que deixaria o cão sozinho por muitas horas. Rottweiler precisa de tutor experiente.',
-            isPrivate: true,
-            createdAt: '2025-10-19T09:30:00Z'
+        ]
+      },
+      {
+        _id: '6',
+        user: {
+          _id: 'u6',
+          name: 'Ricardo Ferreira',
+          email: 'ricardo.ferreira@email.com',
+          phone: '(85) 96666-5555',
+          profilePicture: 'https://i.pravatar.cc/150?img=13'
+        },
+        pet: {
+          _id: 'p6',
+          name: 'Mel',
+          species: 'cat',
+          breed: 'Persa',
+          age: 3,
+          images: ['https://images.unsplash.com/photo-1495360010541-f48722b34f7d?w=400']
+        },
+        status: 'sent',
+        formData: {
+          aboutYou: {
+            occupation: 'Empresário',
+            ageRange: '36-45',
+            motivation: 'Minha família adora gatos e queremos adotar a Mel. Temos bastante tempo e recursos para cuidar muito bem dela.',
+            previousPetExperience: 'Já tivemos 2 gatos persas antes. Conhecemos bem os cuidados especiais que a raça exige.'
+          },
+          yourHome: {
+            housingType: 'house',
+            ownershipStatus: 'owned',
+            hasYard: true,
+            householdSize: 4,
+            hasChildren: true,
+            childrenAges: [8, 12]
+          },
+          yourRoutine: {
+            workSchedule: 'flexible',
+            hoursAlonePerDay: 3,
+            exercisePlan: 'Temos um espaço preparado com arranhadores, prateleiras e brinquedos. Escovação diária devido ao pelo longo.'
           }
+        },
+        submittedAt: '2025-11-02T15:30:00Z',
+        statusHistory: [
+          { status: 'sent', timestamp: '2025-11-02T15:30:00Z', notes: 'Solicitação recebida' }
         ]
       }
     ];
 
-    // Status translations and colors
-    const statusConfig = {
-      sent: { label: 'Enviada', color: 'bg-blue-100 text-blue-800', icon: '📨' },
-      in_review: { label: 'Em Análise', color: 'bg-yellow-100 text-yellow-800', icon: '🔍' },
-      interview: { label: 'Entrevista', color: 'bg-purple-100 text-purple-800', icon: '📅' },
-      approved: { label: 'Aprovada', color: 'bg-green-100 text-green-800', icon: '✅' },
-      rejected: { label: 'Rejeitada', color: 'bg-red-100 text-red-800', icon: '❌' },
-      withdrawn: { label: 'Retirada', color: 'bg-gray-100 text-gray-800', icon: '↩️' },
-      completed: { label: 'Concluída', color: 'bg-emerald-100 text-emerald-800', icon: '🎉' }
-    };
-
-    const housingTypeLabels = {
-      house: 'Casa',
-      apartment: 'Apartamento',
-      farm: 'Fazenda',
-      other: 'Outro'
-    };
-
-    const ownershipLabels = {
-      owned: 'Próprio',
-      rented: 'Alugado',
-      family: 'Família'
-    };
-
-    const workScheduleLabels = {
-      'full-time-office': 'Tempo integral (escritório)',
-      'full-time-remote': 'Tempo integral (remoto)',
-      'part-time': 'Meio período',
-      'freelance': 'Freelancer',
-      'unemployed': 'Desempregado',
-      'retired': 'Aposentado',
-      'student': 'Estudante'
-    };
+    // Variables for status change
+    let pendingStatusChange = null;
 
     // Format date
     function formatDate(dateString) {
@@ -431,317 +494,198 @@
       });
     }
 
-    // Format relative time
-    function formatRelativeTime(dateString) {
-      const date = new Date(dateString);
-      const now = new Date();
-      const diffInDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
-      
-      if (diffInDays === 0) return 'Hoje';
-      if (diffInDays === 1) return 'Ontem';
-      if (diffInDays < 7) return `Há ${diffInDays} dias`;
-      if (diffInDays < 30) return `Há ${Math.floor(diffInDays / 7)} semanas`;
-      return `Há ${Math.floor(diffInDays / 30)} meses`;
+    // Update counters
+    function updateCounters() {
+      document.getElementById('countAll').textContent = mockRequests.length;
+      document.getElementById('countSent').textContent = mockRequests.filter(r => r.status === 'sent').length;
+      document.getElementById('countInReview').textContent = mockRequests.filter(r => r.status === 'in_review').length;
+      document.getElementById('countInterview').textContent = mockRequests.filter(r => r.status === 'interview').length;
+      document.getElementById('countApproved').textContent = mockRequests.filter(r => r.status === 'approved').length;
+      document.getElementById('countRejected').textContent = mockRequests.filter(r => r.status === 'rejected').length;
     }
 
     // Render request card
     function renderRequestCard(request) {
       const status = statusConfig[request.status];
+      const daysAgo = Math.floor((new Date() - new Date(request.submittedAt)) / (1000 * 60 * 60 * 24));
       
       return `
-        <div class="bg-white rounded-2xl shadow-md hover:shadow-lg transition p-6 request-card" data-status="${request.status}">
-          <div class="flex flex-col lg:flex-row gap-6">
-            <!-- Pet Info -->
-            <div class="flex items-start gap-4 lg:w-1/3">
+        <div class="bg-white rounded-2xl shadow-md hover:shadow-lg transition overflow-hidden cursor-pointer border-l-4 ${status.borderColor}"
+          onclick="showDetails('${request._id}')">
+          <div class="p-6">
+            <div class="flex items-start justify-between mb-4">
+              <div class="flex items-center gap-4">
+                <img src="${request.user.profilePicture}" alt="${request.user.name}" 
+                  class="w-16 h-16 rounded-full object-cover border-2 border-gray-200">
+                <div>
+                  <h3 class="text-xl font-bold text-gray-900">${request.user.name}</h3>
+                  <p class="text-gray-600 text-sm">${request.user.email}</p>
+                  <p class="text-gray-500 text-sm">${request.user.phone}</p>
+                </div>
+              </div>
+              <span class="px-4 py-2 rounded-full text-sm font-medium ${status.bgColor} ${status.textColor}">
+                ${status.icon} ${status.label}
+              </span>
+            </div>
+
+            <div class="flex items-center gap-6 p-4 bg-gray-50 rounded-xl mb-4">
               <img src="${request.pet.images[0]}" alt="${request.pet.name}" 
-                class="w-24 h-24 rounded-xl object-cover">
+                class="w-20 h-20 rounded-lg object-cover">
               <div>
-                <h3 class="text-xl font-bold text-gray-900">${request.pet.name}</h3>
-                <p class="text-gray-600 text-sm">${request.pet.breed} • ${request.pet.age} anos</p>
-                <span class="inline-block mt-2 px-3 py-1 rounded-full text-xs font-medium ${status.color}">
-                  ${status.icon} ${status.label}
-                </span>
+                <h4 class="text-lg font-bold text-gray-900">${request.pet.name}</h4>
+                <p class="text-gray-600">${request.pet.breed} • ${request.pet.age} anos</p>
               </div>
             </div>
 
-            <!-- User Info -->
-            <div class="flex items-start gap-4 lg:w-1/3 lg:border-l lg:pl-6">
-              <img src="${request.user.profilePicture}" alt="${request.user.name}" 
-                class="w-16 h-16 rounded-full object-cover">
-              <div>
-                <h4 class="font-semibold text-gray-900">${request.user.name}</h4>
-                <p class="text-gray-600 text-sm">${request.user.email}</p>
-                <p class="text-gray-600 text-sm">${request.user.phone}</p>
-                <p class="text-gray-500 text-xs mt-1">${formatRelativeTime(request.submittedAt)}</p>
-              </div>
-            </div>
-
-            <!-- Quick Info -->
-            <div class="lg:w-1/3 lg:border-l lg:pl-6">
-              <div class="space-y-2 text-sm">
-                <div class="flex items-center gap-2">
-                  <span class="text-gray-500">🏠</span>
-                  <span class="text-gray-700">${housingTypeLabels[request.formData.yourHome.housingType]}</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span class="text-gray-500">💼</span>
-                  <span class="text-gray-700">${workScheduleLabels[request.formData.yourRoutine.workSchedule]}</span>
-                </div>
-                <div class="flex items-center gap-2">
-                  <span class="text-gray-500">👨‍👩‍👧‍👦</span>
-                  <span class="text-gray-700">${request.formData.yourHome.householdSize} pessoa(s) na casa</span>
-                </div>
-                ${request.formData.yourHome.hasChildren ? 
-                  `<div class="flex items-center gap-2">
-                    <span class="text-gray-500">👶</span>
-                    <span class="text-gray-700">Tem crianças</span>
-                  </div>` : ''}
-              </div>
-
-              <button onclick="showDetails('${request._id}')" 
-                class="mt-4 w-full bg-primary text-white px-4 py-2 rounded-full font-medium hover:bg-pink-600 transition">
-                Ver Detalhes
-              </button>
+            <div class="flex items-center justify-between text-sm text-gray-500">
+              <span>📅 Enviada há ${daysAgo} ${daysAgo === 1 ? 'dia' : 'dias'}</span>
+              <span class="text-primary font-medium">Ver detalhes →</span>
             </div>
           </div>
         </div>
       `;
     }
 
-    // Render request details in modal
+    // Render request details
     function renderRequestDetails(request) {
       const status = statusConfig[request.status];
       
       return `
         <!-- Header -->
-        <div class="flex items-start gap-6 pb-6 border-b">
-          <img src="${request.pet.images[0]}" alt="${request.pet.name}" 
-            class="w-32 h-32 rounded-xl object-cover">
+        <div class="flex items-start gap-6 mb-8 pb-6 border-b">
+          <img src="${request.user.profilePicture}" alt="${request.user.name}" 
+            class="w-24 h-24 rounded-full object-cover border-4 border-gray-200">
           <div class="flex-1">
-            <div class="flex items-start justify-between">
-              <div>
-                <h3 class="text-2xl font-bold text-gray-900">${request.pet.name}</h3>
-                <p class="text-gray-600">${request.pet.breed} • ${request.pet.age} anos</p>
-              </div>
-              <span class="px-4 py-2 rounded-full text-sm font-medium ${status.color}">
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">${request.user.name}</h3>
+            <div class="space-y-1 text-gray-600">
+              <p>📧 ${request.user.email}</p>
+              <p>📱 ${request.user.phone}</p>
+            </div>
+            <div class="mt-3">
+              <span class="px-4 py-2 rounded-full text-sm font-medium ${status.bgColor} ${status.textColor}">
                 ${status.icon} ${status.label}
               </span>
             </div>
-            <div class="mt-4 flex items-center gap-4">
-              <img src="${request.user.profilePicture}" alt="${request.user.name}" 
-                class="w-12 h-12 rounded-full object-cover">
-              <div>
-                <p class="font-semibold text-gray-900">${request.user.name}</p>
-                <p class="text-sm text-gray-600">${request.user.email} • ${request.user.phone}</p>
-              </div>
+          </div>
+        </div>
+
+        <!-- Pet Info -->
+        <div class="mb-8 bg-gradient-to-r from-pink-50 to-purple-50 rounded-2xl p-6 border-2 border-pink-200">
+          <h4 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+            <span>🐾</span> Pet Desejado
+          </h4>
+          <div class="flex items-center gap-6">
+            <img src="${request.pet.images[0]}" alt="${request.pet.name}" 
+              class="w-32 h-32 rounded-xl object-cover border-4 border-white shadow-lg">
+            <div>
+              <h5 class="text-2xl font-bold text-gray-900 mb-1">${request.pet.name}</h5>
+              <p class="text-gray-700 text-lg">${request.pet.breed}</p>
+              <p class="text-gray-600">${request.pet.age} anos • ${request.pet.species === 'dog' ? 'Cachorro' : 'Gato'}</p>
             </div>
           </div>
         </div>
 
         <!-- Form Data -->
-        <div class="space-y-8 py-6">
+        <div class="space-y-6 mb-8">
           <!-- Sobre Você -->
-          <div>
+          <div class="bg-blue-50 rounded-xl p-6 border-2 border-blue-200">
             <h4 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <span>👤</span> Sobre o Adotante
+              <span>👤</span> Sobre o Candidato
             </h4>
-            <div class="space-y-3 bg-gray-50 rounded-xl p-5">
-              <div>
-                <p class="text-sm font-medium text-gray-500">Ocupação</p>
-                <p class="text-gray-900">${request.formData.aboutYou.occupation}</p>
-              </div>
-              <div>
-                <p class="text-sm font-medium text-gray-500">Faixa Etária</p>
-                <p class="text-gray-900">${request.formData.aboutYou.ageRange} anos</p>
-              </div>
-              <div>
-                <p class="text-sm font-medium text-gray-500">Motivação para Adoção</p>
-                <p class="text-gray-900 leading-relaxed">${request.formData.aboutYou.motivation}</p>
-              </div>
-              ${request.formData.aboutYou.previousPetExperience ? `
-                <div>
-                  <p class="text-sm font-medium text-gray-500">Experiência Prévia com Pets</p>
-                  <p class="text-gray-900 leading-relaxed">${request.formData.aboutYou.previousPetExperience}</p>
-                </div>
-              ` : ''}
+            <div class="space-y-3 text-gray-700">
+              <div><strong>Ocupação:</strong> ${request.formData.aboutYou.occupation}</div>
+              <div><strong>Faixa Etária:</strong> ${request.formData.aboutYou.ageRange} anos</div>
+              <div><strong>Motivação:</strong> ${request.formData.aboutYou.motivation}</div>
+              <div><strong>Experiência com Pets:</strong> ${request.formData.aboutYou.previousPetExperience}</div>
             </div>
           </div>
 
           <!-- Sua Casa -->
-          <div>
+          <div class="bg-green-50 rounded-xl p-6 border-2 border-green-200">
             <h4 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <span>🏠</span> Sobre a Residência
+              <span>🏠</span> Informações da Residência
             </h4>
-            <div class="grid grid-cols-2 gap-4">
-              <div class="bg-gray-50 rounded-xl p-4">
-                <p class="text-sm font-medium text-gray-500">Tipo de Moradia</p>
-                <p class="text-gray-900 font-semibold">${housingTypeLabels[request.formData.yourHome.housingType]}</p>
-              </div>
-              <div class="bg-gray-50 rounded-xl p-4">
-                <p class="text-sm font-medium text-gray-500">Situação</p>
-                <p class="text-gray-900 font-semibold">${ownershipLabels[request.formData.yourHome.ownershipStatus]}</p>
-              </div>
-              <div class="bg-gray-50 rounded-xl p-4">
-                <p class="text-sm font-medium text-gray-500">Quintal</p>
-                <p class="text-gray-900 font-semibold">${request.formData.yourHome.hasYard ? '✅ Sim' : '❌ Não'}</p>
-              </div>
-              <div class="bg-gray-50 rounded-xl p-4">
-                <p class="text-sm font-medium text-gray-500">Pessoas na Casa</p>
-                <p class="text-gray-900 font-semibold">${request.formData.yourHome.householdSize}</p>
-              </div>
-              <div class="bg-gray-50 rounded-xl p-4">
-                <p class="text-sm font-medium text-gray-500">Tem Crianças</p>
-                <p class="text-gray-900 font-semibold">${request.formData.yourHome.hasChildren ? '✅ Sim' : '❌ Não'}</p>
-              </div>
-              ${request.formData.yourHome.hasChildren && request.formData.yourHome.childrenAges.length > 0 ? `
-                <div class="bg-gray-50 rounded-xl p-4">
-                  <p class="text-sm font-medium text-gray-500">Idades das Crianças</p>
-                  <p class="text-gray-900 font-semibold">${request.formData.yourHome.childrenAges.join(', ')} anos</p>
-                </div>
-              ` : ''}
+            <div class="space-y-3 text-gray-700">
+              <div><strong>Tipo:</strong> ${request.formData.yourHome.housingType === 'house' ? 'Casa' : 'Apartamento'}</div>
+              <div><strong>Situação:</strong> ${request.formData.yourHome.ownershipStatus === 'owned' ? 'Próprio' : 'Alugado'}</div>
+              <div><strong>Quintal:</strong> ${request.formData.yourHome.hasYard ? 'Sim' : 'Não'}</div>
+              <div><strong>Pessoas na casa:</strong> ${request.formData.yourHome.householdSize}</div>
+              <div><strong>Tem crianças:</strong> ${request.formData.yourHome.hasChildren ? `Sim (${request.formData.yourHome.childrenAges.join(', ')} anos)` : 'Não'}</div>
             </div>
           </div>
 
-          <!-- Sua Rotina -->
-          <div>
+          <!-- Rotina -->
+          <div class="bg-purple-50 rounded-xl p-6 border-2 border-purple-200">
             <h4 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-              <span>⏰</span> Rotina e Cuidados
+              <span>📅</span> Rotina e Cuidados
             </h4>
-            <div class="space-y-3 bg-gray-50 rounded-xl p-5">
-              <div>
-                <p class="text-sm font-medium text-gray-500">Trabalho/Ocupação</p>
-                <p class="text-gray-900">${workScheduleLabels[request.formData.yourRoutine.workSchedule]}</p>
-              </div>
-              <div>
-                <p class="text-sm font-medium text-gray-500">Horas Sozinho por Dia</p>
-                <p class="text-gray-900">${request.formData.yourRoutine.hoursAlonePerDay} hora(s)</p>
-              </div>
-              <div>
-                <p class="text-sm font-medium text-gray-500">Plano de Exercícios</p>
-                <p class="text-gray-900 leading-relaxed">${request.formData.yourRoutine.exercisePlan}</p>
-              </div>
+            <div class="space-y-3 text-gray-700">
+              <div><strong>Horário de Trabalho:</strong> ${request.formData.yourRoutine.workSchedule}</div>
+              <div><strong>Horas sozinho por dia:</strong> ${request.formData.yourRoutine.hoursAlonePerDay}h</div>
+              <div><strong>Plano de Exercícios:</strong> ${request.formData.yourRoutine.exercisePlan}</div>
             </div>
           </div>
-
-          <!-- Interview Info -->
-          ${request.interview && request.interview.scheduled ? `
-            <div>
-              <h4 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <span>📅</span> Entrevista Agendada
-              </h4>
-              <div class="bg-purple-50 border-2 border-purple-200 rounded-xl p-5">
-                <div class="grid grid-cols-2 gap-4">
-                  <div>
-                    <p class="text-sm font-medium text-purple-700">Data e Hora</p>
-                    <p class="text-purple-900 font-semibold">${formatDate(request.interview.date)}</p>
-                  </div>
-                  <div>
-                    <p class="text-sm font-medium text-purple-700">Local</p>
-                    <p class="text-purple-900 font-semibold">${request.interview.location}</p>
-                  </div>
-                  <div>
-                    <p class="text-sm font-medium text-purple-700">Tipo</p>
-                    <p class="text-purple-900 font-semibold">${request.interview.type === 'in-person' ? 'Presencial' : request.interview.type === 'video-call' ? 'Videochamada' : 'Telefone'}</p>
-                  </div>
-                  <div>
-                    <p class="text-sm font-medium text-purple-700">Status</p>
-                    <p class="text-purple-900 font-semibold">${request.interview.completed ? '✅ Realizada' : '⏳ Pendente'}</p>
-                  </div>
-                </div>
-                ${request.interview.notes ? `
-                  <div class="mt-3 pt-3 border-t border-purple-200">
-                    <p class="text-sm font-medium text-purple-700">Observações</p>
-                    <p class="text-purple-900">${request.interview.notes}</p>
-                  </div>
-                ` : ''}
-              </div>
-            </div>
-          ` : ''}
-
-          <!-- Notes -->
-          ${request.notes && request.notes.length > 0 ? `
-            <div>
-              <h4 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <span>📝</span> Notas Internas
-              </h4>
-              <div class="space-y-3">
-                ${request.notes.map(note => `
-                  <div class="bg-yellow-50 border-l-4 border-yellow-400 rounded-r-xl p-4">
-                    <p class="text-gray-900">${note.content}</p>
-                    <p class="text-xs text-gray-500 mt-2">${formatDate(note.createdAt)}</p>
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-          ` : ''}
-
-          <!-- Status History -->
-          ${request.statusHistory.length > 1 ? `
-            <div>
-              <h4 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
-                <span>📊</span> Histórico de Status
-              </h4>
-              <div class="space-y-2">
-                ${request.statusHistory.map(history => {
-                  const historyStatus = statusConfig[history.status];
-                  return `
-                    <div class="flex items-center gap-3 bg-gray-50 rounded-xl p-3">
-                      <span class="text-2xl">${historyStatus.icon}</span>
-                      <div class="flex-1">
-                        <p class="font-medium text-gray-900">${historyStatus.label}</p>
-                        <p class="text-xs text-gray-500">${formatDate(history.timestamp)}</p>
-                        ${history.reason ? `<p class="text-sm text-gray-600 mt-1">${history.reason}</p>` : ''}
-                      </div>
-                    </div>
-                  `;
-                }).join('')}
-              </div>
-            </div>
-          ` : ''}
-
-          <!-- Rejection Reason -->
-          ${request.status === 'rejected' && request.statusHistory.find(h => h.status === 'rejected' && h.reason) ? `
-            <div class="bg-red-50 border-2 border-red-200 rounded-xl p-5">
-              <h4 class="text-lg font-bold text-red-900 mb-2 flex items-center gap-2">
-                <span>❌</span> Motivo da Rejeição
-              </h4>
-              <p class="text-red-800">${request.statusHistory.find(h => h.status === 'rejected' && h.reason).reason}</p>
-            </div>
-          ` : ''}
         </div>
 
+        <!-- Status History -->
+        ${request.statusHistory.length > 1 ? `
+          <div class="mb-8">
+            <h4 class="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+              <span>📊</span> Histórico de Status
+            </h4>
+            <div class="space-y-2">
+              ${request.statusHistory.map(history => {
+                const historyStatus = statusConfig[history.status];
+                return `
+                  <div class="flex items-start gap-3 bg-gray-50 rounded-xl p-4 border border-gray-200">
+                    <span class="text-2xl">${historyStatus.icon}</span>
+                    <div class="flex-1">
+                      <div class="flex items-center gap-3 mb-1">
+                        <p class="font-bold text-gray-900">${historyStatus.label}</p>
+                        <p class="text-xs text-gray-500">${formatDate(history.timestamp)}</p>
+                      </div>
+                      ${history.notes ? `<p class="text-sm text-gray-600">${history.notes}</p>` : ''}
+                      ${history.reason ? `<p class="text-sm text-red-700 mt-1 font-medium">Motivo: ${history.reason}</p>` : ''}
+                    </div>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        ` : ''}
+
         <!-- Action Buttons -->
-        <div class="sticky bottom-0 bg-white pt-6 border-t flex gap-3">
+        <div class="sticky bottom-0 bg-white pt-6 border-t flex flex-wrap gap-3">
           ${request.status === 'sent' ? `
-            <button onclick="updateStatus('${request._id}', 'in_review')" 
+            <button onclick="initiateStatusChange('${request._id}', 'in_review')" 
               class="flex-1 bg-yellow-500 text-white px-6 py-3 rounded-full font-medium hover:bg-yellow-600 transition">
               🔍 Iniciar Análise
             </button>
           ` : ''}
           
           ${request.status === 'in_review' ? `
-            <button onclick="updateStatus('${request._id}', 'interview')" 
+            <button onclick="initiateStatusChange('${request._id}', 'interview')" 
               class="flex-1 bg-purple-500 text-white px-6 py-3 rounded-full font-medium hover:bg-purple-600 transition">
               📅 Agendar Entrevista
             </button>
           ` : ''}
           
           ${request.status === 'interview' ? `
-            <button onclick="updateStatus('${request._id}', 'approved')" 
+            <button onclick="initiateStatusChange('${request._id}', 'approved')" 
               class="flex-1 bg-green-500 text-white px-6 py-3 rounded-full font-medium hover:bg-green-600 transition">
               ✅ Aprovar
             </button>
           ` : ''}
           
           ${request.status !== 'rejected' && request.status !== 'approved' && request.status !== 'completed' ? `
-            <button onclick="updateStatus('${request._id}', 'rejected')" 
+            <button onclick="initiateStatusChange('${request._id}', 'rejected')" 
               class="flex-1 bg-red-500 text-white px-6 py-3 rounded-full font-medium hover:bg-red-600 transition">
               ❌ Rejeitar
             </button>
           ` : ''}
 
           ${request.status === 'approved' ? `
-            <button onclick="updateStatus('${request._id}', 'completed')" 
+            <button onclick="initiateStatusChange('${request._id}', 'completed')" 
               class="flex-1 bg-emerald-500 text-white px-6 py-3 rounded-full font-medium hover:bg-emerald-600 transition">
               🎉 Marcar como Concluída
             </button>
@@ -768,6 +712,7 @@
       }
       
       container.innerHTML = filtered.map(renderRequestCard).join('');
+      updateCounters();
     }
 
     // Show details modal
@@ -783,40 +728,128 @@
       document.body.style.overflow = 'hidden';
     }
 
-    // Close modal
-    function closeModal() {
+    // Close details modal
+    function closeDetailsModal() {
       const modal = document.getElementById('detailsModal');
       modal.classList.add('hidden');
       document.body.style.overflow = 'auto';
     }
 
-    // Update status (mock function)
-    function updateStatus(requestId, newStatus) {
-      alert(`Status atualizado para: ${statusConfig[newStatus].label}\n\nEm produção, isso enviaria uma atualização para o backend.`);
-      closeModal();
-      
-      // Update mock data
+    // Initiate status change
+    function initiateStatusChange(requestId, newStatus) {
       const request = mockRequests.find(r => r._id === requestId);
-      if (request) {
-        request.status = newStatus;
-        request.statusHistory.push({
-          status: newStatus,
-          timestamp: new Date().toISOString()
-        });
-        
-        if (newStatus === 'approved') {
-          request.approvedAt = new Date().toISOString();
-        } else if (newStatus === 'rejected') {
-          request.rejectedAt = new Date().toISOString();
-        }
-        
-        loadRequests(currentFilter);
+      if (!request) return;
+
+      pendingStatusChange = { requestId, newStatus };
+
+      const status = statusConfig[newStatus];
+      const modal = document.getElementById('statusChangeModal');
+      const preview = document.getElementById('statusChangePreview');
+      const reasonContainer = document.getElementById('reasonContainer');
+      const interviewContainer = document.getElementById('interviewContainer');
+
+      // Update preview
+      preview.innerHTML = `
+        <span class="text-3xl">${status.icon}</span>
+        <div>
+          <p class="font-bold text-gray-900">${status.label}</p>
+          <p class="text-sm text-gray-600">Pet: ${request.pet.name}</p>
+        </div>
+      `;
+
+      // Show/hide fields based on status
+      if (newStatus === 'rejected') {
+        reasonContainer.classList.remove('hidden');
+        interviewContainer.classList.add('hidden');
+      } else if (newStatus === 'interview') {
+        reasonContainer.classList.add('hidden');
+        interviewContainer.classList.remove('hidden');
+      } else {
+        reasonContainer.classList.add('hidden');
+        interviewContainer.classList.add('hidden');
       }
+
+      // Clear previous values
+      document.getElementById('rejectionReason').value = '';
+      document.getElementById('statusNotes').value = '';
+      document.getElementById('interviewDate').value = '';
+
+      modal.classList.remove('hidden');
+    }
+
+    // Confirm status change
+    function confirmStatusChange() {
+      if (!pendingStatusChange) return;
+
+      const { requestId, newStatus } = pendingStatusChange;
+      const request = mockRequests.find(r => r._id === requestId);
+      if (!request) return;
+
+      // Get values
+      const notes = document.getElementById('statusNotes').value.trim();
+      const reason = newStatus === 'rejected' ? document.getElementById('rejectionReason').value.trim() : '';
+      const interviewDate = newStatus === 'interview' ? document.getElementById('interviewDate').value : '';
+
+      // Validate rejection reason
+      if (newStatus === 'rejected' && !reason) {
+        showNotification('Por favor, informe o motivo da rejeição', 'error');
+        return;
+      }
+
+      // Update request
+      request.status = newStatus;
+      
+      const historyEntry = {
+        status: newStatus,
+        timestamp: new Date().toISOString(),
+        notes: notes || undefined,
+        reason: reason || undefined
+      };
+
+      request.statusHistory.push(historyEntry);
+
+      // Update specific timestamps
+      if (newStatus === 'approved') {
+        request.approvedAt = new Date().toISOString();
+      } else if (newStatus === 'rejected') {
+        request.rejectedAt = new Date().toISOString();
+      } else if (newStatus === 'interview' && interviewDate) {
+        request.interviewScheduledAt = new Date(interviewDate).toISOString();
+      }
+
+      // Close modals and refresh
+      closeStatusChangeModal();
+      closeDetailsModal();
+      loadRequests(currentFilter);
+
+      showNotification(`Status atualizado para: ${statusConfig[newStatus].label}`, 'success');
+
+      pendingStatusChange = null;
+    }
+
+    // Close status change modal
+    function closeStatusChangeModal() {
+      document.getElementById('statusChangeModal').classList.add('hidden');
+      pendingStatusChange = null;
+    }
+
+    // Show notification
+    function showNotification(message, type = 'success') {
+      const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
+      const notification = document.createElement('div');
+      notification.className = `fixed top-20 right-6 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50 transition-all duration-300`;
+      notification.textContent = message;
+      document.body.appendChild(notification);
+
+      setTimeout(() => {
+        notification.classList.add('opacity-0');
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
     }
 
     // Global functions
     window.showDetails = showDetails;
-    window.updateStatus = updateStatus;
+    window.initiateStatusChange = initiateStatusChange;
 
     // Filter functionality
     let currentFilter = 'all';
@@ -837,31 +870,28 @@
       });
     });
 
-    // Close modal button
-    document.getElementById('closeModal').addEventListener('click', closeModal);
-
-    // Close modal on outside click
+    // Modal event listeners
+    document.getElementById('closeModal').addEventListener('click', closeDetailsModal);
     document.getElementById('detailsModal').addEventListener('click', function(e) {
-      if (e.target === this) {
-        closeModal();
-      }
+      if (e.target === this) closeDetailsModal();
+    });
+
+    document.getElementById('cancelStatusChange').addEventListener('click', closeStatusChangeModal);
+    document.getElementById('confirmStatusChange').addEventListener('click', confirmStatusChange);
+    document.getElementById('statusChangeModal').addEventListener('click', function(e) {
+      if (e.target === this) closeStatusChangeModal();
     });
 
     // Logout
-    document.getElementById('logoutBtn').addEventListener('click', async () => {
-      try {
-        // await api.logout();
-        localStorage.removeItem('userInfo');
-        window.location.href = 'index.html';
-      } catch (error) {
-        console.error('Erro ao sair:', error);
-      }
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('userInfo');
+      window.location.href = 'index.html';
     });
 
     // Initial load
     loadRequests();
 
-    // Add active filter button style
+    // Add filter button styles
     const style = document.createElement('style');
     style.textContent = `
       .filter-btn {

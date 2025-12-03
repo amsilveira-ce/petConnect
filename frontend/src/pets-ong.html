@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Meus Pets | PetConnect</title>
-  <link rel="icon" type="image/x-icon" href="http://localhost:5173/logos/logo.svg">
+  <link rel="icon" type="image/x-icon" href="http://127.0.0.1:5501/frontend/public/logos/logo.svg">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -24,7 +24,7 @@
   <nav class="bg-white shadow-md sticky top-0 z-10">
     <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
       <div class="flex items-center gap-3">
-        <img src="http://localhost:5173/logos/logo.svg" alt="PetConnect" class="h-10 w-10">
+        <img src="http://127.0.0.1:5501/frontend/public/logos/logo.svg" alt="PetConnect" class="h-10 w-10">
         <span class="font-mono text-2xl font-semibold">PetConnect</span>
       </div>
       <div class="hidden md:flex gap-8">
@@ -51,14 +51,14 @@
   </main>
 
   <!-- Modal Detalhes -->
-  <div id="petModal" class="hidden fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50">
+  <div id="petModal" class="hidden fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
     <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full overflow-hidden">
       <div class="flex justify-between items-center border-b p-6">
         <h2 id="modalPetName" class="text-2xl font-bold text-gray-900">Detalhes do Pet</h2>
         <button id="closeModal" class="text-gray-600 hover:text-gray-900 text-2xl">&times;</button>
       </div>
 
-      <div class="p-6 overflow-y-auto max-h-[80vh]">
+      <div class="p-6 overflow-y-auto max-h-[70vh]">
         <img id="modalPetImage" src="" alt="Pet" class="w-full h-64 object-cover rounded-xl mb-6">
 
         <div id="modalPetDetails" class="space-y-4 text-gray-700"></div>
@@ -71,14 +71,177 @@
     </div>
   </div>
 
+  <!-- Modal Edição -->
+  <div id="editModal" class="hidden fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50 p-4 overflow-y-auto">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full my-8">
+      <div class="flex justify-between items-center border-b p-6">
+        <h2 class="text-2xl font-bold text-gray-900">Editar Pet</h2>
+        <button id="closeEditModal" class="text-gray-600 hover:text-gray-900 text-2xl">&times;</button>
+      </div>
+
+      <form id="editPetForm" class="p-6 space-y-6">
+        <!-- Grid de 2 colunas -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          
+          <!-- Nome -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Nome *</label>
+            <input type="text" id="editName" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+          </div>
+
+          <!-- Espécie -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Espécie *</label>
+            <select id="editSpecies" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+              <option value="dog">Cachorro</option>
+              <option value="cat">Gato</option>
+            </select>
+          </div>
+
+          <!-- Raça -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Raça *</label>
+            <input type="text" id="editBreed" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+          </div>
+
+          <!-- Tamanho -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Tamanho *</label>
+            <select id="editSize" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+              <option value="small">Pequeno</option>
+              <option value="medium">Médio</option>
+              <option value="large">Grande</option>
+            </select>
+          </div>
+
+          <!-- Gênero -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Gênero *</label>
+            <select id="editGender" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+              <option value="male">Macho</option>
+              <option value="female">Fêmea</option>
+            </select>
+          </div>
+
+          <!-- Idade (anos) -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Idade (anos) *</label>
+            <input type="number" id="editAgeYears" min="0" max="30" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+          </div>
+
+          <!-- Categoria de Idade -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Categoria de Idade *</label>
+            <select id="editAgeCategory" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+              <option value="young">Jovem (0-2 anos)</option>
+              <option value="adult">Adulto (3-7 anos)</option>
+              <option value="senior">Idoso (8+ anos)</option>
+            </select>
+          </div>
+
+          <!-- Cor -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Cor Principal *</label>
+            <input type="text" id="editColor" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+          </div>
+
+          <!-- Cidade -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Cidade *</label>
+            <input type="text" id="editCity" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+          </div>
+
+          <!-- Estado -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Estado *</label>
+            <input type="text" id="editState" required maxlength="2" placeholder="Ex: SP" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+          </div>
+
+          <!-- Status de Adoção -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-2">Status *</label>
+            <select id="editStatus" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+              <option value="available">Disponível</option>
+              <option value="adopted">Adotado</option>
+              <option value="pending">Pendente</option>
+            </select>
+          </div>
+
+          <!-- URL da Foto -->
+          <div class="md:col-span-2">
+            <label class="block text-sm font-semibold text-gray-700 mb-2">URL da Foto *</label>
+            <input type="url" id="editPhotoUrl" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent">
+          </div>
+
+        </div>
+
+        <!-- Descrição (largura completa) -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Descrição *</label>
+          <textarea id="editDescription" required rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"></textarea>
+        </div>
+
+        <!-- Tags de Comportamento -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-2">Tags de Comportamento</label>
+          <div class="flex flex-wrap gap-2 mb-3">
+            <button type="button" class="tag-btn px-3 py-1 rounded-full text-sm border border-gray-300" data-tag="friendly">Amigável</button>
+            <button type="button" class="tag-btn px-3 py-1 rounded-full text-sm border border-gray-300" data-tag="playful">Brincalhão</button>
+            <button type="button" class="tag-btn px-3 py-1 rounded-full text-sm border border-gray-300" data-tag="calm">Calmo</button>
+            <button type="button" class="tag-btn px-3 py-1 rounded-full text-sm border border-gray-300" data-tag="energetic">Energético</button>
+            <button type="button" class="tag-btn px-3 py-1 rounded-full text-sm border border-gray-300" data-tag="affectionate">Carinhoso</button>
+            <button type="button" class="tag-btn px-3 py-1 rounded-full text-sm border border-gray-300" data-tag="independent">Independente</button>
+            <button type="button" class="tag-btn px-3 py-1 rounded-full text-sm border border-gray-300" data-tag="good-with-kids">Bom com crianças</button>
+            <button type="button" class="tag-btn px-3 py-1 rounded-full text-sm border border-gray-300" data-tag="trainable">Treinável</button>
+            <button type="button" class="tag-btn px-3 py-1 rounded-full text-sm border border-gray-300" data-tag="quiet">Quieto</button>
+            <button type="button" class="tag-btn px-3 py-1 rounded-full text-sm border border-gray-300" data-tag="active">Ativo</button>
+            <button type="button" class="tag-btn px-3 py-1 rounded-full text-sm border border-gray-300" data-tag="curious">Curioso</button>
+            <button type="button" class="tag-btn px-3 py-1 rounded-full text-sm border border-gray-300" data-tag="social">Social</button>
+          </div>
+        </div>
+
+        <!-- Informações de Saúde -->
+        <div class="space-y-3">
+          <label class="block text-sm font-semibold text-gray-700">Informações de Saúde</label>
+          <div class="flex items-center gap-3">
+            <input type="checkbox" id="editVaccinated" class="w-5 h-5 text-primary focus:ring-primary rounded">
+            <label for="editVaccinated" class="text-gray-700">Vacinado</label>
+          </div>
+          <div class="flex items-center gap-3">
+            <input type="checkbox" id="editNeutered" class="w-5 h-5 text-primary focus:ring-primary rounded">
+            <label for="editNeutered" class="text-gray-700">Castrado</label>
+          </div>
+        </div>
+
+        <!-- Botões -->
+        <div class="flex gap-4 justify-end pt-4 border-t">
+          <button type="button" id="cancelEdit" class="px-6 py-2 rounded-full border border-gray-300 hover:bg-gray-50 transition">Cancelar</button>
+          <button type="submit" class="px-6 py-2 rounded-full bg-primary text-white hover:bg-pink-600 transition">Salvar Alterações</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal Confirmação de Remoção -->
+  <div id="confirmModal" class="hidden fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6">
+      <h3 class="text-2xl font-bold text-gray-900 mb-4">Confirmar Remoção</h3>
+      <p class="text-gray-700 mb-6">Tem certeza que deseja remover <strong id="confirmPetName"></strong>? Esta ação não pode ser desfeita.</p>
+      <div class="flex gap-4 justify-end">
+        <button id="cancelDelete" class="px-6 py-2 rounded-full border border-gray-300 hover:bg-gray-50 transition">Cancelar</button>
+        <button id="confirmDelete" class="px-6 py-2 rounded-full bg-red-500 text-white hover:bg-red-600 transition">Remover</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Footer -->
   <footer class="bg-white py-6 mt-16 border-t text-center text-gray-500 text-sm">
-    © 2025 PetConnect — Conectando corações humanos e animais ❤️
+    © 2025 PetConnect – Conectando corações humanos e animais ❤️
   </footer>
 
   <script>
     // MOCKS DE PETS + USUÁRIOS
-    const petsMock = [
+    let petsMock = [
       {
         _id: "pet1",
         name: "Luna",
@@ -118,7 +281,7 @@
         healthInfo: { isVaccinated: true, isNeutered: true },
         media: {
           photos: [
-            { url: "https://midias.agazeta.com.br/2025/07/15/edicaseo-vira-lata-caramelo-e-um-verdadeiro-icone-da-cultura-nacional-imagem-jucadima-shutterstock-aklomqjees.jpg", isPrimary: true }
+            { url: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&w=600&q=60", isPrimary: true }
           ]
         },
         adoptedBy: {
@@ -137,46 +300,228 @@
             childrenAges: [5, 9]
           }
         }
+      },
+      {
+        _id: "pet3",
+        name: "Mimi",
+        species: "cat",
+        breed: "Siamês",
+        size: "small",
+        gender: "female",
+        ageCategory: "adult",
+        ageYears: 3,
+        color: { primary: "Creme e Marrom" },
+        adoptionStatus: "available",
+        description: "Mimi é elegante e independente, mas adora carinho quando está no clima certo.",
+        location: { city: "São Paulo", state: "SP" },
+        behaviorTags: ["independent", "affectionate", "quiet"],
+        healthInfo: { isVaccinated: true, isNeutered: true },
+        media: {
+          photos: [
+            { url: "https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?auto=format&fit=crop&w=600&q=60", isPrimary: true }
+          ]
+        },
+        adoptedBy: null
+      },
+      {
+        _id: "pet4",
+        name: "Bob",
+        species: "dog",
+        breed: "Labrador",
+        size: "large",
+        gender: "male",
+        ageCategory: "young",
+        ageYears: 1,
+        color: { primary: "Amarelo" },
+        adoptionStatus: "available",
+        description: "Bob é pura energia! Adora nadar, brincar de buscar e é ótimo com crianças.",
+        location: { city: "Rio de Janeiro", state: "RJ" },
+        behaviorTags: ["energetic", "playful", "good-with-kids", "trainable"],
+        healthInfo: { isVaccinated: true, isNeutered: false },
+        media: {
+          photos: [
+            { url: "https://love.doghero.com.br/wp-content/uploads/2016/11/Labrador-6.jpg", isPrimary: true }
+          ]
+        },
+        adoptedBy: null
+      },
+      {
+        _id: "pet5",
+        name: "Princesa",
+        species: "cat",
+        breed: "Persa",
+        size: "small",
+        gender: "female",
+        ageCategory: "senior",
+        ageYears: 8,
+        color: { primary: "Branco" },
+        adoptionStatus: "available",
+        description: "Princesa é calma e adora um colo quentinho. Perfeita para quem busca companhia tranquila.",
+        location: { city: "Belo Horizonte", state: "MG" },
+        behaviorTags: ["calm", "affectionate"],
+        healthInfo: { isVaccinated: true, isNeutered: true },
+        media: {
+          photos: [
+            { url: "https://images.unsplash.com/photo-1495360010541-f48722b34f7d?auto=format&fit=crop&w=600&q=60", isPrimary: true }
+          ]
+        },
+        adoptedBy: null
+      },
+      {
+        _id: "pet6",
+        name: "Max",
+        species: "dog",
+        breed: "Beagle",
+        size: "medium",
+        gender: "male",
+        ageCategory: "adult",
+        ageYears: 5,
+        color: { primary: "Tricolor" },
+        adoptionStatus: "available",
+        description: "Max é curioso e aventureiro. Adora farejar tudo e explorar novos lugares.",
+        location: { city: "Curitiba", state: "PR" },
+        behaviorTags: ["curious", "friendly", "active"],
+        healthInfo: { isVaccinated: true, isNeutered: true },
+        media: {
+          photos: [
+            { url: "https://images.unsplash.com/photo-1505628346881-b72b27e84530?auto=format&fit=crop&w=600&q=60", isPrimary: true }
+          ]
+        },
+        adoptedBy: null
+      },
+      {
+        _id: "pet7",
+        name: "Nina",
+        species: "cat",
+        breed: "SRD",
+        size: "small",
+        gender: "female",
+        ageCategory: "young",
+        ageYears: 1,
+        color: { primary: "Malhada" },
+        adoptionStatus: "adopted",
+        description: "Nina foi resgatada das ruas e agora vive feliz em seu novo lar.",
+        location: { city: "Salvador", state: "BA" },
+        behaviorTags: ["playful", "social", "affectionate"],
+        healthInfo: { isVaccinated: true, isNeutered: true },
+        media: {
+          photos: [
+            { url: "https://images.unsplash.com/photo-1574158622682-e40e69881006?auto=format&fit=crop&w=600&q=60", isPrimary: true }
+          ]
+        },
+        adoptedBy: {
+          name: "Carlos Mendes",
+          email: "carlos.mendes@example.com",
+          phone: "(71) 98765-4321",
+          address: {
+            street: "Av. Oceânica, 456",
+            city: "Salvador",
+            state: "BA"
+          },
+          profile: {
+            occupation: "Designer",
+            hasPets: false,
+            hasChildren: false,
+            childrenAges: []
+          }
+        }
+      },
+      {
+        _id: "pet8",
+        name: "Toby",
+        species: "dog",
+        breed: "Poodle",
+        size: "small",
+        gender: "male",
+        ageCategory: "adult",
+        ageYears: 6,
+        color: { primary: "Branco" },
+        adoptionStatus: "available",
+        description: "Toby é inteligente e carinhoso. Ideal para apartamentos e adora fazer truques.",
+        location: { city: "Brasília", state: "DF" },
+        behaviorTags: ["intelligent", "trainable", "affectionate", "quiet"],
+        healthInfo: { isVaccinated: true, isNeutered: true },
+        media: {
+          photos: [
+            { url: "https://images.unsplash.com/photo-1546527868-ccb7ee7dfa6a?auto=format&fit=crop&w=600&q=60", isPrimary: true }
+          ]
+        },
+        adoptedBy: null
       }
     ];
 
-    // RENDERIZA OS CARDS
-    const petsGrid = document.getElementById("petsGrid");
-    petsMock.forEach(pet => {
-      const card = document.createElement("div");
-      card.className = "bg-white rounded-2xl shadow-md hover:shadow-lg transition overflow-hidden cursor-pointer";
-      card.innerHTML = `
-        <img src="${pet.media.photos[0].url}" alt="${pet.name}" class="w-full h-52 object-cover">
-        <div class="p-6">
-          <h3 class="text-2xl font-bold mb-1">${pet.name}</h3>
-          <p class="text-gray-600 capitalize mb-1">${pet.breed} • ${pet.gender} • ${pet.ageCategory}</p>
-          <p class="text-sm text-gray-500">${pet.location.city} - ${pet.location.state}</p>
-          <span class="inline-block mt-3 px-3 py-1 rounded-full text-sm font-medium
-            ${pet.adoptionStatus === 'available' ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-700'}">
-            ${pet.adoptionStatus === 'available' ? 'Disponível' : 'Adotado'}
-          </span>
-        </div>
-      `;
-      card.addEventListener('click', () => openPetModal(pet));
-      petsGrid.appendChild(card);
-    });
+    // Variáveis globais
+    let petToDelete = null;
+    let petToEdit = null;
+    let selectedTags = [];
 
-    // MODAL
+    // RENDERIZA OS CARDS
+    function renderPets() {
+      const petsGrid = document.getElementById("petsGrid");
+      petsGrid.innerHTML = '';
+      
+      petsMock.forEach(pet => {
+        const card = document.createElement("div");
+        card.className = "bg-white rounded-2xl shadow-md hover:shadow-lg transition overflow-hidden";
+        card.innerHTML = `
+          <div class="relative">
+            <img src="${pet.media.photos[0].url}" alt="${pet.name}" class="w-full h-52 object-cover cursor-pointer" onclick="openPetModal('${pet._id}')">
+            <div class="absolute top-3 right-3 flex gap-2">
+              <button onclick="editPet('${pet._id}')" class="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition" title="Editar">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+              </button>
+              <button onclick="confirmDeletePet('${pet._id}')" class="bg-white p-2 rounded-full shadow-md hover:bg-gray-100 transition" title="Remover">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="p-6 cursor-pointer" onclick="openPetModal('${pet._id}')">
+            <h3 class="text-2xl font-bold mb-1">${pet.name}</h3>
+            <p class="text-gray-600 capitalize mb-1">${pet.breed} • ${pet.gender === 'male' ? 'Macho' : 'Fêmea'} • ${getAgeCategoryLabel(pet.ageCategory)}</p>
+            <p class="text-sm text-gray-500">${pet.location.city} - ${pet.location.state}</p>
+            <span class="inline-block mt-3 px-3 py-1 rounded-full text-sm font-medium
+              ${pet.adoptionStatus === 'available' ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-700'}">
+              ${pet.adoptionStatus === 'available' ? 'Disponível' : 'Adotado'}
+            </span>
+          </div>
+        `;
+        petsGrid.appendChild(card);
+      });
+    }
+
+    // Helper para traduzir categoria de idade
+    function getAgeCategoryLabel(category) {
+      const labels = {
+        'young': 'Jovem',
+        'adult': 'Adulto',
+        'senior': 'Idoso'
+      };
+      return labels[category] || category;
+    }
+
+    // ============== MODAL DETALHES ==============
     const modal = document.getElementById('petModal');
     const closeModal = document.getElementById('closeModal');
 
     closeModal.addEventListener('click', () => modal.classList.add('hidden'));
     modal.addEventListener('click', e => { if (e.target === modal) modal.classList.add('hidden'); });
 
-    function openPetModal(pet) {
+    function openPetModal(petId) {
+      const pet = petsMock.find(p => p._id === petId);
+      if (!pet) return;
+
       document.getElementById('modalPetName').textContent = pet.name;
       document.getElementById('modalPetImage').src = pet.media.photos[0].url;
 
       const details = `
-        <div><strong>Espécie:</strong> ${pet.species}</div>
+        <div><strong>Espécie:</strong> ${pet.species === 'dog' ? 'Cachorro' : 'Gato'}</div>
         <div><strong>Raça:</strong> ${pet.breed}</div>
-        <div><strong>Tamanho:</strong> ${pet.size}</div>
-        <div><strong>Idade:</strong> ${pet.ageYears} anos (${pet.ageCategory})</div>
+        <div><strong>Tamanho:</strong> ${pet.size === 'small' ? 'Pequeno' : pet.size === 'medium' ? 'Médio' : 'Grande'}</div>
+        <div><strong>Idade:</strong> ${pet.ageYears} ${pet.ageYears === 1 ? 'ano' : 'anos'} (${getAgeCategoryLabel(pet.ageCategory)})</div>
         <div><strong>Cor:</strong> ${pet.color.primary || '-'}</div>
         <div><strong>Comportamento:</strong> ${pet.behaviorTags.join(', ')}</div>
         <div><strong>Saúde:</strong> ${pet.healthInfo.isVaccinated ? 'Vacinado' : 'Não vacinado'}, ${pet.healthInfo.isNeutered ? 'Castrado' : 'Não castrado'}</div>
@@ -205,6 +550,176 @@
 
       modal.classList.remove('hidden');
     }
+
+    // ============== MODAL EDIÇÃO ==============
+    const editModal = document.getElementById('editModal');
+    const closeEditModal = document.getElementById('closeEditModal');
+    const cancelEdit = document.getElementById('cancelEdit');
+    const editPetForm = document.getElementById('editPetForm');
+
+    closeEditModal.addEventListener('click', () => editModal.classList.add('hidden'));
+    cancelEdit.addEventListener('click', () => editModal.classList.add('hidden'));
+    editModal.addEventListener('click', e => { if (e.target === editModal) editModal.classList.add('hidden'); });
+
+    // Sistema de Tags
+    const tagButtons = document.querySelectorAll('.tag-btn');
+    tagButtons.forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        const tag = this.dataset.tag;
+        
+        if (selectedTags.includes(tag)) {
+          selectedTags = selectedTags.filter(t => t !== tag);
+          this.classList.remove('bg-primary', 'text-white');
+          this.classList.add('border-gray-300');
+        } else {
+          selectedTags.push(tag);
+          this.classList.add('bg-primary', 'text-white');
+          this.classList.remove('border-gray-300');
+        }
+      });
+    });
+
+    // Abrir modal de edição
+    function editPet(petId) {
+      const pet = petsMock.find(p => p._id === petId);
+      if (!pet) return;
+
+      petToEdit = petId;
+      selectedTags = [...pet.behaviorTags];
+
+      // Preencher formulário
+      document.getElementById('editName').value = pet.name;
+      document.getElementById('editSpecies').value = pet.species;
+      document.getElementById('editBreed').value = pet.breed;
+      document.getElementById('editSize').value = pet.size;
+      document.getElementById('editGender').value = pet.gender;
+      document.getElementById('editAgeYears').value = pet.ageYears;
+      document.getElementById('editAgeCategory').value = pet.ageCategory;
+      document.getElementById('editColor').value = pet.color.primary;
+      document.getElementById('editCity').value = pet.location.city;
+      document.getElementById('editState').value = pet.location.state;
+      document.getElementById('editStatus').value = pet.adoptionStatus;
+      document.getElementById('editPhotoUrl').value = pet.media.photos[0].url;
+      document.getElementById('editDescription').value = pet.description;
+      document.getElementById('editVaccinated').checked = pet.healthInfo.isVaccinated;
+      document.getElementById('editNeutered').checked = pet.healthInfo.isNeutered;
+
+      // Resetar e marcar tags selecionadas
+      tagButtons.forEach(btn => {
+        btn.classList.remove('bg-primary', 'text-white');
+        btn.classList.add('border-gray-300');
+        
+        if (selectedTags.includes(btn.dataset.tag)) {
+          btn.classList.add('bg-primary', 'text-white');
+          btn.classList.remove('border-gray-300');
+        }
+      });
+
+      editModal.classList.remove('hidden');
+    }
+
+    // Salvar edições
+    editPetForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const petIndex = petsMock.findIndex(p => p._id === petToEdit);
+      if (petIndex === -1) return;
+
+      // Atualizar pet com novos dados
+      petsMock[petIndex] = {
+        ...petsMock[petIndex],
+        name: document.getElementById('editName').value,
+        species: document.getElementById('editSpecies').value,
+        breed: document.getElementById('editBreed').value,
+        size: document.getElementById('editSize').value,
+        gender: document.getElementById('editGender').value,
+        ageYears: parseInt(document.getElementById('editAgeYears').value),
+        ageCategory: document.getElementById('editAgeCategory').value,
+        color: { primary: document.getElementById('editColor').value },
+        adoptionStatus: document.getElementById('editStatus').value,
+        description: document.getElementById('editDescription').value,
+        location: {
+          city: document.getElementById('editCity').value,
+          state: document.getElementById('editState').value.toUpperCase()
+        },
+        behaviorTags: selectedTags,
+        healthInfo: {
+          isVaccinated: document.getElementById('editVaccinated').checked,
+          isNeutered: document.getElementById('editNeutered').checked
+        },
+        media: {
+          photos: [{
+            url: document.getElementById('editPhotoUrl').value,
+            isPrimary: true
+          }]
+        }
+      };
+
+      // Fechar modal e re-renderizar
+      editModal.classList.add('hidden');
+      renderPets();
+      showNotification('Pet atualizado com sucesso!');
+      petToEdit = null;
+    });
+
+    // ============== MODAL CONFIRMAÇÃO DE REMOÇÃO ==============
+    const confirmModal = document.getElementById('confirmModal');
+    const cancelDelete = document.getElementById('cancelDelete');
+    const confirmDeleteBtn = document.getElementById('confirmDelete');
+
+    function confirmDeletePet(petId) {
+      const pet = petsMock.find(p => p._id === petId);
+      if (!pet) return;
+
+      petToDelete = petId;
+      document.getElementById('confirmPetName').textContent = pet.name;
+      confirmModal.classList.remove('hidden');
+    }
+
+    cancelDelete.addEventListener('click', () => {
+      confirmModal.classList.add('hidden');
+      petToDelete = null;
+    });
+
+    confirmModal.addEventListener('click', e => {
+      if (e.target === confirmModal) {
+        confirmModal.classList.add('hidden');
+        petToDelete = null;
+      }
+    });
+
+    confirmDeleteBtn.addEventListener('click', () => {
+      if (petToDelete) {
+        deletePet(petToDelete);
+        confirmModal.classList.add('hidden');
+        petToDelete = null;
+      }
+    });
+
+    // DELETAR PET
+    function deletePet(petId) {
+      petsMock = petsMock.filter(p => p._id !== petId);
+      renderPets();
+      showNotification('Pet removido com sucesso!');
+    }
+
+    // NOTIFICAÇÃO
+    function showNotification(message, type = 'success') {
+      const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
+      const notification = document.createElement('div');
+      notification.className = `fixed top-20 right-6 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50 transition-all duration-300`;
+      notification.textContent = message;
+      document.body.appendChild(notification);
+
+      setTimeout(() => {
+        notification.classList.add('opacity-0');
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
+
+    // Renderiza os pets ao carregar a página
+    renderPets();
   </script>
 </body>
 </html>

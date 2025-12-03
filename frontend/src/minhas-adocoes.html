@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minhas Adoções | PetConnect</title>
+  <link rel="icon" type="image/x-icon" href="http://127.0.0.1:5501/frontend/public/logos/logo.svg">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#ec4899',
+            secondary: '#fce7f3'
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-900">
+  <!-- Navbar -->
+  <nav class="bg-white shadow-md sticky top-0 z-10">
+    <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center gap-3">
+        <img src="http://127.0.0.1:5501/frontend/public/logos/logo.svg" alt="PetConnect" class="h-10 w-10">
+        <span class="font-mono text-2xl font-semibold">PetConnect</span>
+      </div>
+      <div class="hidden md:flex gap-8">
+        <a href="user-dashboard.html" class="text-gray-700 hover:text-primary transition">Dashboard</a>
+        <a href="pets-adodante.html" class="text-gray-700 hover:text-primary transition">Meus Pets</a>
+        <a href="minhas-adocoes.html" class="text-primary font-semibold">Minhas Adoções</a>
+        <button id="logoutBtn" class="bg-primary text-white px-6 py-2 rounded-full hover:bg-pink-600 transition">Sair</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Conteúdo -->
+  <main class="max-w-7xl mx-auto px-6 py-12">
+    <div class="flex justify-between items-center mb-8">
+      <div>
+        <h1 class="text-4xl font-bold text-gray-900">Minhas Solicitações de Adoção</h1>
+        <p class="text-gray-600 mt-2">Acompanhe o status das suas solicitações</p>
+      </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div class="bg-white p-6 rounded-2xl shadow-lg">
+        <div class="flex items-center gap-4">
+          <div class="bg-yellow-100 p-3 rounded-full">
+            <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-2xl font-bold text-gray-900" id="pendingCount">0</h3>
+            <p class="text-gray-600">Pendentes</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="bg-white p-6 rounded-2xl shadow-lg">
+        <div class="flex items-center gap-4">
+          <div class="bg-green-100 p-3 rounded-full">
+            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-2xl font-bold text-gray-900" id="approvedCount">0</h3>
+            <p class="text-gray-600">Aprovadas</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white p-6 rounded-2xl shadow-lg">
+        <div class="flex items-center gap-4">
+          <div class="bg-red-100 p-3 rounded-full">
+            <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <div>
+            <h3 class="text-2xl font-bold text-gray-900" id="rejectedCount">0</h3>
+            <p class="text-gray-600">Recusadas</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div id="emptyState" class="hidden text-center py-16 bg-white rounded-2xl shadow-lg">
+      <div class="text-6xl mb-4">📋</div>
+      <h3 class="text-2xl font-bold text-gray-900 mb-2">Nenhuma solicitação ainda</h3>
+      <p class="text-gray-600 mb-6">Você ainda não fez nenhuma solicitação de adoção.</p>
+      <a href="user-dashboard.html" class="inline-block bg-primary text-white px-8 py-3 rounded-full hover:bg-pink-600 transition">
+        Explorar Pets
+      </a>
+    </div>
+
+    <!-- Applications List -->
+    <div id="applicationsList" class="space-y-6"></div>
+  </main>
+
+  <!-- Modal Detalhes -->
+  <div id="detailsModal" class="hidden fixed inset-0 bg-black bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full overflow-hidden max-h-[90vh] overflow-y-auto">
+      <div class="flex justify-between items-center border-b p-6 sticky top-0 bg-white">
+        <h2 class="text-2xl font-bold text-gray-900">Detalhes da Solicitação</h2>
+        <button id="closeModal" class="text-gray-600 hover:text-gray-900 text-2xl">&times;</button>
+      </div>
+
+      <div id="modalContent" class="p-6"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="bg-white py-6 mt-16 border-t text-center text-gray-500 text-sm">
+    © 2025 PetConnect – Conectando corações humanos e animais ❤️
+  </footer>
+
+  <script>
+    // Get applications from localStorage
+    let applications = JSON.parse(localStorage.getItem('applications')) || [];
+
+    console.log('Loaded applications:', applications.length);
+
+    // Update stats
+    function updateStats() {
+      const pending = applications.filter(a => a.status === 'pending').length;
+      const approved = applications.filter(a => a.status === 'approved').length;
+      const rejected = applications.filter(a => a.status === 'rejected').length;
+
+      document.getElementById('pendingCount').textContent = pending;
+      document.getElementById('approvedCount').textContent = approved;
+      document.getElementById('rejectedCount').textContent = rejected;
+    }
+
+    // Get status badge HTML
+    function getStatusBadge(status) {
+      const badges = {
+        pending: '<span class="status-badge px-4 py-2 bg-yellow-100 text-yellow-700 rounded-full text-sm font-medium"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path></svg>Pendente</span>',
+        approved: '<span class="status-badge px-4 py-2 bg-green-100 text-green-700 rounded-full text-sm font-medium"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>Aprovada</span>',
+        rejected: '<span class="status-badge px-4 py-2 bg-red-100 text-red-700 rounded-full text-sm font-medium"><svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"></path></svg>Recusada</span>'
+      };
+      return badges[status] || badges.pending;
+    }
+
+    // Format date
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('pt-BR', { 
+        day: '2-digit', 
+        month: '2-digit', 
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+    }
+
+    // Render applications
+    function renderApplications() {
+      const list = document.getElementById('applicationsList');
+      const emptyState = document.getElementById('emptyState');
+
+      console.log('Rendering applications. Total:', applications.length);
+
+      if (applications.length === 0) {
+        list.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+      list.innerHTML = '';
+
+      // Sort by date (newest first)
+      const sortedApps = [...applications].sort((a, b) => 
+        new Date(b.submittedAt) - new Date(a.submittedAt)
+      );
+
+      sortedApps.forEach((app, index) => {
+        console.log(`Application ${index}:`, app);
+        
+        // Use pet data from the application itself
+        const pet = app.pet || {
+          name: app.petName || 'Pet',
+          breed: 'N/A',
+          species: 'dog',
+          image: 'https://images.unsplash.com/photo-1617854970997-9526f01d0493?w=800'
+        };
+
+        console.log(`Pet for app ${index}:`, pet);
+        console.log(`Pet image:`, pet.image);
+
+        const card = document.createElement('div');
+        card.className = 'bg-white rounded-2xl shadow-lg hover:shadow-xl transition overflow-hidden';
+        card.innerHTML = `
+          <div class="md:flex">
+            <div class="md:w-1/3">
+              <img src="${pet.image}" alt="${pet.name}" class="w-full h-full object-cover">
+            </div>
+            <div class="md:w-2/3 p-6">
+              <div class="flex justify-between items-start mb-4">
+                <div>
+                  <h3 class="text-2xl font-bold text-gray-900 mb-1">${pet.name}</h3>
+                  <p class="text-gray-600">${pet.breed} • ${pet.species === 'dog' ? 'Cachorro' : 'Gato'}</p>
+                </div>
+                ${getStatusBadge(app.status)}
+              </div>
+
+              <div class="space-y-2 mb-4 text-sm text-gray-600">
+                <div><strong>Enviado em:</strong> ${formatDate(app.submittedAt)}</div>
+                <div><strong>Solicitante:</strong> ${app.applicantInfo.fullName}</div>
+                <div><strong>Email:</strong> ${app.applicantInfo.email}</div>
+                <div><strong>Telefone:</strong> ${app.applicantInfo.phone}</div>
+              </div>
+
+              ${app.status === 'pending' ? `
+                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 mb-4">
+                  <p class="text-sm text-yellow-700">
+                    <strong>⏳ Aguardando análise</strong><br>
+                    Sua solicitação está em análise. A ONG entrará em contato em breve!
+                  </p>
+                </div>
+              ` : ''}
+
+              ${app.status === 'approved' ? `
+                <div class="bg-green-50 border-l-4 border-green-400 p-4 mb-4">
+                  <p class="text-sm text-green-700">
+                    <strong>🎉 Parabéns!</strong><br>
+                    Sua solicitação foi aprovada! Aguarde o contato da ONG para combinar a retirada.
+                  </p>
+                </div>
+              ` : ''}
+
+              ${app.status === 'rejected' ? `
+                <div class="bg-red-50 border-l-4 border-red-400 p-4 mb-4">
+                  <p class="text-sm text-red-700">
+                    <strong>Solicitação não aprovada</strong><br>
+                    Infelizmente sua solicitação não foi aprovada desta vez. Continue explorando outros pets!
+                  </p>
+                </div>
+              ` : ''}
+
+              <button onclick="openDetailsModal(${index})" 
+                class="text-primary font-semibold hover:text-pink-600 transition">
+                Ver Detalhes Completos →
+              </button>
+            </div>
+          </div>
+        `;
+        list.appendChild(card);
+      });
+    }
+
+    // Modal functions
+    const modal = document.getElementById('detailsModal');
+    const closeModal = document.getElementById('closeModal');
+
+    closeModal.addEventListener('click', () => modal.classList.add('hidden'));
+    modal.addEventListener('click', e => { if (e.target === modal) modal.classList.add('hidden'); });
+
+    function openDetailsModal(appIndex) {
+      const app = applications[appIndex];
+      
+      // Use pet data from the application itself
+      const pet = app.pet || {
+        name: app.petName || 'Pet',
+        breed: 'N/A',
+        species: 'dog',
+        image: 'https://images.unsplash.com/photo-1617854970997-9526f01d0493?w=800'
+      };
+
+      const content = document.getElementById('modalContent');
+      content.innerHTML = `
+        <div class="space-y-6">
+          <div class="flex items-center gap-6 pb-6 border-b">
+            <img src="${pet.image}" alt="${pet.name}" class="w-24 h-24 object-cover rounded-xl">
+            <div>
+              <h3 class="text-2xl font-bold text-gray-900">${pet.name}</h3>
+              <p class="text-gray-600">${pet.breed}</p>
+              ${getStatusBadge(app.status)}
+            </div>
+          </div>
+
+          <div>
+            <h4 class="text-xl font-bold text-gray-900 mb-3">Informações Pessoais</h4>
+            <div class="grid grid-cols-2 gap-4 text-sm">
+              <div><strong>Nome:</strong> ${app.applicantInfo.fullName}</div>
+              <div><strong>Email:</strong> ${app.applicantInfo.email}</div>
+              <div><strong>Telefone:</strong> ${app.applicantInfo.phone}</div>
+              <div><strong>CPF:</strong> ${app.applicantInfo.cpf}</div>
+              <div><strong>Data de Nascimento:</strong> ${new Date(app.applicantInfo.birthDate).toLocaleDateString('pt-BR')}</div>
+              <div><strong>Profissão:</strong> ${app.applicantInfo.occupation}</div>
+            </div>
+          </div>
+
+          <div>
+            <h4 class="text-xl font-bold text-gray-900 mb-3">Informações do Lar</h4>
+            <div class="grid grid-cols-2 gap-4 text-sm">
+              <div class="col-span-2"><strong>Endereço:</strong> ${app.homeInfo.address}</div>
+              <div><strong>Cidade:</strong> ${app.homeInfo.city}</div>
+              <div><strong>Estado:</strong> ${app.homeInfo.state}</div>
+              <div><strong>CEP:</strong> ${app.homeInfo.zipCode}</div>
+              <div><strong>Tipo de Moradia:</strong> ${getHousingTypeText(app.homeInfo.housingType)}</div>
+              <div><strong>Status:</strong> ${app.homeInfo.ownershipStatus === 'owner' ? 'Proprietário' : 'Inquilino'}</div>
+              <div><strong>Quintal:</strong> ${app.homeInfo.hasYard === 'yes' ? 'Sim' : 'Não'}</div>
+            </div>
+          </div>
+
+          <div>
+            <h4 class="text-xl font-bold text-gray-900 mb-3">Experiência com Pets</h4>
+            <div class="space-y-3 text-sm">
+              <div><strong>Já teve pets antes:</strong> ${app.petExperience.hadPetsBefore === 'yes' ? 'Sim' : 'Não'}</div>
+              <div><strong>Possui pets atualmente:</strong> ${app.petExperience.currentPets === 'yes' ? 'Sim' : 'Não'}</div>
+              <div><strong>Crianças em casa:</strong> ${getChildrenText(app.petExperience.hasChildren)}</div>
+              <div><strong>Horas sozinho por dia:</strong> ${app.petExperience.hoursAlone} horas</div>
+              <div>
+                <strong>Motivo da adoção:</strong><br>
+                <p class="mt-2 text-gray-700 bg-gray-50 p-4 rounded-xl">${app.petExperience.adoptionReason}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-xs text-gray-500 pt-4 border-t">
+            Solicitação enviada em: ${formatDate(app.submittedAt)}
+          </div>
+        </div>
+      `;
+
+      modal.classList.remove('hidden');
+    }
+
+    // Helper functions
+    function getHousingTypeText(type) {
+      const types = {
+        apartment: 'Apartamento',
+        house: 'Casa',
+        condo: 'Condomínio'
+      };
+      return types[type] || type;
+    }
+
+    function getChildrenText(hasChildren) {
+      const texts = {
+        no: 'Não',
+        'yes-under-5': 'Sim, menores de 5 anos',
+        'yes-5-12': 'Sim, entre 5-12 anos',
+        'yes-over-12': 'Sim, maiores de 12 anos'
+      };
+      return texts[hasChildren] || hasChildren;
+    }
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('userInfo');
+      window.location.href = 'index.html';
+    });
+
+    // Initialize
+    updateStats();
+    renderApplications();
+  </script>
+</body>
+</html>

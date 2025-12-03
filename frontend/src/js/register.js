@@ -1,3 +1,5 @@
+import { authService } from './api.js';
+
 // Registration Page Logic
 document.addEventListener('DOMContentLoaded', () => {
     const registerForm = document.getElementById('registerForm');
@@ -9,6 +11,10 @@ document.addEventListener('DOMContentLoaded', () => {
     
     let accountType = 'user';
 
+    if (authService.isAuthenticated()) {
+        authService.redirectToDashboard();
+        return;
+    }
     // Toggle between User and ONG
     toggleOptions.forEach(option => {
         option.addEventListener('click', () => {
@@ -35,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Phone mask
+    // Mascara do telefone (formato brasileiro)
     const phoneInput = document.getElementById('phone');
     phoneInput.addEventListener('input', (e) => {
         let value = e.target.value.replace(/\D/g, '');
@@ -52,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.target.value = value;
     });
 
-    // CEP mask
+    // CEP
     const zipCodeInput = document.getElementById('zipCode');
     zipCodeInput.addEventListener('input', (e) => {
         let value = e.target.value.replace(/\D/g, '');
@@ -65,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.target.value = value;
     });
 
-    // Form submission
+    // Formulário de submissão
     registerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
@@ -89,7 +95,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 name: formData.name,
                 email: formData.email,
                 password: formData.password,
-                role: accountType
+                confirmPassword: formData.confirmPassword,
+                terms: formData.terms
             };
 
             // Add ONG-specific fields
@@ -109,18 +116,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
             }
             
-            // Call signup API
-            const response = await api.signup(userData);
+            
+            const response = await authService.register(userData, accountType);
+
             
             if (response.success) {
                 // Show success message
-                showAlert('Conta criada com sucesso! Verifique seu e-mail.', 'success');
+                showAlert('Conta criada com sucesso! Redirecionando...', 'success');
                 
-                // Redirect to verification page
+                // Redirect to appropriate dashboard after 1.5 seconds
                 setTimeout(() => {
-                    window.location.href = `verify-email.html?email=${encodeURIComponent(formData.email)}`;
-                }, 2000);
+                    authService.redirectToDashboard();
+                }, 1500);
             }
+
         } catch (error) {
             console.error('Registration error:', error);
             showAlert(error.message || 'Erro ao criar conta. Tente novamente.', 'error');

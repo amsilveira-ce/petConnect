@@ -5,9 +5,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PetConnect - Adote um Pet</title>
-    <link rel="icon" type="image/x-icon" href="http://localhost:5173/logos/logo.svg">
+    <link rel="icon" type="image/x-icon" href="http://127.0.0.1:5501/frontend/public/logos/logo.svg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .hero-gradient {
+            background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 50%, #f9a8d4 100%);
+        }
+        .pet-card-hover {
+            transition: all 0.3s ease;
+        }
+        .pet-card-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .heart-float {
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+    </style>
 </head>
 
 <body class="bg-zinc-100 text-gray-800">
@@ -17,7 +36,7 @@
         <nav class="container mx-auto flex items-center justify-between p-4">
             <!-- Logo + Nome -->
             <div class="flex items-center space-x-3 ml-3">
-                <img src="http://localhost:5173/logos/logo.svg" alt="PetConnect Logo" class="h-10 w-auto">
+                <img src="http://127.0.0.1:5501/frontend/public/logos/logo.svg" alt="PetConnect Logo" class="h-10 w-auto">
                 <span class="text-2xl font-mono text-gray-900">PetConnect</span>
             </div>
 
@@ -26,8 +45,8 @@
                 <li><a href="#home" class="text-gray-900 hover:text-pink-500 transition-colors">Início</a></li>
                 <li><a href="#encontre-pet" class="text-gray-900 hover:text-pink-500 transition-colors">Encontre um Pet</a></li>
                 <li><a href="#seja-parceiro" class="text-gray-900 hover:text-pink-500">Seja um Parceiro</a></li>
-                <li><a href="#" class="text-gray-900 hover:text-pink-500">Sobre Nós</a></li>
-                <li><a href="#" class="text-gray-900 hover:text-pink-500">Contato</a></li>
+                <li><a href="#sobre" class="text-gray-900 hover:text-pink-500">Sobre Nós</a></li>
+                <li><a href="#contato" class="text-gray-900 hover:text-pink-500">Contato</a></li>
                 
                 <!-- Auth Links (shown when not logged in) -->
                 <li id="authLinks">
@@ -66,35 +85,73 @@
         </nav>
     </header>
 
-    <!-- Seção Inicial -->
-    <section id="home" class="pt-20">
-        <main class="flex flex-col md:flex-row items-center justify-center min-h-[80vh] px-6 md:px-12 bg-zinc-100 gap-12">
+    <!-- Seção Inicial - Hero -->
+    <section id="home" class="pt-20 hero-gradient">
+        <main class="flex flex-col md:flex-row items-center justify-center min-h-[85vh] px-6 md:px-12 gap-12">
 
           <!-- Lado esquerdo -->
           <div class="max-w-xl md:max-w-lg flex-1 text-center md:text-left">
-            <h2 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-6 leading-tight text-gray-900">
-              Conectando mais do que pets, unimos <span class="underline decoration-pink-500 underline-offset-8">famílias</span>
-            </h2>
-            <p class="text-lg mb-8 text-gray-700">
+            <div class="inline-block bg-pink-100 text-pink-600 px-4 py-2 rounded-full text-sm font-semibold mb-6">
+                ❤️ Mais de 10.000 pets já encontraram um lar
+            </div>
+            <h1 class="text-5xl sm:text-6xl md:text-7xl font-bold mb-6 leading-tight text-gray-900">
+              Conectando mais do que pets, unimos <span class="text-pink-500">famílias</span>
+            </h1>
+            <p class="text-xl mb-8 text-gray-700 leading-relaxed">
               Descubra animais incríveis disponíveis para adoção em ONGs parceiras. 
-              Seu novo melhor amigo está mais perto do que você imagina.
+              Seu novo melhor amigo está mais perto do que você imagina! 🐾
             </p>
             <div class="flex flex-col sm:flex-row justify-center md:justify-start gap-4 sm:gap-6">
-              <button onclick="window.location.href='register.html'" class="text-white px-8 py-4 rounded-full shadow-lg font-semibold relative hover:shadow-xl hover:scale-[1.02] transition-all duration-200"
-                style="background-color:#221716;">
-                Cadastro para ONGs
+              <button onclick="window.location.href='register.html'" class="bg-pink-500 text-white px-8 py-4 rounded-full shadow-lg font-semibold hover:bg-pink-600 hover:shadow-xl hover:scale-[1.02] transition-all duration-200">
+                Quero Adotar 🐕
               </button>
-              <button onclick="window.location.href='register.html'" class="text-white px-8 py-4 rounded-full shadow-lg font-semibold relative hover:shadow-xl hover:scale-[1.02] transition-all duration-200"
-                style="background-color:#221716;">
-                Cadastro para adotantes
-                <span class="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-2 h-2 rounded-full"></span>
+              <button onclick="window.location.href='register.html'" class="bg-white text-gray-900 px-8 py-4 rounded-full shadow-lg font-semibold hover:shadow-xl hover:scale-[1.02] transition-all duration-200 border-2 border-gray-900">
+                Sou uma ONG 🏥
               </button>
+            </div>
+            
+            <!-- Stats -->
+            <div class="grid grid-cols-3 gap-6 mt-12 pt-8 border-t border-pink-200">
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-gray-900">500+</div>
+                    <div class="text-sm text-gray-600">Pets Disponíveis</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-gray-900">50+</div>
+                    <div class="text-sm text-gray-600">ONGs Parceiras</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-3xl font-bold text-gray-900">10k+</div>
+                    <div class="text-sm text-gray-600">Adoções Felizes</div>
+                </div>
             </div>
           </div>
 
-        <div class="bg-blue-500 rounded-xl w-full max-w-sm sm:max-w-md lg:w-96 xl:w-[28rem] h-64 sm:h-80 lg:h-96 xl:h-[28rem] overflow-hidden">
-            <img src="http://localhost:5173/images/landingPage-cat.svg" alt="Imagem de pets" class="w-full h-full object-cover">
-        </div>
+          <!-- Lado direito - Imagem com overlay de pets -->
+          <div class="relative flex-1 max-w-2xl">
+            <div class="grid grid-cols-2 gap-4">
+                <!-- Pet 1 -->
+                <div class="rounded-2xl overflow-hidden shadow-2xl transform hover:scale-105 transition-all duration-300">
+                    <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=600" alt="Cachorro" class="w-full h-64 object-cover">
+                </div>
+                <!-- Pet 2 -->
+                <div class="rounded-2xl overflow-hidden shadow-2xl transform hover:scale-105 transition-all duration-300 mt-8">
+                    <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=600" alt="Gato" class="w-full h-64 object-cover">
+                </div>
+                <!-- Pet 3 -->
+                <div class="rounded-2xl overflow-hidden shadow-2xl transform hover:scale-105 transition-all duration-300 -mt-8">
+                    <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=600" alt="Cachorro 2" class="w-full h-64 object-cover">
+                </div>
+                <!-- Pet 4 -->
+                <div class="rounded-2xl overflow-hidden shadow-2xl transform hover:scale-105 transition-all duration-300">
+                    <img src="https://img.olx.com.br/thumbs700x500/31/312593693377718.webp" alt="Gato 2" class="w-full h-64 object-cover">
+                </div>
+            </div>
+            
+            <!-- Floating hearts -->
+            <div class="absolute top-10 right-10 text-6xl heart-float">❤️</div>
+            <div class="absolute bottom-10 left-10 text-4xl heart-float" style="animation-delay: 1s;">🐾</div>
+          </div>
         </main>
 
         <!-- Scroll Down Button -->
@@ -111,7 +168,8 @@
     <section id="encontre-pet" class="bg-white py-20">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                <span class="text-pink-500 font-semibold text-sm uppercase tracking-wide">Pets Disponíveis</span>
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 mt-2">
                     Adotar nunca foi tão fácil! <span class="text-pink-500">Dê o Primeiro Passo!</span>
                 </h2>
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto">
@@ -121,98 +179,179 @@
 
             <!-- Steps do processo -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
-                <div class="text-center">
-                    <div class="bg-pink-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
-                        <span class="text-2xl font-bold text-pink-500">1</span>
+                <div class="text-center p-8 rounded-2xl bg-gradient-to-br from-pink-50 to-white">
+                    <div class="bg-pink-500 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-lg">
+                        <span class="text-3xl">🔍</span>
                     </div>
                     <h3 class="text-2xl font-bold text-gray-900 mb-4">Deixe-se Encantar</h3>
                     <p class="text-gray-600 text-lg leading-relaxed">Apaixonar-se por vários é parte da magia! Quando um pet fizer seu coração sorrir, adicione-o aos favoritos e deixe o carinho guiar sua escolha.</p>
                 </div>
-                <div class="text-center">
-                    <div class="bg-pink-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
-                        <span class="text-2xl font-bold text-pink-500">2</span>
+                <div class="text-center p-8 rounded-2xl bg-gradient-to-br from-pink-50 to-white">
+                    <div class="bg-pink-500 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-lg">
+                        <span class="text-3xl">💬</span>
                     </div>
                     <h3 class="text-2xl font-bold text-gray-900 mb-4">Converse e Pergunte</h3>
-                    <p class="text-gray-600 text-lg leading-relaxed">Perguntar faz parte do caminho. Nossas ONGs parceiras estão preparadas para acolher suas dúvidas e cuidar para que a adoção seja especial para ambos: você e seu novo amigo.</p>
+                    <p class="text-gray-600 text-lg leading-relaxed">Perguntar faz parte do caminho. Nossas ONGs parceiras estão preparadas para acolher suas dúvidas e cuidar para que a adoção seja especial para ambos.</p>
                 </div>
-                <div class="text-center">
-                    <div class="bg-pink-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
-                        <span class="text-2xl font-bold text-pink-500">3</span>
+                <div class="text-center p-8 rounded-2xl bg-gradient-to-br from-pink-50 to-white">
+                    <div class="bg-pink-500 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6 shadow-lg">
+                        <span class="text-3xl">🏠</span>
                     </div>
-                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Pronto para Mudar o Mundo?</h3>
-                    <p class="text-gray-600 text-lg leading-relaxed">Viu como é fácil? O último passo é criar sua conta. É rápido, gratuito e te deixa pronto para fazer a diferença. O mundo de um pet está prestes a mudar.</p>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-4">Leve Para Casa</h3>
+                    <p class="text-gray-600 text-lg leading-relaxed">Viu como é fácil? Crie sua conta, preencha o formulário de adoção e prepare-se para receber amor incondicional. Um novo amigo está te esperando!</p>
+                </div>
+            </div>
+
+            <!-- Pet Grid com imagens reais -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+                <!-- Pet Card 1 - Luna -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden pet-card-hover cursor-pointer" onclick="window.location.href='user-dashboard.html'">
+                    <div class="relative">
+                        <img src="https://www.petlove.com.br/images/breeds/193219/profile/original/labrador-p.jpg?1532539172" alt="Luna" class="w-full h-64 object-cover">
+                        <span class="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            Disponível
+                        </span>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-2xl font-bold text-gray-900 mb-2">Luna 🐕</h4>
+                        <p class="text-gray-600 mb-2">Labrador • 2 anos • Fêmea</p>
+                        <p class="text-gray-600 mb-4">Luna é muito carinhosa e adora brincar. Perfeita para famílias!</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-500">📍 Bragança Paulista, SP</span>
+                            <button class="bg-pink-500 text-white px-6 py-2 rounded-full hover:bg-pink-600 transition-colors font-semibold">
+                                Ver Mais
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pet Card 2 - Mimi -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden pet-card-hover cursor-pointer" onclick="window.location.href='user-dashboard.html'">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1513245543132-31f507417b26?w=800" alt="Mimi" class="w-full h-64 object-cover">
+                        <span class="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            Disponível
+                        </span>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-2xl font-bold text-gray-900 mb-2">Mimi 🐱</h4>
+                        <p class="text-gray-600 mb-2">Siamês • 1 ano • Fêmea</p>
+                        <p class="text-gray-600 mb-4">Independente mas carinhosa. Adora dormir no sol!</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-500">📍 São Paulo, SP</span>
+                            <button class="bg-pink-500 text-white px-6 py-2 rounded-full hover:bg-pink-600 transition-colors font-semibold">
+                                Ver Mais
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pet Card 3 - Max -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden pet-card-hover cursor-pointer" onclick="window.location.href='user-dashboard.html'">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1633722715463-d30f4f325e24?w=800" alt="Max" class="w-full h-64 object-cover">
+                        <span class="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            Disponível
+                        </span>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-2xl font-bold text-gray-900 mb-2">Max 🐕</h4>
+                        <p class="text-gray-600 mb-2">Golden Retriever • 2.5 anos • Macho</p>
+                        <p class="text-gray-600 mb-4">Extremamente amigável e adora crianças!</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-500">📍 Campinas, SP</span>
+                            <button class="bg-pink-500 text-white px-6 py-2 rounded-full hover:bg-pink-600 transition-colors font-semibold">
+                                Ver Mais
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pet Card 4 - Nina -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden pet-card-hover cursor-pointer" onclick="window.location.href='user-dashboard.html'">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1495360010541-f48722b34f7d?w=800" alt="Nina" class="w-full h-64 object-cover">
+                        <span class="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            Disponível
+                        </span>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-2xl font-bold text-gray-900 mb-2">Nina 🐱</h4>
+                        <p class="text-gray-600 mb-2">Persa • 3 anos • Fêmea</p>
+                        <p class="text-gray-600 mb-4">Tranquila e adora colo. Perfeita para apartamento!</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-500">📍 Bragança Paulista, SP</span>
+                            <button class="bg-pink-500 text-white px-6 py-2 rounded-full hover:bg-pink-600 transition-colors font-semibold">
+                                Ver Mais
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pet Card 5 - Thor -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden pet-card-hover cursor-pointer" onclick="window.location.href='user-dashboard.html'">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1568572933382-74d440642117?w=800" alt="Thor" class="w-full h-64 object-cover">
+                        <span class="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            Disponível
+                        </span>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-2xl font-bold text-gray-900 mb-2">Thor 🐕</h4>
+                        <p class="text-gray-600 mb-2">Pastor Alemão • 4 anos • Macho</p>
+                        <p class="text-gray-600 mb-4">Protetor e leal. Ótimo companheiro!</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-500">📍 Jundiaí, SP</span>
+                            <button class="bg-pink-500 text-white px-6 py-2 rounded-full hover:bg-pink-600 transition-colors font-semibold">
+                                Ver Mais
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pet Card 6 - Bob -->
+                <div class="bg-white rounded-2xl shadow-lg overflow-hidden pet-card-hover cursor-pointer" onclick="window.location.href='user-dashboard.html'">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=800" alt="Bob" class="w-full h-64 object-cover">
+                        <span class="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+                            Disponível
+                        </span>
+                    </div>
+                    <div class="p-6">
+                        <h4 class="text-2xl font-bold text-gray-900 mb-2">Bob 🐕</h4>
+                        <p class="text-gray-600 mb-2">Bulldog • 6 meses • Macho</p>
+                        <p class="text-gray-600 mb-4">Filhote brincalhão que adora fazer amigos!</p>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm text-gray-500">📍 Atibaia, SP</span>
+                            <button class="bg-pink-500 text-white px-6 py-2 rounded-full hover:bg-pink-600 transition-colors font-semibold">
+                                Ver Mais
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Call to Action -->
-            <div class="text-center mb-16">
-                <button onclick="window.location.href='register.html'" class="text-white px-12 py-4 rounded-full shadow-lg font-bold text-xl hover:shadow-xl hover:scale-[1.02] transition-all duration-200"
-                    style="background-color:#221716;">
-                    CADASTRE-SE
+            <div class="text-center bg-gradient-to-r from-pink-500 to-purple-600 rounded-2xl p-12 shadow-2xl">
+                <h3 class="text-3xl font-bold text-white mb-4">
+                    Pronto para encontrar seu novo melhor amigo?
+                </h3>
+                <p class="text-xl text-pink-100 mb-8 max-w-2xl mx-auto">
+                    Cadastre-se gratuitamente e tenha acesso a centenas de pets esperando por um lar cheio de amor!
+                </p>
+                <button onclick="window.location.href='register.html'" class="bg-white text-pink-500 px-12 py-4 rounded-full shadow-lg font-bold text-xl hover:shadow-xl hover:scale-[1.02] transition-all duration-200">
+                    CADASTRAR AGORA
                 </button>
-            </div>
-
-
-            <!-- Grid de pets (placeholder) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                <!-- Pet Card 1 -->
-                <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-200">
-                    <div class="bg-gray-200 h-64 flex items-center justify-center">
-                        <p class="text-gray-500 text-lg">Foto do Pet</p>
-                    </div>
-                    <div class="p-6">
-                        <h4 class="text-xl font-bold text-gray-900 mb-2">Nome do Pet</h4>
-                        <p class="text-gray-600 mb-4">Descrição breve do pet e características importantes.</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-gray-500">ONG Parceira</span>
-                            <button class="bg-pink-500 text-white px-6 py-2 rounded-full hover:bg-pink-600 transition-colors">
-                                Ver Detalhes
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Pet Card 2 -->
-                <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-200">
-                    <div class="bg-gray-200 h-64 flex items-center justify-center">
-                        <p class="text-gray-500 text-lg">Foto do Pet</p>
-                    </div>
-                    <div class="p-6">
-                        <h4 class="text-xl font-bold text-gray-900 mb-2">Nome do Pet</h4>
-                        <p class="text-gray-600 mb-4">Descrição breve do pet e características importantes.</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-gray-500">ONG Parceira</span>
-                            <button class="bg-pink-500 text-white px-6 py-2 rounded-full hover:bg-pink-600 transition-colors">
-                                Ver Detalhes
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Pet Card 3 -->
-                <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-200">
-                    <div class="bg-gray-200 h-64 flex items-center justify-center">
-                        <p class="text-gray-500 text-lg">Foto do Pet</p>
-                    </div>
-                    <div class="p-6">
-                        <h4 class="text-xl font-bold text-gray-900 mb-2">Nome do Pet</h4>
-                        <p class="text-gray-600 mb-4">Descrição breve do pet e características importantes.</p>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-gray-500">ONG Parceira</span>
-                            <button class="bg-pink-500 text-white px-6 py-2 rounded-full hover:bg-pink-600 transition-colors">
-                                Ver Detalhes
-                            </button>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
     </section>
-     <!-- Seção Seja um Parceiro -->
+
+    <!-- Seção Seja um Parceiro -->
     <section id="seja-parceiro" class="bg-gray-50 py-20">
         <div class="container mx-auto px-6">
             <div class="text-center mb-16">
-                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+                <span class="text-pink-500 font-semibold text-sm uppercase tracking-wide">Para ONGs</span>
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 mt-2">
                     Nós Entendemos a sua <span class="text-pink-500">Luta</span>
                 </h2>
                 <p class="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
@@ -223,7 +362,7 @@
             <div class="mb-16">
                 <h3 class="text-3xl font-bold text-gray-900 mb-8 text-center">Principais Problemas que Resolvemos</h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="bg-white rounded-2xl p-8 shadow-lg">
+                    <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300">
                         <div class="bg-pink-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
                             <svg class="w-8 h-8 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"></path>
@@ -233,7 +372,7 @@
                         <p class="text-gray-600 text-center leading-relaxed">Dificuldade de divulgar animais disponíveis para adoção e alcançar potenciais adotantes de forma eficiente.</p>
                     </div>
 
-                    <div class="bg-white rounded-2xl p-8 shadow-lg">
+                    <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300">
                         <div class="bg-pink-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
                             <svg class="w-8 h-8 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"></path>
@@ -243,7 +382,7 @@
                         <p class="text-gray-600 text-center leading-relaxed">Falta de comunicação rápida entre ONGs para troca de recursos, voluntários e informações importantes.</p>
                     </div>
 
-                    <div class="bg-white rounded-2xl p-8 shadow-lg">
+                    <div class="bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-300">
                         <div class="bg-pink-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-6">
                             <svg class="w-8 h-8 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
@@ -251,6 +390,57 @@
                         </div>
                         <h4 class="text-xl font-bold text-gray-900 mb-4 text-center">Gestão Desorganizada</h4>
                         <p class="text-gray-600 text-center leading-relaxed">Necessidade de centralizar pedidos e necessidades de forma simples e organizada em uma única plataforma.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Benefícios para ONGs -->
+            <div class="bg-gradient-to-br from-pink-500 to-purple-600 rounded-3xl p-12 shadow-2xl text-white mb-16">
+                <h3 class="text-3xl font-bold mb-8 text-center">O que você ganha com o PetConnect?</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="flex items-start space-x-4">
+                        <div class="bg-white/20 rounded-full p-3 flex-shrink-0">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg mb-2">Maior Visibilidade</h4>
+                            <p class="text-pink-100">Alcance milhares de pessoas interessadas em adotar</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-4">
+                        <div class="bg-white/20 rounded-full p-3 flex-shrink-0">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg mb-2">Gestão Simplificada</h4>
+                            <p class="text-pink-100">Organize pedidos e processos em um só lugar</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-4">
+                        <div class="bg-white/20 rounded-full p-3 flex-shrink-0">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg mb-2">Rede de Apoio</h4>
+                            <p class="text-pink-100">Conecte-se com outras ONGs para trocar experiências</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start space-x-4">
+                        <div class="bg-white/20 rounded-full p-3 flex-shrink-0">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-lg mb-2">100% Gratuito</h4>
+                            <p class="text-pink-100">Sem mensalidades, sem taxas ocultas</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -263,10 +453,82 @@
                 <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
                     Junte-se à PetConnect hoje e concentre-se no que você faz de melhor: salvar animais. Nós cuidamos da tecnologia.
                 </p>
-                <button onclick="window.location.href='register.html'" class="text-white px-12 py-4 rounded-full shadow-lg font-bold text-xl hover:shadow-xl hover:scale-[1.02] transition-all duration-200"
-                    style="background-color:#221716;">
-                    Crie a conta da sua ONG
+                <button onclick="window.location.href='register.html'" class="bg-pink-500 text-white px-12 py-4 rounded-full shadow-lg font-bold text-xl hover:bg-pink-600 hover:shadow-xl hover:scale-[1.02] transition-all duration-200">
+                    Cadastrar Minha ONG
                 </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sobre Nós -->
+    <section id="sobre" class="bg-white py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <span class="text-pink-500 font-semibold text-sm uppercase tracking-wide">Nossa História</span>
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 mt-2">
+                    Sobre o <span class="text-pink-500">PetConnect</span>
+                </h2>
+            </div>
+            
+            <div class="max-w-4xl mx-auto text-center">
+                <p class="text-xl text-gray-600 leading-relaxed mb-8">
+                    O PetConnect nasceu de uma missão simples: <strong>facilitar adoções responsáveis</strong> e criar uma ponte entre ONGs, pets e famílias que querem fazer a diferença. Acreditamos que todo animal merece amor, cuidado e um lar permanente.
+                </p>
+                <p class="text-xl text-gray-600 leading-relaxed mb-12">
+                    Nossa plataforma conecta pessoas apaixonadas por animais com ONGs que fazem um trabalho incrível todos os dias. Juntos, já ajudamos milhares de pets a encontrarem seus lares definitivos. E você pode fazer parte dessa história! 🐾❤️
+                </p>
+                
+                <!-- Valores -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="p-6">
+                        <div class="text-5xl mb-4">💙</div>
+                        <h4 class="text-xl font-bold text-gray-900 mb-2">Compaixão</h4>
+                        <p class="text-gray-600">Cada vida importa</p>
+                    </div>
+                    <div class="p-6">
+                        <div class="text-5xl mb-4">🤝</div>
+                        <h4 class="text-xl font-bold text-gray-900 mb-2">Compromisso</h4>
+                        <p class="text-gray-600">Adoção responsável</p>
+                    </div>
+                    <div class="p-6">
+                        <div class="text-5xl mb-4">🌟</div>
+                        <h4 class="text-xl font-bold text-gray-900 mb-2">Transparência</h4>
+                        <p class="text-gray-600">Conexões verdadeiras</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contato -->
+    <section id="contato" class="bg-gray-50 py-20">
+        <div class="container mx-auto px-6">
+            <div class="max-w-2xl mx-auto text-center">
+                <span class="text-pink-500 font-semibold text-sm uppercase tracking-wide">Fale Conosco</span>
+                <h2 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6 mt-2">
+                    Entre em <span class="text-pink-500">Contato</span>
+                </h2>
+                <p class="text-xl text-gray-600 mb-12">
+                    Tem dúvidas? Sugestões? Queremos ouvir você!
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white p-8 rounded-2xl shadow-lg">
+                        <div class="text-4xl mb-4">📧</div>
+                        <h4 class="font-bold text-gray-900 mb-2">Email</h4>
+                        <p class="text-gray-600">pet@outlook.com.br</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-lg">
+                        <div class="text-4xl mb-4">💬</div>
+                        <h4 class="font-bold text-gray-900 mb-2">WhatsApp</h4>
+                        <p class="text-gray-600">(11) 9999-9349</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-lg">
+                        <div class="text-4xl mb-4">📍</div>
+                        <h4 class="font-bold text-gray-900 mb-2">Localização</h4>
+                        <p class="text-gray-600">São Paulo, Brasil</p>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
@@ -278,10 +540,21 @@
                 <!-- Logo e descrição -->
                 <div class="md:col-span-2">
                     <div class="flex items-center space-x-3 mb-4">
-                        <img src="/logos/logo.svg" alt="PetConnect Logo" class="h-8 w-auto">
+                        <img src="http://127.0.0.1:5501/frontend/public/logos/logo.svg" alt="PetConnect Logo" class="h-8 w-auto">
                         <span class="text-xl font-mono">PetConnect</span>
                     </div>
                     <p class="text-gray-300 mb-4">Conectando mais do que pets, unimos famílias através do amor e cuidado pelos animais.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-pink-400 transition-colors">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-pink-400 transition-colors">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-pink-400 transition-colors">
+                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+                        </a>
+                    </div>
                 </div>
                 
                 <!-- Links rápidos -->
@@ -289,8 +562,9 @@
                     <h3 class="font-semibold mb-4">Links Rápidos</h3>
                     <ul class="space-y-2 text-gray-300">
                         <li><a href="#encontre-pet" class="hover:text-pink-400 transition-colors">Encontre um Pet</a></li>
-                        <li><a href="#" class="hover:text-pink-400 transition-colors">Seja um Parceiro</a></li>
-                        <li><a href="#" class="hover:text-pink-400 transition-colors">Sobre Nós</a></li>
+                        <li><a href="#seja-parceiro" class="hover:text-pink-400 transition-colors">Seja um Parceiro</a></li>
+                        <li><a href="#sobre" class="hover:text-pink-400 transition-colors">Sobre Nós</a></li>
+                        <li><a href="register.html" class="hover:text-pink-400 transition-colors">Cadastre-se</a></li>
                     </ul>
                 </div>
                 
@@ -298,16 +572,17 @@
                 <div>
                     <h3 class="font-semibold mb-4">Contato</h3>
                     <ul class="space-y-2 text-gray-300">
-                        <li><a href="#" class="hover:text-pink-400 transition-colors">Suporte</a></li>
+                        <li><a href="#contato" class="hover:text-pink-400 transition-colors">Suporte</a></li>
                         <li><a href="#" class="hover:text-pink-400 transition-colors">FAQ</a></li>
-                        <li><a href="#" class="hover:text-pink-400 transition-colors">Email</a></li>
+                        <li><a href="mailto:contato@petconnect.com.br" class="hover:text-pink-400 transition-colors">Email</a></li>
+                        <li><a href="#" class="hover:text-pink-400 transition-colors">WhatsApp</a></li>
                     </ul>
                 </div>
             </div>
             
             <!-- Linha divisória e copyright -->
             <div class="border-t border-gray-700 pt-8 text-center">
-                <p class="text-gray-300">&copy; 2025 PetConnect. Todos os direitos reservados.</p>
+                <p class="text-gray-300">&copy; 2025 PetConnect. Todos os direitos reservados. Feito com ❤️ para os animais.</p>
             </div>
         </div>
     </footer>

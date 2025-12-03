@@ -4,14 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard da ONG | PetConnect</title>
-  <link rel="icon" type="image/x-icon" href="http://localhost:5501/logos/logo.svg">
+  <link rel="icon" type="image/x-icon" href="http://127.0.0.1:5501/frontend/public/logos/logo.svg">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            primary: '#ec4899', // Tailwind pink-500
+            primary: '#ec4899',
             secondary: '#fce7f3',
           },
         },
@@ -25,24 +25,17 @@
   <nav class="bg-white shadow-md sticky top-0 z-10">
     <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
       <div class="flex items-center gap-3">
-        <img src="http://localhost:5501/frontend/public/logos/logo.svg" alt="PetConnect" class="h-10 w-10">
+        <img src="http://127.0.0.1:5501/frontend/public/logos/logo.svg" alt="PetConnect" class="h-10 w-10">
         <span class="font-mono text-2xl font-semibold text-gray-900">PetConnect</span>
       </div>
       <div class="hidden md:flex items-center gap-8">
-        <a href="index.html" class="text-gray-700 hover:text-primary transition">Início</a>
+        <a href="ong-dashboard.html" class="text-primary font-semibold transition">Dashboard</a>
         <a href="pets-ong.html" class="text-gray-700 hover:text-primary transition">Meus Pets</a>
         <a href="requests-ong.html" class="text-gray-700 hover:text-primary transition">Solicitações</a>
         <a href="ong-blog.html" class="text-gray-700 hover:text-primary transition">Posts</a>
         <button id="logoutBtn"
           class="bg-primary text-white px-6 py-2 rounded-full font-medium hover:bg-pink-600 transition">Sair</button>
       </div>
-      <button class="md:hidden text-gray-700 focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-          stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-          <path stroke-linecap="round" stroke-linejoin="round"
-            d="M3.75 5.25h16.5M3.75 12h16.5m-16.5 6.75h16.5" />
-        </svg>
-      </button>
     </div>
   </nav>
 
@@ -55,48 +48,177 @@
 
     <!-- Stats Cards -->
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-      <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition">
+      <!-- Total de Pets -->
+      <div class="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-2xl shadow-lg hover:shadow-xl transition transform hover:-translate-y-1 cursor-pointer"
+        onclick="window.location.href='pets-ong.html'">
         <div class="flex items-center justify-between mb-3">
-          <div class="text-primary text-4xl">🐾</div>
+          <div class="text-white text-4xl">🐾</div>
+          <div class="bg-white bg-opacity-20 rounded-full p-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
         </div>
-        <h3 id="petsCount" class="text-3xl font-bold text-gray-900">0</h3>
-        <p class="text-gray-600">Pets Cadastrados</p>
+        <h3 id="petsCount" class="text-4xl font-bold text-white mb-1">0</h3>
+        <p class="text-blue-100 text-sm">Pets Cadastrados</p>
+        <div class="mt-3 pt-3 border-t border-blue-400 flex justify-between text-xs text-blue-100">
+          <span id="petsAvailable">0 disponíveis</span>
+          <span id="petsAdopted">0 adotados</span>
+        </div>
       </div>
 
-      <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition">
+      <!-- Solicitações Pendentes -->
+      <div class="bg-gradient-to-br from-yellow-500 to-yellow-600 p-6 rounded-2xl shadow-lg hover:shadow-xl transition transform hover:-translate-y-1 cursor-pointer"
+        onclick="window.location.href='requests-ong.html'">
         <div class="flex items-center justify-between mb-3">
-          <div class="text-primary text-4xl">📋</div>
+          <div class="text-white text-4xl">📋</div>
+          <div class="bg-white bg-opacity-20 rounded-full p-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
         </div>
-        <h3 id="pendingRequests" class="text-3xl font-bold text-gray-900">0</h3>
-        <p class="text-gray-600">Solicitações Pendentes</p>
+        <h3 id="pendingRequests" class="text-4xl font-bold text-white mb-1">0</h3>
+        <p class="text-yellow-100 text-sm">Solicitações Pendentes</p>
+        <div class="mt-3 pt-3 border-t border-yellow-400 flex justify-between text-xs text-yellow-100">
+          <span id="requestsSent">0 enviadas</span>
+          <span id="requestsReview">0 em análise</span>
+        </div>
       </div>
 
-      <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition">
+      <!-- Adoções Realizadas -->
+      <div class="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-2xl shadow-lg hover:shadow-xl transition transform hover:-translate-y-1 cursor-pointer"
+        onclick="window.location.href='requests-ong.html?filter=approved'">
         <div class="flex items-center justify-between mb-3">
-          <div class="text-primary text-4xl">✅</div>
+          <div class="text-white text-4xl">✅</div>
+          <div class="bg-white bg-opacity-20 rounded-full p-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
         </div>
-        <h3 id="adoptionsDone" class="text-3xl font-bold text-gray-900">0</h3>
-        <p class="text-gray-600">Adoções Realizadas</p>
+        <h3 id="adoptionsDone" class="text-4xl font-bold text-white mb-1">0</h3>
+        <p class="text-green-100 text-sm">Adoções Realizadas</p>
+        <div class="mt-3 pt-3 border-t border-green-400 flex justify-between text-xs text-green-100">
+          <span id="adoptionsMonth">0 este mês</span>
+          <span id="adoptionsTotal">0 total</span>
+        </div>
       </div>
 
-      <div class="bg-white p-6 rounded-2xl shadow-md hover:shadow-lg transition">
+      <!-- Posts Publicados -->
+      <div class="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-2xl shadow-lg hover:shadow-xl transition transform hover:-translate-y-1 cursor-pointer"
+        onclick="window.location.href='ong-blog.html'">
         <div class="flex items-center justify-between mb-3">
-          <div class="text-primary text-4xl">📰</div>
+          <div class="text-white text-4xl">📰</div>
+          <div class="bg-white bg-opacity-20 rounded-full p-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </div>
         </div>
-        <h3 id="postsCount" class="text-3xl font-bold text-gray-900">0</h3>
-        <p class="text-gray-600">Posts Publicados</p>
+        <h3 id="postsCount" class="text-4xl font-bold text-white mb-1">0</h3>
+        <p class="text-purple-100 text-sm">Posts Publicados</p>
+        <div class="mt-3 pt-3 border-t border-purple-400 flex justify-between text-xs text-purple-100">
+          <span id="postsFeatured">0 em destaque</span>
+          <span id="postsMonth">0 este mês</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Actions -->
+    <section class="mb-10">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6">Ações Rápidas</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <button onclick="window.location.href='register-pet.html'"
+          class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition flex items-center gap-4 group">
+          <div class="bg-primary bg-opacity-10 p-3 rounded-full group-hover:bg-primary group-hover:bg-opacity-100 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+          </div>
+          <div class="text-left">
+            <h3 class="font-bold text-gray-900">Novo Pet</h3>
+            <p class="text-sm text-gray-600">Cadastrar animal</p>
+          </div>
+        </button>
+
+        <button onclick="window.location.href='requests-ong.html'"
+          class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition flex items-center gap-4 group">
+          <div class="bg-yellow-500 bg-opacity-10 p-3 rounded-full group-hover:bg-yellow-500 group-hover:bg-opacity-100 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-yellow-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+            </svg>
+          </div>
+          <div class="text-left">
+            <h3 class="font-bold text-gray-900">Solicitações</h3>
+            <p class="text-sm text-gray-600">Gerenciar pedidos</p>
+          </div>
+        </button>
+
+        <button onclick="window.location.href='ong-blog.html'"
+          class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition flex items-center gap-4 group">
+          <div class="bg-purple-500 bg-opacity-10 p-3 rounded-full group-hover:bg-purple-500 group-hover:bg-opacity-100 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-purple-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+            </svg>
+          </div>
+          <div class="text-left">
+            <h3 class="font-bold text-gray-900">Novo Post</h3>
+            <p class="text-sm text-gray-600">Criar publicação</p>
+          </div>
+        </button>
+
+        <button onclick="window.location.href='pets-ong.html'"
+          class="bg-white p-6 rounded-xl shadow-md hover:shadow-lg transition flex items-center gap-4 group">
+          <div class="bg-blue-500 bg-opacity-10 p-3 rounded-full group-hover:bg-blue-500 group-hover:bg-opacity-100 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-600 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+          </div>
+          <div class="text-left">
+            <h3 class="font-bold text-gray-900">Ver Pets</h3>
+            <p class="text-sm text-gray-600">Listar todos</p>
+          </div>
+        </button>
+      </div>
+    </section>
+
+    <!-- Recent Activity -->
+    <section class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10">
+      <!-- Recent Requests -->
+      <div class="bg-white p-6 rounded-2xl shadow-md">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-xl font-bold text-gray-900">Solicitações Recentes</h2>
+          <a href="requests-ong.html" class="text-primary text-sm font-medium hover:underline">Ver todas →</a>
+        </div>
+        <div id="recentRequests" class="space-y-4">
+          <!-- Will be populated by JS -->
+        </div>
+      </div>
+
+      <!-- Available Pets -->
+      <div class="bg-white p-6 rounded-2xl shadow-md">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-xl font-bold text-gray-900">Pets Disponíveis</h2>
+          <a href="pets-ong.html" class="text-primary text-sm font-medium hover:underline">Ver todos →</a>
+        </div>
+        <div id="availablePets" class="space-y-4">
+          <!-- Will be populated by JS -->
+        </div>
       </div>
     </section>
 
     <!-- CTA -->
-    <section class="bg-white p-10 rounded-2xl shadow-md text-center">
-      <h2 class="text-2xl font-bold mb-4">Bem-vindo(a) ao <span class="text-primary">PetConnect</span>! 🐶🐱</h2>
-      <p class="text-gray-600 mb-6">
+    <section class="bg-gradient-to-r from-pink-500 to-purple-600 p-10 rounded-2xl shadow-lg text-center text-white">
+      <h2 class="text-3xl font-bold mb-4">Bem-vindo(a) ao PetConnect! 🐶🐱</h2>
+      <p class="text-white text-opacity-90 mb-6 max-w-2xl mx-auto">
         Aqui você pode cadastrar novos pets, acompanhar solicitações de adoção e interagir com a comunidade.
+        Juntos, podemos fazer a diferença na vida de muitos animais!
       </p>
       <button
-        id="registerPet"
-        class="bg-primary text-white font-medium px-8 py-3 rounded-full hover:bg-pink-600 transition transform hover:scale-105">
+        onclick="window.location.href='register-pet.html'"
+        class="bg-white text-primary font-bold px-8 py-3 rounded-full hover:bg-gray-100 transition transform hover:scale-105">
         + Cadastrar Novo Pet
       </button>
     </section>
@@ -110,53 +232,268 @@
   </footer>
 
   <!-- Scripts -->
-  <script src="js/api.js"></script>
   <script>
-    document.getElementById('registerPet').addEventListener('click', async () => {
-      try {
-        window.location.href = 'register-pet.html';
+    // Mock Data - Sincronizado com outras páginas
+    const petsMock = [
+      {
+        _id: "pet1",
+        name: "Luna",
+        species: "dog",
+        breed: "Golden Retriever",
+        adoptionStatus: "available",
+        media: { photos: [{ url: "https://images.unsplash.com/photo-1558788353-f76d92427f16?auto=format&fit=crop&w=200&q=60" }] }
+      },
+      {
+        _id: "pet2",
+        name: "Thor",
+        species: "dog",
+        breed: "SRD",
+        adoptionStatus: "adopted",
+        media: { photos: [{ url: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&w=200&q=60" }] }
+      },
+      {
+        _id: "pet3",
+        name: "Mimi",
+        species: "cat",
+        breed: "Siamês",
+        adoptionStatus: "available",
+        media: { photos: [{ url: "https://images.unsplash.com/photo-1513360371669-4adf3dd7dff8?auto=format&fit=crop&w=200&q=60" }] }
+      },
+      {
+        _id: "pet4",
+        name: "Bob",
+        species: "dog",
+        breed: "Labrador",
+        adoptionStatus: "available",
+        media: { photos: [{ url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKPeg-XI9sjsNwrXosngzg8NQUZJqDXHnmJA&s" }] }
+      },
+      {
+        _id: "pet5",
+        name: "Princesa",
+        species: "cat",
+        breed: "Persa",
+        adoptionStatus: "available",
+        media: { photos: [{ url: "https://images.unsplash.com/photo-1495360010541-f48722b34f7d?auto=format&fit=crop&w=200&q=60" }] }
+      },
+      {
+        _id: "pet6",
+        name: "Max",
+        species: "dog",
+        breed: "Beagle",
+        adoptionStatus: "available",
+        media: { photos: [{ url: "https://images.unsplash.com/photo-1505628346881-b72b27e84530?auto=format&fit=crop&w=200&q=60" }] }
+      },
+      {
+        _id: "pet7",
+        name: "Nina",
+        species: "cat",
+        breed: "SRD",
+        adoptionStatus: "adopted",
+        media: { photos: [{ url: "https://images.unsplash.com/photo-1574158622682-e40e69881006?auto=format&fit=crop&w=200&q=60" }] }
+      },
+      {
+        _id: "pet8",
+        name: "Toby",
+        species: "dog",
+        breed: "Poodle",
+        adoptionStatus: "available",
+        media: { photos: [{ url: "https://images.unsplash.com/photo-1546527868-ccb7ee7dfa6a?auto=format&fit=crop&w=200&q=60" }] }
+      }
+    ];
 
-      } catch (error) {
-        console.error('Erro ao sair:', error);
+    const requestsMock = [
+      {
+        _id: '1',
+        user: { name: 'Ana Silva', profilePicture: 'https://i.pravatar.cc/150?img=1' },
+        pet: { name: 'Rex', breed: 'Labrador' },
+        status: 'sent',
+        submittedAt: '2025-11-01T10:30:00Z'
+      },
+      {
+        _id: '2',
+        user: { name: 'Carlos Mendes', profilePicture: 'https://i.pravatar.cc/150?img=12' },
+        pet: { name: 'Luna', breed: 'Siamês' },
+        status: 'in_review',
+        submittedAt: '2025-10-28T14:20:00Z'
+      },
+      {
+        _id: '3',
+        user: { name: 'Mariana Costa', profilePicture: 'https://i.pravatar.cc/150?img=5' },
+        pet: { name: 'Bob', breed: 'Beagle' },
+        status: 'interview',
+        submittedAt: '2025-10-25T16:45:00Z'
+      },
+      {
+        _id: '4',
+        user: { name: 'Pedro Oliveira', profilePicture: 'https://i.pravatar.cc/150?img=8' },
+        pet: { name: 'Nina', breed: 'SRD' },
+        status: 'approved',
+        submittedAt: '2025-10-20T09:15:00Z'
+      },
+      {
+        _id: '5',
+        user: { name: 'Julia Santos', profilePicture: 'https://i.pravatar.cc/150?img=9' },
+        pet: { name: 'Thor', breed: 'Pastor Alemão' },
+        status: 'rejected',
+        submittedAt: '2025-10-18T11:20:00Z'
+      },
+      {
+        _id: '6',
+        user: { name: 'Ricardo Ferreira', profilePicture: 'https://i.pravatar.cc/150?img=13' },
+        pet: { name: 'Mel', breed: 'Persa' },
+        status: 'sent',
+        submittedAt: '2025-11-02T15:30:00Z'
       }
-    });
-    
-    document.getElementById('logoutBtn').addEventListener('click', async () => {
-      try {
-        await api.logout();
-        localStorage.removeItem('userInfo');
-        window.location.href = 'index.html';
-      } catch (error) {
-        console.error('Erro ao sair:', error);
-      }
-    });
-    document.getElementById('logoutBtn').addEventListener('click', async () => {
-      // try {
-      //   await api.logout();
-      //   localStorage.removeItem('userInfo');
-      window.location.href = 'index.html';
-    //   } catch (error) {
-    //     console.error('Erro ao sair:', error);
-    //   }
-    });
+    ];
 
-    // Example dynamic data fetch
-    async function loadDashboardData() {
-      try {
-        const res = await fetch('/api/ong/dashboard');
-        const data = await res.json();
-        document.getElementById('petsCount').textContent = data.pets || 0;
-        document.getElementById('pendingRequests').textContent = data.requests || 0;
-        document.getElementById('adoptionsDone').textContent = data.adoptions || 0;
-        document.getElementById('postsCount').textContent = data.posts || 0;
-      } catch (err) {
-        console.error('Erro ao carregar dados do dashboard:', err);
-      }
+    const postsMock = [
+      { id: '1', title: "Adoção responsável", date: "10/11/2025", featured: true },
+      { id: '2', title: "Evento de adoção", date: "22/10/2025", featured: false },
+      { id: '3', title: "História do Thor", date: "15/10/2025", featured: false },
+      { id: '4', title: "Primeiro dia do pet", date: "05/11/2025", featured: false }
+    ];
+
+    // Status configuration
+    const statusConfig = {
+      sent: { label: 'Enviada', icon: '📨', color: 'text-blue-600 bg-blue-100' },
+      in_review: { label: 'Em Análise', icon: '🔍', color: 'text-yellow-600 bg-yellow-100' },
+      interview: { label: 'Entrevista', icon: '📅', color: 'text-purple-600 bg-purple-100' },
+      approved: { label: 'Aprovada', icon: '✅', color: 'text-green-600 bg-green-100' },
+      rejected: { label: 'Rejeitada', icon: '❌', color: 'text-red-600 bg-red-100' }
+    };
+
+    // Calculate statistics
+    function updateDashboard() {
+      // Pets stats
+      const totalPets = petsMock.length;
+      const availablePets = petsMock.filter(p => p.adoptionStatus === 'available').length;
+      const adoptedPets = petsMock.filter(p => p.adoptionStatus === 'adopted').length;
+
+      document.getElementById('petsCount').textContent = totalPets;
+      document.getElementById('petsAvailable').textContent = `${availablePets} disponíveis`;
+      document.getElementById('petsAdopted').textContent = `${adoptedPets} adotados`;
+
+      // Requests stats
+      const pendingRequests = requestsMock.filter(r => 
+        r.status === 'sent' || r.status === 'in_review' || r.status === 'interview'
+      ).length;
+      const sentRequests = requestsMock.filter(r => r.status === 'sent').length;
+      const reviewRequests = requestsMock.filter(r => r.status === 'in_review').length;
+
+      document.getElementById('pendingRequests').textContent = pendingRequests;
+      document.getElementById('requestsSent').textContent = `${sentRequests} enviadas`;
+      document.getElementById('requestsReview').textContent = `${reviewRequests} em análise`;
+
+      // Adoptions stats
+      const approvedAdoptions = requestsMock.filter(r => r.status === 'approved').length;
+      const totalAdoptions = adoptedPets; // Based on adopted pets
+
+      document.getElementById('adoptionsDone').textContent = totalAdoptions;
+      document.getElementById('adoptionsMonth').textContent = `${approvedAdoptions} este mês`;
+      document.getElementById('adoptionsTotal').textContent = `${totalAdoptions} total`;
+
+      // Posts stats
+      const totalPosts = postsMock.length;
+      const featuredPosts = postsMock.filter(p => p.featured).length;
+      const postsThisMonth = postsMock.filter(p => {
+        const postDate = new Date(p.date.split('/').reverse().join('-'));
+        const now = new Date();
+        return postDate.getMonth() === now.getMonth() && postDate.getFullYear() === now.getFullYear();
+      }).length;
+
+      document.getElementById('postsCount').textContent = totalPosts;
+      document.getElementById('postsFeatured').textContent = `${featuredPosts} em destaque`;
+      document.getElementById('postsMonth').textContent = `${postsThisMonth} este mês`;
     }
 
+    // Format date
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      const now = new Date();
+      const diff = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+      
+      if (diff === 0) return 'Hoje';
+      if (diff === 1) return 'Ontem';
+      if (diff < 7) return `${diff} dias atrás`;
+      return date.toLocaleDateString('pt-BR');
+    }
+
+    // Render recent requests
+    function renderRecentRequests() {
+      const container = document.getElementById('recentRequests');
+      const recent = requestsMock.slice(0, 4);
+
+      if (recent.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-8 text-gray-500">
+            <p>Nenhuma solicitação recente</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = recent.map(request => {
+        const status = statusConfig[request.status];
+        return `
+          <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer"
+            onclick="window.location.href='requests-ong.html'">
+            <img src="${request.user.profilePicture}" alt="${request.user.name}" 
+              class="w-12 h-12 rounded-full object-cover">
+            <div class="flex-1">
+              <h4 class="font-semibold text-gray-900">${request.user.name}</h4>
+              <p class="text-sm text-gray-600">Interesse em ${request.pet.name}</p>
+            </div>
+            <div class="text-right">
+              <span class="px-3 py-1 rounded-full text-xs font-medium ${status.color}">
+                ${status.icon} ${status.label}
+              </span>
+              <p class="text-xs text-gray-500 mt-1">${formatDate(request.submittedAt)}</p>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Render available pets
+    function renderAvailablePets() {
+      const container = document.getElementById('availablePets');
+      const available = petsMock.filter(p => p.adoptionStatus === 'available').slice(0, 4);
+
+      if (available.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-8 text-gray-500">
+            <p>Nenhum pet disponível</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = available.map(pet => `
+        <div class="flex items-center gap-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition cursor-pointer"
+          onclick="window.location.href='pets-ong.html'">
+          <img src="${pet.media.photos[0].url}" alt="${pet.name}" 
+            class="w-12 h-12 rounded-full object-cover">
+          <div class="flex-1">
+            <h4 class="font-semibold text-gray-900">${pet.name}</h4>
+            <p class="text-sm text-gray-600">${pet.breed} • ${pet.species === 'dog' ? 'Cachorro' : 'Gato'}</p>
+          </div>
+          <span class="px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
+            Disponível
+          </span>
+        </div>
+      `).join('');
+    }
+
+    // Logout
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('userInfo');
+      window.location.href = 'index.html';
+    });
+
     // Initialize dashboard
-    // checkAuth();
-    // loadDashboardData();
+    updateDashboard();
+    renderRecentRequests();
+    renderAvailablePets();
   </script>
 </body>
 </html>
