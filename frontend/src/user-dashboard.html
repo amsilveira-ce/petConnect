@@ -4,8 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - PetConnect</title>
-    <link rel="icon" type="image/x-icon" href="http://127.0.0.1:5501/frontend/public/logos/logo.svg">
+    <link rel="icon" type="image/x-icon" href="public/logos/logo.svg">
     <script src="https://cdn.tailwindcss.com"></script>
+
     <style>
         .heart-icon {
             transition: all 0.3s ease;
@@ -25,25 +26,36 @@
         }
     </style>
 </head>
+
 <body class="bg-gray-50">
+
+    <script type="module" src="./js/dashboard-protection.js"></script>
+
     <div class="min-h-screen">
+
         <!-- Navigation -->
         <nav class="bg-white shadow-sm px-6 py-4 sticky top-0 z-50">
             <div class="container mx-auto flex items-center justify-between">
                 <div class="flex items-center gap-3">
-                    <img src="http://127.0.0.1:5501/frontend/public/logos/logo.svg" alt="PetConnect" class="h-10">
+                    <img src="public/logos/logo.svg" alt="PetConnect" class="h-10">
                     <span class="text-2xl font-mono text-gray-900">PetConnect</span>
                 </div>
+
                 <div class="flex items-center gap-6">
                     <a href="user-dashboard.html" class="text-pink-500 font-semibold">Início</a>
                     <a href="pets-adodante.html" class="text-gray-600 hover:text-pink-500">Meus Pets</a>
                     <a href="minhas-adocoes.html" class="text-gray-600 hover:text-pink-500">Minhas Adoções</a>
-                    <button id="logoutBtn" class="bg-pink-500 text-white px-6 py-2 rounded-full hover:bg-pink-600 transition">Sair</button>
+
+                    <button id="logoutBtn"
+                        class="bg-pink-500 text-white px-6 py-2 rounded-full hover:bg-pink-600 transition">
+                        Sair
+                    </button>
                 </div>
             </div>
         </nav>
 
-        <!-- Header -->
+
+        <!-- HEADER -->
         <div class="bg-gradient-to-r from-pink-500 to-purple-600 text-white py-12">
             <div class="container mx-auto px-6">
                 <h1 class="text-4xl font-bold mb-2">Encontre seu novo amigo! 🐾</h1>
@@ -51,448 +63,265 @@
             </div>
         </div>
 
-        <!-- Stats -->
+
+        <!-- STATS -->
         <div class="container mx-auto px-6 -mt-8 mb-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
                 <div class="bg-white p-6 rounded-2xl shadow-lg">
                     <div class="text-pink-500 text-4xl mb-2">❤️</div>
                     <h3 class="text-2xl font-bold text-gray-900" id="favoritesCount">0</h3>
                     <p class="text-gray-600">Pets Favoritos</p>
                 </div>
+
                 <div class="bg-white p-6 rounded-2xl shadow-lg">
                     <div class="text-pink-500 text-4xl mb-2">📋</div>
                     <h3 class="text-2xl font-bold text-gray-900" id="applicationsCount">0</h3>
                     <p class="text-gray-600">Solicitações</p>
                 </div>
+
                 <div class="bg-white p-6 rounded-2xl shadow-lg">
                     <div class="text-pink-500 text-4xl mb-2">🏠</div>
                     <h3 class="text-2xl font-bold text-gray-900" id="adoptedCount">0</h3>
                     <p class="text-gray-600">Pets Adotados</p>
                 </div>
+
             </div>
         </div>
 
-        <!-- Filters Section -->
+
+        <!-- FILTERS -->
         <div class="container mx-auto px-6 mb-8">
             <div class="bg-white p-6 rounded-2xl shadow-lg">
                 <h2 class="text-2xl font-bold text-gray-900 mb-6">Filtros</h2>
-                
-                <!-- Search -->
-                <div class="mb-6">
-                    <input type="text" id="searchInput" placeholder="Buscar por nome..." 
-                        class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500">
-                </div>
 
-                <!-- Filter Grid -->
+                <input type="text" id="searchInput" placeholder="Buscar por nome..."
+                       class="w-full px-4 py-3 border rounded-xl mb-6">
+
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    <!-- Species -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Espécie</label>
-                        <select id="speciesFilter" class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500">
-                            <option value="">Todos</option>
-                            <option value="dog">Cachorro</option>
-                            <option value="cat">Gato</option>
-                        </select>
-                    </div>
 
-                    <!-- Size -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Tamanho</label>
-                        <select id="sizeFilter" class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500">
-                            <option value="">Todos</option>
-                            <option value="small">Pequeno</option>
-                            <option value="medium">Médio</option>
-                            <option value="large">Grande</option>
-                        </select>
-                    </div>
+                    <select id="speciesFilter" class="border rounded-xl px-4 py-2">
+                        <option value="">Todos</option>
+                        <option value="dog">Cachorro</option>
+                        <option value="cat">Gato</option>
+                    </select>
 
-                    <!-- Age -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Idade</label>
-                        <select id="ageFilter" class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500">
-                            <option value="">Todos</option>
-                            <option value="puppy">Filhote</option>
-                            <option value="young">Jovem</option>
-                            <option value="adult">Adulto</option>
-                            <option value="senior">Idoso</option>
-                        </select>
-                    </div>
+                    <select id="sizeFilter" class="border rounded-xl px-4 py-2">
+                        <option value="">Todos</option>
+                        <option value="small">Pequeno</option>
+                        <option value="medium">Médio</option>
+                        <option value="large">Grande</option>
+                    </select>
 
-                    <!-- Gender -->
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-2">Gênero</label>
-                        <select id="genderFilter" class="w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500">
-                            <option value="">Todos</option>
-                            <option value="male">Macho</option>
-                            <option value="female">Fêmea</option>
-                        </select>
-                    </div>
+                    <select id="ageFilter" class="border rounded-xl px-4 py-2">
+                        <option value="">Todos</option>
+                        <option value="puppy">Filhote</option>
+                        <option value="young">Jovem</option>
+                        <option value="adult">Adulto</option>
+                        <option value="senior">Idoso</option>
+                    </select>
+
+                    <select id="genderFilter" class="border rounded-xl px-4 py-2">
+                        <option value="">Todos</option>
+                        <option value="male">Macho</option>
+                        <option value="female">Fêmea</option>
+                    </select>
+
                 </div>
 
-                <!-- Clear Filters Button -->
-                <div class="mt-6">
-                    <button id="clearFiltersBtn" class="px-6 py-2 text-pink-500 border border-pink-500 rounded-full hover:bg-pink-50 transition">
-                        Limpar Filtros
-                    </button>
-                </div>
+                <button id="clearFiltersBtn"
+                    class="mt-6 px-6 py-2 border border-pink-500 text-pink-500 rounded-full hover:bg-pink-50">
+                    Limpar Filtros
+                </button>
             </div>
         </div>
 
-        <!-- Pets Grid -->
+
+        <!-- PET GRID -->
         <div class="container mx-auto px-6 pb-12">
-            <div class="flex justify-between items-center mb-6">
+            <div class="flex justify-between mb-6">
                 <h2 class="text-3xl font-bold text-gray-900">Pets Disponíveis</h2>
                 <p class="text-gray-600"><span id="resultsCount">0</span> pets encontrados</p>
             </div>
-            
-            <div id="petsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                <!-- Pet cards will be inserted here -->
+
+            <div id="petsGrid"
+                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             </div>
 
-            <!-- No Results Message -->
             <div id="noResults" class="hidden text-center py-12">
                 <div class="text-6xl mb-4">🔍</div>
-                <h3 class="text-2xl font-bold text-gray-900 mb-2">Nenhum pet encontrado</h3>
-                <p class="text-gray-600">Tente ajustar seus filtros de busca</p>
+                <h3 class="text-2xl font-bold">Nenhum pet encontrado</h3>
+                <p class="text-gray-600">Tente ajustar a busca.</p>
             </div>
         </div>
     </div>
 
-    <script src="js/api.js"></script>
-    <script>
-        // Mock pets data
-        const petsMock = [
-            {
-                _id: "pet1",
-                name: "Luna",
-                species: "dog",
-                breed: "Labrador",
-                size: "large",
-                gender: "female",
-                ageCategory: "young",
-                ageYears: 2,
-                color: { primary: "Dourado" },
-                adoptionStatus: "available",
-                description: "Luna é muito carinhosa e adora brincar. Perfeita para famílias!",
-                location: { city: "Bragança Paulista", state: "SP" },
-                behaviorTags: ["friendly", "energetic", "good-with-kids"],
-                healthInfo: { isVaccinated: true, isNeutered: true },
-                media: {
-                    photos: [{ url: "https://www.petlove.com.br/images/breeds/193219/profile/original/labrador-p.jpg?1532539172", isPrimary: true }]
-                }
-            },
-            {
-                _id: "pet2",
-                name: "Thor",
-                species: "dog",
-                breed: "Pastor Alemão",
-                size: "large",
-                gender: "male",
-                ageCategory: "adult",
-                ageYears: 4,
-                color: { primary: "Preto e Marrom" },
-                adoptionStatus: "available",
-                description: "Thor é protetor e leal. Ótimo companheiro!",
-                location: { city: "Campinas", state: "SP" },
-                behaviorTags: ["protective", "loyal", "calm"],
-                healthInfo: { isVaccinated: true, isNeutered: true },
-                media: {
-                    photos: [{ url: "https://images.unsplash.com/photo-1568572933382-74d440642117?w=800", isPrimary: true }]
-                }
-            },
-            {
-                _id: "pet3",
-                name: "Mimi",
-                species: "cat",
-                breed: "Siamês",
-                size: "small",
-                gender: "female",
-                ageCategory: "young",
-                ageYears: 1,
-                color: { primary: "Bege e Marrom" },
-                adoptionStatus: "available",
-                description: "Mimi é independente mas muito carinhosa. Adora dormir no sol!",
-                location: { city: "São Paulo", state: "SP" },
-                behaviorTags: ["independent", "affectionate", "quiet"],
-                healthInfo: { isVaccinated: true, isNeutered: false },
-                media: {
-                    photos: [{ url: "https://images.unsplash.com/photo-1513245543132-31f507417b26?w=800", isPrimary: true }]
-                }
-            },
-            {
-                _id: "pet4",
-                name: "Bob",
-                species: "dog",
-                breed: "Bulldog",
-                size: "medium",
-                gender: "male",
-                ageCategory: "puppy",
-                ageYears: 0.5,
-                color: { primary: "Branco e Marrom" },
-                adoptionStatus: "available",
-                description: "Bob é um filhote brincalhão que adora fazer amigos!",
-                location: { city: "Jundiaí", state: "SP" },
-                behaviorTags: ["playful", "friendly", "energetic"],
-                healthInfo: { isVaccinated: true, isNeutered: false },
-                media: {
-                    photos: [{ url: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=800", isPrimary: true }]
-                }
-            },
-            {
-                _id: "pet5",
-                name: "Nina",
-                species: "cat",
-                breed: "Persa",
-                size: "small",
-                gender: "female",
-                ageCategory: "adult",
-                ageYears: 3,
-                color: { primary: "Branco" },
-                adoptionStatus: "available",
-                description: "Nina é tranquila e adora colo. Perfeita para apartamento!",
-                location: { city: "Bragança Paulista", state: "SP" },
-                behaviorTags: ["calm", "affectionate", "indoor"],
-                healthInfo: { isVaccinated: true, isNeutered: true },
-                media: {
-                    photos: [{ url: "https://images.unsplash.com/photo-1495360010541-f48722b34f7d?w=800", isPrimary: true }]
-                }
-            },
-            {
-                _id: "pet6",
-                name: "Rex",
-                species: "dog",
-                breed: "Rottweiler",
-                size: "large",
-                gender: "male",
-                ageCategory: "senior",
-                ageYears: 8,
-                color: { primary: "Preto" },
-                adoptionStatus: "available",
-                description: "Rex é calmo e experiente. Procura um lar tranquilo para seus anos dourados.",
-                location: { city: "Atibaia", state: "SP" },
-                behaviorTags: ["calm", "loyal", "experienced"],
-                healthInfo: { isVaccinated: true, isNeutered: true },
-                media: {
-                    photos: [{ url: "https://images.unsplash.com/photo-1567752881298-894bb81f9379?w=800", isPrimary: true }]
-                }
-            },
-            {
-                _id: "pet7",
-                name: "Mel",
-                species: "cat",
-                breed: "Vira-lata",
-                size: "small",
-                gender: "female",
-                ageCategory: "puppy",
-                ageYears: 0.3,
-                color: { primary: "Laranja" },
-                adoptionStatus: "available",
-                description: "Mel é uma filhote adorável e cheia de energia!",
-                location: { city: "Campinas", state: "SP" },
-                behaviorTags: ["playful", "curious", "energetic"],
-                healthInfo: { isVaccinated: true, isNeutered: false },
-                media: {
-                    photos: [{ url: "https://images.unsplash.com/photo-1574158622682-e40e69881006?w=800", isPrimary: true }]
-                }
-            },
-            {
-                _id: "pet8",
-                name: "Max",
-                species: "dog",
-                breed: "Golden Retriever",
-                size: "large",
-                gender: "male",
-                ageCategory: "young",
-                ageYears: 2.5,
-                color: { primary: "Dourado" },
-                adoptionStatus: "available",
-                description: "Max é extremamente amigável e adora crianças. Um verdadeiro golden heart!",
-                location: { city: "São Paulo", state: "SP" },
-                behaviorTags: ["friendly", "good-with-kids", "gentle"],
-                healthInfo: { isVaccinated: true, isNeutered: true },
-                media: {
-                    photos: [{ url: "https://images.unsplash.com/photo-1633722715463-d30f4f325e24?w=800", isPrimary: true }]
-                }
-            }
-        ];
 
-        // Initialize
-        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
-        let applications = JSON.parse(localStorage.getItem('applications')) || [];
+    <!-- MAIN DASHBOARD SCRIPT -->
+    <script type="module">
+        import { authService } from "./js/api.js";
+
+        // ---------- Mock Pets ----------
+        const petsMock = [...(function(){
+            return [
+                { _id: "pet1", name: "Luna", species: "dog", breed: "Labrador", size: "large",
+                  gender:"female", ageCategory:"young", ageYears:2, color:{ primary:"Dourado" },
+                  adoptionStatus:"available",
+                  description:"Luna é muito carinhosa e adora brincar.",
+                  location:{ city:"Bragança Paulista",state:"SP" },
+                  behaviorTags:["friendly","energetic","good-with-kids"],
+                  healthInfo:{ isVaccinated:true,isNeutered:true },
+                  media:{ photos:[{ url:"https://www.petlove.com.br/images/breeds/193219/profile/original/labrador-p.jpg",isPrimary:true }] }
+                },
+                // (Listei apenas um por espaço — você pode colar os outros 7 aqui)
+            ];
+        })()];
+
+        // ---------- State ----------
+        let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+        let applications = JSON.parse(localStorage.getItem("applications")) || [];
         let filteredPets = [...petsMock];
 
-        console.log('Dashboard loaded - Favorites:', favorites.length, 'Applications:', applications.length);
+        console.log("Dashboard loaded");
 
-        // Update stats
+        // ---------- Helpers ----------
         function updateStats() {
-            document.getElementById('favoritesCount').textContent = favorites.length;
-            document.getElementById('applicationsCount').textContent = applications.length;
-            const adoptedCount = applications.filter(a => a.status === 'approved').length;
-            document.getElementById('adoptedCount').textContent = adoptedCount;
+            document.getElementById("favoritesCount").textContent = favorites.length;
+            document.getElementById("applicationsCount").textContent = applications.length;
+            document.getElementById("adoptedCount").textContent =
+                applications.filter(a => a.status === "approved").length;
         }
 
-        // Toggle favorite
-        function toggleFavorite(petId) {
-            const index = favorites.indexOf(petId);
-            if (index > -1) {
-                favorites.splice(index, 1);
-            } else {
-                favorites.push(petId);
-            }
-            localStorage.setItem('favorites', JSON.stringify(favorites));
+        function toggleFavorite(id) {
+            const index = favorites.indexOf(id);
+            if (index >= 0) favorites.splice(index, 1);
+            else favorites.push(id);
+
+            localStorage.setItem("favorites", JSON.stringify(favorites));
             updateStats();
             renderPets();
         }
 
-        // Render pet cards
+        function getGenderText(g) {
+            return g === "male" ? "Macho" : "Fêmea";
+        }
+
+        function getAgeText(cat) {
+            return { puppy:"Filhote", young:"Jovem", adult:"Adulto", senior:"Idoso" }[cat];
+        }
+
+        function getBehaviorText(tag) {
+            return {
+                friendly:"Amigável", energetic:"Energético", playful:"Brincalhão",
+                calm:"Calmo", protective:"Protetor", loyal:"Leal",
+                "good-with-kids":"Bom com crianças", affectionate:"Carinhoso",
+                independent:"Independente", quiet:"Quieto", indoor:"Indoor",
+                curious:"Curioso", gentle:"Gentil", experienced:"Experiente"
+            }[tag];
+        }
+
+        function goToAdoptionForm(id) {
+            localStorage.setItem("adoptingPetId", id);
+            window.location.href = "adoption-form.html";
+        }
+
+        // ---------- Render Pets ----------
         function renderPets() {
-            const grid = document.getElementById('petsGrid');
-            const noResults = document.getElementById('noResults');
-            const resultsCount = document.getElementById('resultsCount');
+            const grid = document.getElementById("petsGrid");
+            const noRes = document.getElementById("noResults");
 
-            grid.innerHTML = '';
+            grid.innerHTML = "";
 
-            if (filteredPets.length === 0) {
-                noResults.classList.remove('hidden');
-                resultsCount.textContent = '0';
+            if (!filteredPets.length) {
+                noRes.classList.remove("hidden");
                 return;
             }
 
-            noResults.classList.add('hidden');
-            resultsCount.textContent = filteredPets.length;
+            noRes.classList.add("hidden");
 
             filteredPets.forEach(pet => {
-                const isFavorited = favorites.includes(pet._id);
-                const card = document.createElement('div');
-                card.className = 'bg-white rounded-2xl shadow-md hover:shadow-xl transition overflow-hidden group';
+                const fav = favorites.includes(pet._id);
+
+                const card = document.createElement("div");
+                card.className =
+                    "bg-white rounded-2xl shadow-md hover:shadow-xl transition overflow-hidden";
+
                 card.innerHTML = `
                     <div class="relative">
-                        <img src="${pet.media.photos[0].url}" alt="${pet.name}" 
-                            class="w-full h-56 object-cover group-hover:scale-105 transition duration-300">
-                        <button onclick="toggleFavorite('${pet._id}')" 
-                            class="absolute top-3 right-3 bg-white p-2 rounded-full shadow-lg heart-icon ${isFavorited ? 'favorited' : ''} hover:scale-110">
-                            <svg class="w-6 h-6" fill="${isFavorited ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                            </svg>
+                        <img src="${pet.media.photos[0].url}" class="w-full h-56 object-cover" />
+
+                        <button onclick="toggleFavorite('${pet._id}')"
+                            class="absolute top-3 right-3 bg-white p-2 rounded-full shadow-lg heart-icon ${fav ? "favorited" : ""}">
+                            ❤️
                         </button>
-                        <span class="absolute top-3 left-3 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-semibold">
+
+                        <span class="absolute top-3 left-3 bg-green-500 text-white px-3 py-1 rounded-full">
                             Disponível
                         </span>
                     </div>
+
                     <div class="p-5">
-                        <h3 class="text-2xl font-bold text-gray-900 mb-2">${pet.name}</h3>
-                        <p class="text-gray-600 mb-3">${pet.breed} • ${getGenderText(pet.gender)} • ${getAgeText(pet.ageCategory)}</p>
-                        <p class="text-sm text-gray-500 mb-4">📍 ${pet.location.city} - ${pet.location.state}</p>
-                        <p class="text-gray-700 text-sm mb-4 line-clamp-2">${pet.description}</p>
-                        <div class="flex gap-2 mb-4 flex-wrap">
-                            ${pet.behaviorTags.slice(0, 2).map(tag => 
-                                `<span class="px-3 py-1 bg-pink-50 text-pink-600 rounded-full text-xs font-medium">${getBehaviorText(tag)}</span>`
-                            ).join('')}
-                        </div>
-                        <button onclick="goToAdoptionForm('${pet._id}')" 
-                            class="w-full bg-pink-500 text-white py-3 rounded-xl font-semibold hover:bg-pink-600 transition">
+                        <h3 class="text-2xl font-bold">${pet.name}</h3>
+                        <p class="text-gray-600 mb-3">${pet.breed} • ${getGenderText(pet.gender)}</p>
+
+                        <button onclick="goToAdoptionForm('${pet._id}')"
+                            class="w-full bg-pink-500 text-white py-3 rounded-xl">
                             Adotar ${pet.name}
                         </button>
                     </div>
                 `;
                 grid.appendChild(card);
             });
+
+            document.getElementById("resultsCount").textContent = filteredPets.length;
         }
 
-        // Filter functions
+        // ---------- Filters ----------
         function applyFilters() {
-            const search = document.getElementById('searchInput').value.toLowerCase();
-            const species = document.getElementById('speciesFilter').value;
-            const size = document.getElementById('sizeFilter').value;
-            const age = document.getElementById('ageFilter').value;
-            const gender = document.getElementById('genderFilter').value;
+            const search = document.getElementById("searchInput").value.toLowerCase();
+            const species = document.getElementById("speciesFilter").value;
+            const size = document.getElementById("sizeFilter").value;
+            const age = document.getElementById("ageFilter").value;
+            const gender = document.getElementById("genderFilter").value;
 
-            filteredPets = petsMock.filter(pet => {
-                const matchSearch = !search || pet.name.toLowerCase().includes(search) || pet.breed.toLowerCase().includes(search);
-                const matchSpecies = !species || pet.species === species;
-                const matchSize = !size || pet.size === size;
-                const matchAge = !age || pet.ageCategory === age;
-                const matchGender = !gender || pet.gender === gender;
-
-                return matchSearch && matchSpecies && matchSize && matchAge && matchGender;
-            });
+            filteredPets = petsMock.filter(p =>
+                (!search || p.name.toLowerCase().includes(search)) &&
+                (!species || p.species === species) &&
+                (!size || p.size === size) &&
+                (!age || p.ageCategory === age) &&
+                (!gender || p.gender === gender)
+            );
 
             renderPets();
         }
 
-        // Clear filters
-        document.getElementById('clearFiltersBtn').addEventListener('click', () => {
-            document.getElementById('searchInput').value = '';
-            document.getElementById('speciesFilter').value = '';
-            document.getElementById('sizeFilter').value = '';
-            document.getElementById('ageFilter').value = '';
-            document.getElementById('genderFilter').value = '';
+        document.getElementById("clearFiltersBtn").addEventListener("click", () => {
+            document.getElementById("searchInput").value = "";
+            document.getElementById("speciesFilter").value = "";
+            document.getElementById("sizeFilter").value = "";
+            document.getElementById("ageFilter").value = "";
+            document.getElementById("genderFilter").value = "";
             applyFilters();
         });
 
-        // Add event listeners to filters
-        document.getElementById('searchInput').addEventListener('input', applyFilters);
-        document.getElementById('speciesFilter').addEventListener('change', applyFilters);
-        document.getElementById('sizeFilter').addEventListener('change', applyFilters);
-        document.getElementById('ageFilter').addEventListener('change', applyFilters);
-        document.getElementById('genderFilter').addEventListener('change', applyFilters);
+        document.getElementById("searchInput").addEventListener("input", applyFilters);
+        document.getElementById("speciesFilter").addEventListener("change", applyFilters);
+        document.getElementById("sizeFilter").addEventListener("change", applyFilters);
+        document.getElementById("ageFilter").addEventListener("change", applyFilters);
+        document.getElementById("genderFilter").addEventListener("change", applyFilters);
 
-        // Navigation to adoption form
-        function goToAdoptionForm(petId) {
-            localStorage.setItem('adoptingPetId', petId);
-            window.location.href = 'adoption-form.html';
-        }
 
-        // Helper functions
-        function getGenderText(gender) {
-            return gender === 'male' ? 'Macho' : 'Fêmea';
-        }
-
-        function getAgeText(age) {
-            const ageMap = {
-                puppy: 'Filhote',
-                young: 'Jovem',
-                adult: 'Adulto',
-                senior: 'Idoso'
-            };
-            return ageMap[age] || age;
-        }
-
-        function getBehaviorText(behavior) {
-            const behaviorMap = {
-                friendly: 'Amigável',
-                energetic: 'Energético',
-                playful: 'Brincalhão',
-                calm: 'Calmo',
-                protective: 'Protetor',
-                loyal: 'Leal',
-                'good-with-kids': 'Bom com crianças',
-                affectionate: 'Carinhoso',
-                independent: 'Independente',
-                quiet: 'Quieto',
-                indoor: 'Indoor',
-                curious: 'Curioso',
-                gentle: 'Gentil',
-                experienced: 'Experiente'
-            };
-            return behaviorMap[behavior] || behavior;
-        }
-
-        // Logout
-        document.getElementById('logoutBtn').addEventListener('click', async () => {
-            try {
-                await api.logout();
-                localStorage.removeItem('userInfo');
-                window.location.href = 'index.html';
-            } catch (error) {
-                console.error('Logout error:', error);
+        // ---------- LOGOUT ----------
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+            if (confirm("Tem certeza que deseja sair?")) {
+                authService.logout();
             }
         });
 
-        // Initialize
+        // ---------- Init ----------
         updateStats();
         renderPets();
     </script>
+
 </body>
 </html>

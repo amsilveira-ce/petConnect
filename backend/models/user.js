@@ -50,9 +50,6 @@ const userSchema = new mongoose.Schema(
           type: [Number], // [longitude, latitude]
           validate: {
             validator: function(v) {
-              // Allow missing or empty coordinates (optional field)
-              if (!v || v.length === 0) return true;
-              // When provided, must be [lon, lat] and inside valid ranges
               return v.length === 2 && v[0] >= -180 && v[0] <= 180 && v[1] >= -90 && v[1] <= 90;
             },
             message: 'Invalid coordinates format'
