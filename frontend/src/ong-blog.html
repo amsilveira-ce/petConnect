@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Blog da ONG | PetConnect</title>
-  <link rel="icon" type="image/x-icon" href="http://localhost:5173/logos/logo.svg">
+  <link rel="icon" type="image/x-icon" href="http://127.0.0.1:5501/frontend/public/logos/logo.svg">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -24,7 +24,7 @@
   <nav class="bg-white shadow-md sticky top-0 z-10">
     <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
       <div class="flex items-center gap-3">
-        <img src="http://localhost:5173/logos/logo.svg" class="h-10 w-10" alt="PetConnect">
+        <img src="http://127.0.0.1:5501/frontend/public/logos/logo.svg" class="h-10 w-10" alt="PetConnect">
         <span class="font-mono text-2xl font-semibold">PetConnect</span>
       </div>
       <div class="hidden md:flex gap-8">
@@ -34,13 +34,6 @@
         <a href="ong-blog.html" class="text-primary font-semibold">Posts</a>
         <button id="logoutBtn" class="bg-primary text-white px-6 py-2 rounded-full hover:bg-pink-600 transition">Sair</button>
       </div>
-      <button class="md:hidden text-gray-700 focus:outline-none">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-          stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-          <path stroke-linecap="round" stroke-linejoin="round"
-            d="M3.75 5.25h16.5M3.75 12h16.5m-16.5 6.75h16.5" />
-        </svg>
-      </button>
     </div>
   </nav>
 
@@ -63,12 +56,59 @@
     <section id="postsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"></section>
   </main>
 
-  <!-- Modal de Novo Post -->
+  <!-- Modal de Visualização de Post -->
+  <div id="viewPostModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+      <!-- Modal Header -->
+      <div class="sticky top-0 bg-white border-b px-8 py-6 flex justify-between items-center rounded-t-2xl">
+        <h2 id="viewPostTitle" class="text-2xl font-bold text-gray-900"></h2>
+        <button id="closeViewPostModal" class="text-gray-500 hover:text-gray-700 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Modal Content -->
+      <div class="p-8">
+        <div id="viewPostCategory" class="mb-4"></div>
+        <img id="viewPostImage" src="" alt="" class="w-full h-80 object-cover rounded-xl mb-6">
+        
+        <div class="flex items-center gap-4 text-sm text-gray-600 mb-6">
+          <span id="viewPostAuthor" class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+          </span>
+          <span id="viewPostDate" class="flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+          </span>
+        </div>
+
+        <div id="viewPostContent" class="prose max-w-none text-gray-700 leading-relaxed whitespace-pre-line"></div>
+
+        <div id="viewPostTags" class="mt-8 flex flex-wrap gap-2"></div>
+
+        <div class="mt-8 pt-6 border-t flex gap-3">
+          <button id="editPostBtn" class="flex-1 bg-blue-500 text-white px-6 py-3 rounded-full font-medium hover:bg-blue-600 transition">
+            ✏️ Editar Post
+          </button>
+          <button id="deletePostBtn" class="flex-1 bg-red-500 text-white px-6 py-3 rounded-full font-medium hover:bg-red-600 transition">
+            🗑️ Excluir Post
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal de Novo/Editar Post -->
   <div id="newPostModal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4">
     <div class="bg-white rounded-2xl shadow-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
       <!-- Modal Header -->
       <div class="sticky top-0 bg-white border-b px-8 py-6 flex justify-between items-center rounded-t-2xl">
-        <h2 class="text-2xl font-bold text-gray-900 flex items-center gap-2">
+        <h2 id="formModalTitle" class="text-2xl font-bold text-gray-900 flex items-center gap-2">
           <span>✍️</span> Criar Novo Post
         </h2>
         <button id="closeNewPostModal" class="text-gray-500 hover:text-gray-700 transition">
@@ -80,6 +120,8 @@
 
       <!-- Modal Content -->
       <form id="newPostForm" class="p-8 space-y-6">
+        <input type="hidden" id="editPostId" value="">
+        
         <!-- Título -->
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-2">
@@ -153,47 +195,20 @@
           <p class="text-xs text-gray-500 mt-1">Mínimo 100 caracteres - <span id="contentCount">0</span> caracteres</p>
         </div>
 
-        <!-- Imagem de Capa -->
+        <!-- URL da Imagem -->
         <div>
           <label class="block text-sm font-semibold text-gray-700 mb-2">
-            Imagem de Capa <span class="text-red-500">*</span>
-          </label>
-          <div class="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-primary transition">
-            <input 
-              type="file" 
-              id="postImage"
-              name="image"
-              accept="image/*"
-              class="hidden"
-              onchange="previewImage(event)"
-            >
-            <div id="imagePreview" class="hidden mb-4">
-              <img id="previewImg" src="" alt="Preview" class="max-h-48 mx-auto rounded-lg object-cover">
-            </div>
-            <button 
-              type="button"
-              onclick="document.getElementById('postImage').click()"
-              class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-2 rounded-full font-medium transition"
-            >
-              📷 Selecionar Imagem
-            </button>
-            <p class="text-xs text-gray-500 mt-2">PNG, JPG ou WEBP até 5MB</p>
-          </div>
-        </div>
-
-        <!-- URL da Imagem (alternativa) -->
-        <div>
-          <label class="block text-sm font-semibold text-gray-700 mb-2">
-            Ou cole a URL da imagem
+            URL da Imagem de Capa <span class="text-red-500">*</span>
           </label>
           <input 
             type="url" 
             id="postImageUrl"
             name="imageUrl"
+            required
             placeholder="https://exemplo.com/imagem.jpg"
             class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition"
           >
-          <p class="text-xs text-gray-500 mt-1">Se preferir, cole o link de uma imagem online</p>
+          <p class="text-xs text-gray-500 mt-1">Cole o link de uma imagem</p>
         </div>
 
         <!-- Tags -->
@@ -205,39 +220,38 @@
             type="text" 
             id="postTags"
             name="tags"
-            placeholder="Ex: adoção, cachorro, resgate (separadas por vírgula)"
+            placeholder="adoção, cachorro, resgate (separadas por vírgula)"
             class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition"
           >
-          <p class="text-xs text-gray-500 mt-1">Separe as tags com vírgulas</p>
         </div>
 
         <!-- Destaque -->
-        <div class="flex items-center gap-3 p-4 bg-gray-50 rounded-xl">
+        <div class="flex items-center gap-3">
           <input 
             type="checkbox" 
             id="postFeatured"
             name="featured"
-            class="w-5 h-5 text-primary focus:ring-primary border-gray-300 rounded"
+            class="w-5 h-5 text-primary rounded focus:ring-primary"
           >
-          <label for="postFeatured" class="text-sm font-medium text-gray-700">
-            ⭐ Marcar como post em destaque (aparecerá no topo)
+          <label for="postFeatured" class="text-sm font-semibold text-gray-700">
+            ⭐ Marcar como post em destaque
           </label>
         </div>
 
-        <!-- Botões de Ação -->
-        <div class="flex gap-4 pt-4 border-t">
+        <!-- Buttons -->
+        <div class="flex gap-3 pt-4">
           <button 
             type="button"
             id="cancelNewPost"
-            class="flex-1 bg-gray-200 text-gray-700 px-6 py-3 rounded-full font-medium hover:bg-gray-300 transition"
+            class="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-full font-medium hover:bg-gray-50 transition"
           >
             Cancelar
           </button>
           <button 
             type="submit"
-            class="flex-1 bg-primary text-white px-6 py-3 rounded-full font-medium hover:bg-pink-600 transition"
+            class="flex-1 px-6 py-3 bg-primary text-white rounded-full font-medium hover:bg-pink-600 transition"
           >
-            Publicar Post
+            <span id="submitButtonText">Publicar Post</span>
           </button>
         </div>
       </form>
@@ -251,17 +265,41 @@
 
   <!-- Scripts -->
   <script>
-    // Mock data
-    const postsMock = [
+    // Mock data com conteúdo completo
+    let postsMock = [
       {
         id: '1',
         title: "Adoção responsável: o que você precisa saber 🐶",
         author: "ONG Patas Felizes",
-        date: "10/10/2025",
+        date: "10/11/2025",
         category: "tips",
         excerpt: "Adotar é um ato de amor, mas também de responsabilidade. Veja o que considerar antes de levar um pet para casa.",
-        image: "https://pet.istoe.com.br/wp-content/uploads/sites/32/2025/09/vakinhapet.jpg",
-        featured: true
+        content: `Adotar um animal é uma decisão que envolve amor, compromisso e muita responsabilidade. Antes de dar esse importante passo, é essencial estar preparado para oferecer uma vida digna e cheia de cuidados ao seu futuro companheiro.
+
+**O que considerar antes de adotar:**
+
+1. **Tempo disponível:** Pets precisam de atenção, brincadeiras e exercícios diários. Avalie se sua rotina permite dedicar tempo de qualidade ao animal.
+
+2. **Espaço adequado:** Considere o tamanho do seu lar e se ele é adequado para o tipo de pet que você deseja adotar. Cachorros grandes, por exemplo, precisam de mais espaço para se movimentar.
+
+3. **Custos financeiros:** Alimentação, vacinas, consultas veterinárias, medicamentos e acessórios são despesas contínuas. Certifique-se de que pode arcar com esses custos.
+
+4. **Comprometimento de longo prazo:** Pets vivem muitos anos. Um cachorro pode viver de 10 a 15 anos, e gatos até 20 anos. Você está pronto para esse compromisso?
+
+5. **Família preparada:** Todos os membros da família devem estar de acordo com a adoção e dispostos a ajudar nos cuidados.
+
+**Benefícios da adoção:**
+
+Ao adotar, você não apenas ganha um amigo fiel, mas também salva uma vida e abre espaço em abrigos para que outros animais sejam resgatados. Além disso, animais adotados costumam ser extremamente gratos e carinhosos com suas novas famílias.
+
+**Como adotar:**
+
+Entre em contato com ONGs e abrigos da sua região. Muitas organizações realizam eventos de adoção e têm processos de entrevista para garantir que o pet encontre o lar ideal.
+
+Lembre-se: adoção é para sempre! ❤️`,
+        image: "https://images.unsplash.com/photo-1601758228041-f3b2795255f1?auto=format&fit=crop&w=800&q=80",
+        featured: true,
+        tags: ['adoção', 'responsabilidade', 'dicas']
       },
       {
         id: '2',
@@ -270,8 +308,44 @@
         date: "22/10/2025",
         category: "event",
         excerpt: "Venha conhecer nossos animais disponíveis para adoção no parque Villa-Lobos neste fim de semana!",
-        image: "https://images.unsplash.com/photo-1560807707-8cc77767d783?auto=format&fit=crop&w=600&q=60",
-        featured: false
+        content: `📅 **Quando:** Sábado e Domingo, das 10h às 17h
+📍 **Onde:** Parque Villa-Lobos - São Paulo/SP
+
+Estamos muito animados em anunciar nosso grande evento de adoção! Teremos dezenas de cães e gatos de todas as idades, tamanhos e personalidades esperando para conhecer suas futuras famílias.
+
+**O que você encontrará no evento:**
+
+🐕 Mais de 50 animais disponíveis para adoção
+👨‍⚕️ Veterinários para tirar dúvidas sobre cuidados
+📋 Equipe para auxiliar no processo de adoção
+🎪 Atividades para toda a família
+🎁 Brindes e descontos em produtos pet
+
+**Requisitos para adotar:**
+
+- Ser maior de 18 anos
+- Apresentar documento com foto
+- Comprovante de residência
+- Passar por uma breve entrevista
+
+**Por que participar?**
+
+Mesmo que você não possa adotar agora, sua presença ajuda muito! Você pode:
+- Conhecer o trabalho da ONG
+- Compartilhar nas redes sociais
+- Fazer doações
+- Se voluntariar
+
+Todos os animais estão vacinados, vermifugados e castrados (quando possível pela idade). Venha conhecer seu novo melhor amigo!
+
+**Informações:**
+📞 (11) 98765-4321
+📧 contato@coracaoanimal.org.br
+
+Nos vemos lá! 🐾`,
+        image: "https://images.unsplash.com/photo-1560807707-8cc77767d783?auto=format&fit=crop&w=800&q=80",
+        featured: false,
+        tags: ['evento', 'adoção', 'são paulo']
       },
       {
         id: '3',
@@ -280,8 +354,86 @@
         date: "15/10/2025",
         category: "adoption-story",
         excerpt: "Thor foi resgatado em situação crítica e hoje vive feliz com sua nova família. Conheça essa história emocionante.",
-        image: "https://images.unsplash.com/photo-1574158622682-e40e69881006?auto=format&fit=crop&w=600&q=60",
-        featured: false
+        content: `Esta é uma daquelas histórias que nos lembram por que fazemos o que fazemos. Thor, um lindo vira-lata de porte médio, chegou até nós em uma situação desesperadora.
+
+**O Resgate**
+
+Thor foi encontrado abandonado em uma estrada, debilitado, com sinais de maus-tratos e muito assustado. Mal conseguia ficar em pé e estava com desnutrição severa. Nossa equipe o resgatou imediatamente e levou para atendimento veterinário de emergência.
+
+**A Recuperação**
+
+Durante três meses, Thor recebeu todos os cuidados necessários: alimentação adequada, medicamentos, fisioterapia e, principalmente, muito amor. Aos poucos, ele foi recuperando não apenas o peso, mas também a confiança nos humanos.
+
+Apesar do trauma, Thor mostrou uma resiliência incrível. Começou a abanar o rabo quando via os voluntários, aceitava carinho e até brincava com outros cachorros do abrigo.
+
+**O Encontro Perfeito**
+
+Ana e Pedro vieram ao abrigo procurando um companheiro para suas caminhadas nos finais de semana. Quando conheceram Thor, foi amor à primeira vista – de ambos os lados! Thor não parava de abanar o rabo e lambia as mãos do casal sem parar.
+
+Depois de todo o processo de entrevista e visita domiciliar, Thor finalmente foi para seu lar definitivo há dois meses. O casal nos enviou fotos e vídeos mostrando como Thor está feliz: brinca no quintal, dorme na cama (sim, ele conquistou esse direito!), e é tratado como membro da família que sempre mereceu ser.
+
+**A Mensagem**
+
+A história de Thor nos mostra que não importa o passado difícil que um animal teve – com amor, paciência e cuidados adequados, eles podem florescer e se tornar companheiros incríveis.
+
+Se você está pensando em adotar, lembre-se: você não está apenas mudando a vida de um animal, está sendo transformado por esse amor incondicional também.
+
+Thor nos ensinou que vale a pena lutar, que vale a pena acreditar, e que o amor sempre vence. 💙
+
+#HistóriaDeAdoção #Superação #AdoçãoResponsável`,
+        image: "https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&w=800&q=80",
+        featured: false,
+        tags: ['história', 'superação', 'resgate', 'adoção']
+      },
+      {
+        id: '4',
+        title: "Dicas para o primeiro dia do pet em casa 🏠",
+        author: "ONG Patas Felizes",
+        date: "05/11/2025",
+        category: "tips",
+        excerpt: "Acabou de adotar? Veja como tornar a adaptação mais tranquila para você e seu novo amigo!",
+        content: `O primeiro dia do pet em casa é emocionante, mas também pode ser estressante – tanto para você quanto para o animal. Aqui estão dicas essenciais para uma transição suave:
+
+**Preparação Antes da Chegada:**
+
+✓ Compre os itens essenciais: comedouro, bebedouro, cama, brinquedos
+✓ Defina áreas permitidas da casa
+✓ Retire objetos perigosos do alcance
+✓ Escolha um cômodo tranquilo para as primeiras horas
+
+**No Primeiro Dia:**
+
+1. **Mantenha a calma:** Seu pet sentirá sua energia. Respire fundo e seja paciente.
+
+2. **Apresente a casa aos poucos:** Não deixe o animal explorar tudo de uma vez. Comece por um cômodo.
+
+3. **Ofereça água e comida:** Mas não force se ele não quiser comer logo. É normal a falta de apetite no início.
+
+4. **Deixe-o cheirar tudo:** É assim que os pets exploram o mundo.
+
+5. **Estabeleça rotina desde o início:** Horários para comer, passear e dormir ajudam na adaptação.
+
+**Primeiros Dias:**
+
+- Evite visitas nos primeiros 2-3 dias
+- Não o deixe sozinho por muito tempo
+- Seja paciente com possíveis acidentes
+- Reforce comportamentos positivos
+- Procure um veterinário para check-up
+
+**Sinais de Adaptação:**
+
+✓ Começa a comer normalmente
+✓ Explora a casa com mais confiança
+✓ Busca sua companhia
+✓ Dorme tranquilamente
+
+Lembre-se: cada animal tem seu tempo. Alguns se adaptam em dias, outros podem levar semanas. O importante é oferecer amor, paciência e segurança.
+
+Parabéns pela adoção! 🎉`,
+        image: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=800&q=80",
+        featured: false,
+        tags: ['dicas', 'adaptação', 'primeiro dia']
       }
     ];
 
@@ -296,72 +448,167 @@
       'other': { label: '📝 Outro', color: 'bg-gray-100 text-gray-800' }
     };
 
+    let currentViewingPostId = null;
+    let isEditMode = false;
+
     // Render posts
     function renderPosts() {
       const postsGrid = document.getElementById("postsGrid");
       postsGrid.innerHTML = '';
       
-      // Sort by featured first
-      const sortedPosts = [...postsMock].sort((a, b) => b.featured - a.featured);
+      // Sort by featured first, then by date
+      const sortedPosts = [...postsMock].sort((a, b) => {
+        if (a.featured === b.featured) {
+          return 0;
+        }
+        return a.featured ? -1 : 1;
+      });
       
       sortedPosts.forEach(post => {
         const category = categoryConfig[post.category] || categoryConfig.other;
         const card = document.createElement("div");
-        card.className = `bg-white rounded-2xl shadow-md hover:shadow-lg overflow-hidden transition ${post.featured ? 'ring-2 ring-primary' : ''}`;
+        card.className = `bg-white rounded-2xl shadow-md hover:shadow-xl overflow-hidden transition transform hover:-translate-y-1 cursor-pointer ${post.featured ? 'ring-2 ring-primary' : ''}`;
         card.innerHTML = `
           ${post.featured ? '<div class="bg-primary text-white text-xs font-bold px-4 py-2 text-center">⭐ POST EM DESTAQUE</div>' : ''}
           <div class="relative">
             <img src="${post.image}" alt="${post.title}" class="w-full h-48 object-cover">
-            <span class="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-medium ${category.color}">
+            <span class="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-medium ${category.color} backdrop-blur-sm">
               ${category.label}
             </span>
           </div>
           <div class="p-6">
-            <h3 class="text-xl font-bold mb-2 text-gray-900">${post.title}</h3>
+            <h3 class="text-xl font-bold mb-2 text-gray-900 line-clamp-2">${post.title}</h3>
             <p class="text-gray-600 text-sm mb-4 line-clamp-2">${post.excerpt}</p>
-            <div class="flex justify-between items-center text-xs text-gray-500 mb-3">
+            <div class="flex justify-between items-center text-xs text-gray-500 mb-4">
               <span>👤 ${post.author}</span>
               <span>📅 ${post.date}</span>
             </div>
-            <button onclick="viewPost('${post.id}')" class="w-full bg-gray-100 hover:bg-primary hover:text-white text-gray-700 py-2 rounded-full font-medium transition">
-              Ler mais
+            <button onclick="viewPost('${post.id}')" class="w-full bg-gradient-to-r from-pink-500 to-purple-500 hover:from-pink-600 hover:to-purple-600 text-white py-2.5 rounded-full font-medium transition transform hover:scale-105">
+              📖 Ler mais
             </button>
           </div>
         `;
         postsGrid.appendChild(card);
       });
+
+      if (sortedPosts.length === 0) {
+        postsGrid.innerHTML = `
+          <div class="col-span-full text-center py-16">
+            <div class="text-6xl mb-4">📝</div>
+            <p class="text-gray-500 text-lg">Nenhum post publicado ainda</p>
+            <button onclick="openNewPostModal()" class="mt-4 text-primary font-medium hover:underline">
+              Criar primeiro post
+            </button>
+          </div>
+        `;
+      }
     }
 
-    // View post (mock function)
+    // View post
     function viewPost(postId) {
-      alert(`Visualizar post ID: ${postId}\n\nEm produção, isso abriria a página completa do post.`);
+      const post = postsMock.find(p => p.id === postId);
+      if (!post) return;
+
+      currentViewingPostId = postId;
+      const category = categoryConfig[post.category] || categoryConfig.other;
+
+      document.getElementById('viewPostTitle').textContent = post.title;
+      document.getElementById('viewPostImage').src = post.image;
+      document.getElementById('viewPostAuthor').innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        </svg>
+        ${post.author}
+      `;
+      document.getElementById('viewPostDate').innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        ${post.date}
+      `;
+      document.getElementById('viewPostCategory').innerHTML = `
+        <span class="inline-block px-4 py-2 rounded-full text-sm font-medium ${category.color}">
+          ${category.label}
+        </span>
+      `;
+      document.getElementById('viewPostContent').textContent = post.content;
+      
+      // Tags
+      const tagsContainer = document.getElementById('viewPostTags');
+      if (post.tags && post.tags.length > 0) {
+        tagsContainer.innerHTML = post.tags.map(tag => 
+          `<span class="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm">#${tag}</span>`
+        ).join('');
+      } else {
+        tagsContainer.innerHTML = '';
+      }
+
+      document.getElementById('viewPostModal').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
     }
 
-    // Modal functions
-    function openModal() {
+    // Close view post modal
+    function closeViewPostModal() {
+      document.getElementById('viewPostModal').classList.add('hidden');
+      document.body.style.overflow = 'auto';
+      currentViewingPostId = null;
+    }
+
+    // Open new post modal
+    function openNewPostModal() {
+      isEditMode = false;
+      document.getElementById('formModalTitle').innerHTML = '<span>✍️</span> Criar Novo Post';
+      document.getElementById('submitButtonText').textContent = 'Publicar Post';
+      document.getElementById('newPostForm').reset();
+      document.getElementById('editPostId').value = '';
+      updateCharCount();
       document.getElementById('newPostModal').classList.remove('hidden');
       document.body.style.overflow = 'hidden';
     }
 
-    function closeModal() {
+    // Edit post
+    function editPost() {
+      if (!currentViewingPostId) return;
+      
+      const post = postsMock.find(p => p.id === currentViewingPostId);
+      if (!post) return;
+
+      isEditMode = true;
+      document.getElementById('formModalTitle').innerHTML = '<span>✏️</span> Editar Post';
+      document.getElementById('submitButtonText').textContent = 'Salvar Alterações';
+      
+      document.getElementById('editPostId').value = post.id;
+      document.getElementById('postTitle').value = post.title;
+      document.getElementById('postCategory').value = post.category;
+      document.getElementById('postExcerpt').value = post.excerpt;
+      document.getElementById('postContent').value = post.content;
+      document.getElementById('postImageUrl').value = post.image;
+      document.getElementById('postTags').value = post.tags ? post.tags.join(', ') : '';
+      document.getElementById('postFeatured').checked = post.featured;
+
+      updateCharCount();
+      closeViewPostModal();
+      document.getElementById('newPostModal').classList.remove('hidden');
+    }
+
+    // Delete post
+    function deletePost() {
+      if (!currentViewingPostId) return;
+      
+      if (confirm('Tem certeza que deseja excluir este post? Esta ação não pode ser desfeita.')) {
+        postsMock = postsMock.filter(p => p.id !== currentViewingPostId);
+        closeViewPostModal();
+        renderPosts();
+        showNotification('Post excluído com sucesso!', 'success');
+      }
+    }
+
+    // Close new post modal
+    function closeNewPostModal() {
       document.getElementById('newPostModal').classList.add('hidden');
       document.body.style.overflow = 'auto';
       document.getElementById('newPostForm').reset();
-      document.getElementById('imagePreview').classList.add('hidden');
       updateCharCount();
-    }
-
-    // Preview image
-    function previewImage(event) {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          document.getElementById('previewImg').src = e.target.result;
-          document.getElementById('imagePreview').classList.remove('hidden');
-        };
-        reader.readAsDataURL(file);
-      }
     }
 
     // Character count
@@ -372,45 +619,71 @@
       document.getElementById('contentCount').textContent = content.length;
     }
 
+    // Show notification
+    function showNotification(message, type = 'success') {
+      const bgColor = type === 'success' ? 'bg-green-500' : 'bg-red-500';
+      const notification = document.createElement('div');
+      notification.className = `fixed top-20 right-6 ${bgColor} text-white px-6 py-3 rounded-lg shadow-lg z-50 transition-all duration-300`;
+      notification.textContent = message;
+      document.body.appendChild(notification);
+
+      setTimeout(() => {
+        notification.classList.add('opacity-0');
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
+
     // Form submission
     document.getElementById('newPostForm').addEventListener('submit', function(e) {
       e.preventDefault();
       
       const formData = new FormData(this);
+      const editId = document.getElementById('editPostId').value;
+      
       const postData = {
-        id: String(postsMock.length + 1),
+        id: editId || String(Date.now()),
         title: formData.get('title'),
         category: formData.get('category'),
         excerpt: formData.get('excerpt'),
         content: formData.get('content'),
-        image: formData.get('imageUrl') || 'https://images.unsplash.com/photo-1450778869180-41d0601e046e?auto=format&fit=crop&w=600&q=60',
+        image: formData.get('imageUrl'),
         author: 'Minha ONG',
         date: new Date().toLocaleDateString('pt-BR'),
         featured: formData.get('featured') === 'on',
         tags: formData.get('tags') ? formData.get('tags').split(',').map(t => t.trim()) : []
       };
 
-      // Add to mock data
-      postsMock.unshift(postData);
+      if (editId) {
+        // Edit existing post
+        const index = postsMock.findIndex(p => p.id === editId);
+        if (index !== -1) {
+          postsMock[index] = { ...postsMock[index], ...postData };
+          showNotification('Post atualizado com sucesso!', 'success');
+        }
+      } else {
+        // Add new post
+        postsMock.unshift(postData);
+        showNotification('Post publicado com sucesso!', 'success');
+      }
       
-      // Show success message
-      alert('✅ Post criado com sucesso!\n\nEm produção, isso seria enviado para o backend.');
-      
-      // Close modal and re-render
-      closeModal();
+      closeNewPostModal();
       renderPosts();
     });
 
     // Event listeners
-    document.getElementById('openNewPostModal').addEventListener('click', openModal);
-    document.getElementById('closeNewPostModal').addEventListener('click', closeModal);
-    document.getElementById('cancelNewPost').addEventListener('click', closeModal);
+    document.getElementById('openNewPostModal').addEventListener('click', openNewPostModal);
+    document.getElementById('closeNewPostModal').addEventListener('click', closeNewPostModal);
+    document.getElementById('cancelNewPost').addEventListener('click', closeNewPostModal);
+    document.getElementById('closeViewPostModal').addEventListener('click', closeViewPostModal);
+    document.getElementById('editPostBtn').addEventListener('click', editPost);
+    document.getElementById('deletePostBtn').addEventListener('click', deletePost);
     
-    // Close modal on outside click
+    // Close modals on outside click
     document.getElementById('newPostModal').addEventListener('click', function(e) {
-      if (e.target === this) {
-        closeModal();
-      }
+      if (e.target === this) closeNewPostModal();
+    });
+    document.getElementById('viewPostModal').addEventListener('click', function(e) {
+      if (e.target === this) closeViewPostModal();
     });
 
     // Character count listeners
@@ -424,7 +697,6 @@
     });
 
     // Make functions global
-    window.previewImage = previewImage;
     window.viewPost = viewPost;
 
     // Initial render
