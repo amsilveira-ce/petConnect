@@ -1,6 +1,4 @@
-import { authService } from './api.js';
-
-// Registration Page Logic
+// Registration Page Logic with Simple JWT Authentication
 document.addEventListener('DOMContentLoaded', () => {
     const registerForm = document.getElementById('registerForm');
     const submitBtn = document.getElementById('submitBtn');
@@ -9,12 +7,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const ongFields = document.getElementById('ongFields');
     const nameLabel = document.getElementById('nameLabel');
     
-    let accountType = 'user';
+    let accountType = 'user'; // Default: adotante
 
+    // Check if already authenticated
     if (authService.isAuthenticated()) {
         authService.redirectToDashboard();
         return;
     }
+
     // Toggle between User and ONG
     toggleOptions.forEach(option => {
         option.addEventListener('click', () => {
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
             toggleOptions.forEach(opt => opt.classList.remove('active'));
             option.classList.add('active');
             
-            // Update toggle slider position
+            // Update UI based on account type
             if (type === 'ong') {
                 accountTypeToggle.classList.add('ong');
                 ongFields.classList.add('active');
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Mascara do telefone (formato brasileiro)
+    // Phone mask (Brazilian format)
     const phoneInput = document.getElementById('phone');
     phoneInput.addEventListener('input', (e) => {
         let value = e.target.value.replace(/\D/g, '');
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.target.value = value;
     });
 
-    // CEP
+    // CEP mask (Brazilian postal code)
     const zipCodeInput = document.getElementById('zipCode');
     zipCodeInput.addEventListener('input', (e) => {
         let value = e.target.value.replace(/\D/g, '');
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.target.value = value;
     });
 
-    // Formulário de submissão
+    // Form submission
     registerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
@@ -81,16 +81,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Get form data
         const formData = getFormData();
         
-        // Validate form
-        if (!validateForm(formData)) {
-            return;
-        }
-        
         // Set loading state
         setLoading(true);
         
         try {
-            // Prepare data for API
+            // Prepare user data
             const userData = {
                 name: formData.name,
                 email: formData.email,
@@ -101,12 +96,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Add ONG-specific fields
             if (accountType === 'ong') {
-                if (!formData.phone || !formData.street || !formData.city || !formData.state || !formData.zipCode) {
-                    showAlert('Por favor, preencha todos os campos obrigatórios para ONGs', 'error');
-                    setLoading(false);
-                    return;
-                }
-
                 userData.phone = formData.phone.replace(/\D/g, '');
                 userData.address = {
                     street: formData.street,
@@ -116,9 +105,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 };
             }
             
-            
+            // Register user with authentication service
             const response = await authService.register(userData, accountType);
-
             
             if (response.success) {
                 // Show success message
@@ -129,7 +117,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     authService.redirectToDashboard();
                 }, 1500);
             }
-
         } catch (error) {
             console.error('Registration error:', error);
             showAlert(error.message || 'Erro ao criar conta. Tente novamente.', 'error');
@@ -152,80 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
             zipCode: document.getElementById('zipCode').value.trim(),
             terms: document.getElementById('terms').checked
         };
-    }
-
-    // Validation function
-    function validateForm(data) {
-        let isValid = true;
-        
-        // Name validation
-        if (!data.name || data.name.length < 2) {
-            showFieldError('name', 'Digite um nome válido (mínimo 2 caracteres)');
-            isValid = false;
-        }
-        
-        // Email validation
-        if (!data.email) {
-            showFieldError('email', 'O e-mail é obrigatório');
-            isValid = false;
-        } else if (!isValidEmail(data.email)) {
-            showFieldError('email', 'Digite um e-mail válido');
-            isValid = false;
-        }
-        
-        // Password validation
-        if (!data.password) {
-            showFieldError('password', 'A senha é obrigatória');
-            isValid = false;
-        } else if (data.password.length < 8) {
-            showFieldError('password', 'A senha deve ter pelo menos 8 caracteres');
-            isValid = false;
-        }
-        
-        // Confirm password validation
-        if (data.password !== data.confirmPassword) {
-            showFieldError('confirmPassword', 'As senhas não coincidem');
-            isValid = false;
-        }
-        
-        // ONG-specific validation
-        if (accountType === 'ong') {
-            if (!data.phone) {
-                showFieldError('phone', 'O telefone é obrigatório para ONGs');
-                isValid = false;
-            }
-            
-            if (!data.street || !data.city || !data.state || !data.zipCode) {
-                showAlert('Por favor, preencha o endereço completo', 'error');
-                isValid = false;
-            }
-        }
-        
-        // Terms validation
-        if (!data.terms) {
-            showFieldError('terms', 'Você deve aceitar os termos para continuar');
-            isValid = false;
-        }
-        
-        return isValid;
-    }
-
-    // Email validation helper
-    function isValidEmail(email) {
-        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return re.test(email);
-    }
-
-    // Show field-specific error
-    function showFieldError(fieldId, message) {
-        const input = document.getElementById(fieldId);
-        const errorDiv = document.getElementById(`${fieldId}Error`);
-        
-        if (input && errorDiv) {
-            input.classList.add('error');
-            errorDiv.textContent = message;
-            errorDiv.classList.remove('hidden');
-        }
     }
 
     // Clear all errors
@@ -283,3 +196,219 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 });
+
+
+
+
+// API 
+
+// Simple Authentication System for PetConnect
+// This system stores JWT token from environment variables in sessionStorage
+
+class AuthService {
+    constructor() {
+        this.TOKEN_KEY = 'petconnect_token';
+        this.USER_TYPE_KEY = 'petconnect_user_type';
+        this.USER_DATA_KEY = 'petconnect_user_data';
+    }
+
+    /**
+     * Register a new user (adotante or ong)
+     */
+    async register(userData, userType) {
+        try {
+            // Simulate API delay
+            await this.simulateDelay(500);
+
+            // Validate user data
+            this.validateUserData(userData, userType);
+
+            // In a real application, this would make an API call to register the user
+            // For this simple implementation, we're simulating success
+            
+            // Store JWT token from config (simulating .env)
+            sessionStorage.setItem(this.TOKEN_KEY, CONFIG.JWT_TOKEN);
+            
+            // Store user type (user or ong)
+            sessionStorage.setItem(this.USER_TYPE_KEY, userType);
+            
+            // Store user data (without password)
+            const { password, confirmPassword, ...safeUserData } = userData;
+            sessionStorage.setItem(this.USER_DATA_KEY, JSON.stringify({
+                ...safeUserData,
+                userType: userType,
+                registeredAt: new Date().toISOString()
+            }));
+
+            return {
+                success: true,
+                message: 'Cadastro realizado com sucesso!',
+                userType: userType
+            };
+        } catch (error) {
+            throw new Error(error.message || 'Erro ao realizar cadastro');
+        }
+    }
+
+    /**
+     * Login user (adotante or ong)
+     */
+    async login(email, password, userType) {
+        try {
+            // Simulate API delay
+            await this.simulateDelay(500);
+
+            // Validate credentials
+            if (!email || !password) {
+                throw new Error('Email e senha são obrigatórios');
+            }
+
+            // In a real application, this would validate against a backend
+            // For this simple implementation, we accept any valid email/password
+            
+            // Store JWT token from config (simulating .env)
+            sessionStorage.setItem(this.TOKEN_KEY, CONFIG.JWT_TOKEN);
+            
+            // Store user type
+            sessionStorage.setItem(this.USER_TYPE_KEY, userType);
+            
+            // Store mock user data
+            sessionStorage.setItem(this.USER_DATA_KEY, JSON.stringify({
+                email: email,
+                userType: userType,
+                name: userType === 'ong' ? 'ONG Exemplo' : 'Usuário Exemplo',
+                loggedInAt: new Date().toISOString()
+            }));
+
+            return {
+                success: true,
+                message: 'Login realizado com sucesso!',
+                userType: userType
+            };
+        } catch (error) {
+            throw new Error(error.message || 'Erro ao fazer login');
+        }
+    }
+
+    /**
+     * Logout user
+     */
+    logout() {
+        sessionStorage.removeItem(this.TOKEN_KEY);
+        sessionStorage.removeItem(this.USER_TYPE_KEY);
+        sessionStorage.removeItem(this.USER_DATA_KEY);
+        window.location.href = 'index.html';
+    }
+
+    /**
+     * Check if user is authenticated
+     */
+    isAuthenticated() {
+        const token = sessionStorage.getItem(this.TOKEN_KEY);
+        return !!token;
+    }
+
+    /**
+     * Get current user type
+     */
+    getUserType() {
+        return sessionStorage.getItem(this.USER_TYPE_KEY);
+    }
+
+    /**
+     * Get current user data
+     */
+    getUserData() {
+        const data = sessionStorage.getItem(this.USER_DATA_KEY);
+        return data ? JSON.parse(data) : null;
+    }
+
+    /**
+     * Get JWT token
+     */
+    getToken() {
+        return sessionStorage.getItem(this.TOKEN_KEY);
+    }
+
+    /**
+     * Redirect to appropriate dashboard based on user type
+     */
+    redirectToDashboard() {
+        const userType = this.getUserType();
+        
+        if (userType === 'ong') {
+            window.location.href = CONFIG.ONG_DASHBOARD;
+        } else if (userType === 'user') {
+            window.location.href = CONFIG.USER_DASHBOARD;
+        } else {
+            // Fallback to login if no user type found
+            window.location.href = 'login.html';
+        }
+    }
+
+    /**
+     * Validate user data before registration
+     */
+    validateUserData(userData, userType) {
+        // Name validation
+        if (!userData.name || userData.name.length < 2) {
+            throw new Error('Nome deve ter pelo menos 2 caracteres');
+        }
+
+        // Email validation
+        if (!userData.email || !this.isValidEmail(userData.email)) {
+            throw new Error('Email inválido');
+        }
+
+        // Password validation
+        if (!userData.password || userData.password.length < 8) {
+            throw new Error('Senha deve ter pelo menos 8 caracteres');
+        }
+
+        // Confirm password validation
+        if (userData.password !== userData.confirmPassword) {
+            throw new Error('As senhas não coincidem');
+        }
+
+        // ONG-specific validation
+        if (userType === 'ong') {
+            if (!userData.phone) {
+                throw new Error('Telefone é obrigatório para ONGs');
+            }
+            if (!userData.address || !userData.address.street || !userData.address.city || 
+                !userData.address.state || !userData.address.zipCode) {
+                throw new Error('Endereço completo é obrigatório para ONGs');
+            }
+        }
+
+        // Terms validation
+        if (!userData.terms) {
+            throw new Error('Você deve aceitar os termos para continuar');
+        }
+
+        return true;
+    }
+
+    /**
+     * Validate email format
+     */
+    isValidEmail(email) {
+        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return re.test(email);
+    }
+
+    /**
+     * Simulate network delay
+     */
+    simulateDelay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+}
+
+// Create singleton instance
+const authService = new AuthService();
+
+// Export for use in other files
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = authService;
+}
